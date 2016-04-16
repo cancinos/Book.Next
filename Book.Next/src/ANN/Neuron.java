@@ -26,7 +26,9 @@ public class Neuron {
         counter++;
     }
     
-    // Output = 
-    
+    // Output's calculation 
+    public void calculateOutput(){
+        
+    }
     
 }
