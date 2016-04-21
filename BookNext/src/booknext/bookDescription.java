@@ -13,18 +13,11 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -32,7 +25,7 @@ import javafx.stage.StageStyle;
  *
  * @author jcdur
  */
-public class BookNext extends Application {
+public class bookDescription extends Application {
     
     private mainToolbar toolBar;
     private NavigationDrawer navDrawer;
@@ -56,21 +49,21 @@ public class BookNext extends Application {
     }
     
     @Override
-    public void start(Stage stage) throws Exception {
-        stage.initStyle(StageStyle.UNDECORATED);
+    public void start(Stage primaryStage) {
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         // <editor-fold defaultstate="collapsed" desc="Nav Drawer">
             createView();
+            giantCard card = new giantCard(200,200);
+            //card.setPrefSize(100, 100);
+            card.createCard();
+            card.relocate(10, 10);
             BorderPane page = new BorderPane();
 
+            
             JFXButton button = new JFXButton("Exit".toUpperCase());
             button.getStyleClass().add("button-raised");
             button.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE;");
             button.relocate(445, 320);
-            
-            JFXButton button2 = new JFXButton("Open book".toUpperCase());
-            button2.getStyleClass().add("button-raised");
-            button2.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE;");
-            button2.relocate(445, 370);
             
             button.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -80,17 +73,7 @@ public class BookNext extends Application {
                 }
             });
             
-            button2.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    bookDescription newPage = new bookDescription();
-                    //newPage.start(primaryStage);
-  
-                }
-            });
-            
-            navDrawer.getContent().getChildren().addAll(button);
+            navDrawer.getContent().getChildren().addAll(button, card);
             page.setCenter(navDrawer);
             page.setTop(toolBar);
             //page.relocate(5, 5);
@@ -98,9 +81,9 @@ public class BookNext extends Application {
             Scene scene = new Scene(page, 1110, 700);
             
             scene.getStylesheets().add("/style/jfoenix-components.css");
-            stage.setScene(scene);
-            stage.setTitle("FXML is Simple");
-            stage.show();    
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("FXML is Simple");
+            primaryStage.show();    
             // </editor-fold>
     }
 
