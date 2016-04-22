@@ -36,7 +36,7 @@ public class mainToolbar extends HBox{
         this.setWidth(width);
         this.setHeight(height);
         this.setStyle(style);
-        this.setEffect(new DropShadow(2d, 0d, +2d, Color.GRAY));
+        this.setEffect(new DropShadow(5d, 0d, +2d, Color.GRAY));
         setHamburger();
         setTitle();
     }

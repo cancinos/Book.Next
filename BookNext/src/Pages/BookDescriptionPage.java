@@ -5,12 +5,15 @@
  */
 package Pages;
 
+import UI.HCard;
+import UI.ListCards;
 import UI.NavigationDrawer;
 import UI.giantCard;
 import UI.mainToolbar;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
@@ -67,6 +70,28 @@ public class BookDescriptionPage extends Stage{
         infoCard.createCard();
         infoCard.relocate(50, 50);
         addComponent(infoCard);
+        
+        Label moreLabel = new Label("Similar");
+        moreLabel.setStyle("-fx-font-size:22px;");
+        moreLabel.relocate(810, 60);
+        addComponent(moreLabel);
+        
+        JFXButton btnMore = new JFXButton("More");
+        //btnMore.getStyleClass().add("button-raised");
+        btnMore.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #FFC107;");
+        btnMore.setMaxSize(150, 38);
+        btnMore.setPrefSize(55, 38);
+        btnMore.setMinSize(20, 38);
+        btnMore.relocate(970, 55);
+        addComponent(btnMore);
+        
+        ListCards list = new ListCards(true);
+        list.createVerticalList();
+        addComponent(list.getList());
+//        HCard hcard = new HCard(220, 120);
+//        hcard.createCard();
+//        hcard.relocate(800, 50);
+//        addComponent(hcard);
     }
     
     /**

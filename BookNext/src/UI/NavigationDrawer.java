@@ -77,14 +77,14 @@ public class NavigationDrawer extends JFXDrawersStack{
     {
         JFXListView<Label> menuList = new JFXListView<Label>();
         menuList.setStyle("-fx-padding: 10 10 10 10;");
-        Label lblAct = new Label("    RENDERER");
+        Label lblAct = new Label("    Home");
         lblAct.setStyle("-fx-font-size: 14; -fx-font-weight: LIGHT;");
         Image imgUser = new Image("/Icons/home.png");
         lblAct.setGraphic(new ImageView(imgUser));
         lblAct.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblAct);
         
-        lblAct = new Label("    RENDERER");
+        lblAct = new Label("    Profile");
         lblAct.setStyle("-fx-font-size: 14;");
         imgUser = new Image("/Icons/profile.png");
         lblAct.setGraphic(new ImageView(imgUser));
