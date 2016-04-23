@@ -31,9 +31,6 @@ public class ListCards extends ScrollPane{
         this.setStyle("-fx-padding: 5 0 0 5; -fx-background-color:TRANSPARENT;");
         this.setBorder(Border.EMPTY);
         CBook newBook = new CBook();
-        newBook.setBook_name("Harry Potter");
-        newBook.setBook_author("J. K. Rowling");
-        newBook.setBook_image("asdf");
         
         List<CBook> bookList;
         bookList = new ArrayList<>();

@@ -27,7 +27,7 @@ public class giantCard extends Pane {
     public void createCard()
     {
         this.setPrefSize(width, height);
-        this.setEffect(new DropShadow(7d, 0d, 0d, Color.GRAY));
+        this.setEffect(new DropShadow(5d, 0d, 0d, Color.web("#B6B6B6")));
         this.setStyle("-fx-background-color:WHITE;");
     }
     

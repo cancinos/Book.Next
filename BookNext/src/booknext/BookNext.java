@@ -5,11 +5,15 @@
  */
 package booknext;
 
+import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import UI.NavigationDrawer;
 import UI.giantCard;
 import UI.mainToolbar;
 import com.jfoenix.controls.JFXButton;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -28,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.json.JSONException;
 
 /**
  *
@@ -85,6 +90,14 @@ public class BookNext extends Application {
             button2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
+//                    ISBNConverter converter = new ISBNConverter();
+//                    try {
+//                        converter.readJSON();
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+//                    } catch (JSONException ex) {
+//                        Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
                     BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
                     bookDescript.setSize(1100, 700); //Resizing
                     Stage bookDescriptStage = bookDescript.getStage(); //Getting Stage
