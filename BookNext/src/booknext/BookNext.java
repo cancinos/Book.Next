@@ -63,6 +63,7 @@ public class BookNext extends Application {
         // </editor-fold>
     }
     
+    
     @Override
     public void start(Stage stage) throws Exception {
         stage.initStyle(StageStyle.UNDECORATED);

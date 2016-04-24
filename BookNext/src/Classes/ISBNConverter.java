@@ -62,7 +62,7 @@ public class ISBNConverter {
        JSONArray authors =  volumeInfo.getJSONArray("authors");
        
        newBook.setBook_name(volumeInfo.getString("title"));
-       newBook.setBook_publishYear(volumeInfo.getInt("publishedDate"));
+       newBook.setBook_publishYear(volumeInfo.getString("publishedDate"));
        newBook.setBook_description(volumeInfo.getString("description"));
        newBook.setBook_publisher(volumeInfo.getString("publisher"));
        newBook.setBook_authors(convertToString(authors));

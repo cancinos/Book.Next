@@ -56,7 +56,7 @@ public class NavigationDrawer extends JFXDrawersStack{
         
         content = new Pane();
         //content.getChildren().add(node2);
-        content.setStyle("-fx-background-color: -fx-background-color: #f5f5f5");
+        content.setStyle("-fx-background-color: -fx-background-color: WHITE;");
 
         
         leftDrawer.setSidePane(leftDrawerPane);

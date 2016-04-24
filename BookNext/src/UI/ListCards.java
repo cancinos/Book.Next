@@ -27,7 +27,7 @@ public class ListCards extends ScrollPane{
     
     public void createVerticalList()
     {
-        this.setPrefSize(240,550);
+        this.setPrefSize(260,550);
         this.setStyle("-fx-padding: 5 0 0 5; -fx-background-color:TRANSPARENT;");
         this.setBorder(Border.EMPTY);
         CBook newBook = new CBook();
@@ -42,7 +42,7 @@ public class ListCards extends ScrollPane{
         VBox vbox = new VBox(10);
         HCard newCard;
         for (CBook bookList1 : bookList) {
-            newCard = new HCard(220,115);
+            newCard = new HCard(240,115);
             newCard.createCard();
             vbox.getChildren().add(newCard);
         }

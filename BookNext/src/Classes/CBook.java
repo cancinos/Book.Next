@@ -17,7 +17,7 @@ public class CBook {
     private String book_image;
     private String book_description;
     private String book_publisher;
-    private int book_publishYear;
+    private String book_publishYear;
     private List<String> book_categories;
     private List<String> key_words;
     
@@ -39,8 +39,8 @@ public class CBook {
     public String getBook_description() { return this.book_description; }
     public void setBook_description(String descr) { this.book_description = descr; }
     
-    public int getBook_publishYear() { return this.book_publishYear; }
-    public void setBook_publishYear(int year) { this.book_publishYear = year; }
+    public String getBook_publishYear() { return this.book_publishYear; }
+    public void setBook_publishYear(String year) { this.book_publishYear = year; }
     
     public String getBook_publisher() { return this.book_publisher; }
     public void setBook_publisher(String publisher) { this.book_publisher = publisher; }
@@ -55,6 +55,15 @@ public class CBook {
         book_rating += rating;
         book_rating /= num_ratings;
         num_ratings++;
+    }
+    
+    public String getBook_authorsStr()
+    {
+        String finalString = "";
+        for (int i = 0; i < book_authors.size(); i++) {
+            finalString += book_authors.get(i)+ ", ";
+        }
+        return finalString.substring(0, finalString.length() - 1);
     }
     
 }
