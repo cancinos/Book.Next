@@ -7,6 +7,8 @@ package booknext;
 
 import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
+import Pages.Login;
+import UI.Button;
 import UI.NavigationDrawer;
 import UI.giantCard;
 import UI.mainToolbar;
@@ -18,6 +20,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -77,6 +80,8 @@ public class BookNext extends Application {
             button2.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE;");
             button2.relocate(445, 370);
             
+            JFXButton button3 = new Button("Sing In".toUpperCase(),"WHITE","").getButton();
+             button3.relocate(445, 420);
             //Closing Program
             button.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -106,7 +111,17 @@ public class BookNext extends Application {
                 }
             });
             
-            navDrawer.getContent().getChildren().addAll(button, button2);
+            //For opening sing in
+            button3.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
+                Login login = new Login();
+                Stage loginStage = login.getStage();
+                loginStage.show();
+                stage.getScene().getWindow().hide();
+           });    
+            
+            
+            
+            navDrawer.getContent().getChildren().addAll(button, button2,button3);
 
             BorderPane page = new BorderPane();
             page.setCenter(navDrawer);
