@@ -113,12 +113,18 @@ public class BookNext extends Application {
             });
             
             //For opening sing in
-            button3.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
+              button3.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
                 Login login = new Login();
                 Stage loginStage = login.getStage();
                 loginStage.show();
                 stage.getScene().getWindow().hide();
-           });    
+                }
+            });
+           
+               
             
             
             
