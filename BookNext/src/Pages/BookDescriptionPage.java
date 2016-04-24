@@ -282,7 +282,7 @@ public class BookDescriptionPage extends Stage{
         btnMore.relocate(990, 55);
         addComponent(btnMore);
         
-        ListCards list = new ListCards(true);
+        ListCards list = new ListCards();
         list.createVerticalList();
         addComponent(list.getList());
     }

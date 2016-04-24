@@ -171,21 +171,6 @@ public class Login extends Stage{
         card.getChildren().add(vbox); 
         page.getChildren().add(card);
 	page.getChildren().add(hamburger);
-       
-//        VCard vcard = new VCard(128,250);
-//        vcard.createCard();
-//        vcard.relocate(150,400);
-//        
-//        Label title = new Label("Divergent");
-//        
-//        Label author = new Label("Veronica Roth");
-//        title.relocate(0, 205);
-//        author.relocate(0, 225);
-//        author.setTextFill(Color.GRAY);
-//        vcard.getChildren().add(title);
-//        vcard.getChildren().add(author);
-//        page.getChildren().add(vcard);
-        
         
     }
     
