@@ -117,7 +117,7 @@ public class Login extends Stage{
   
     public void createPic(){
        
-        background = new ImageView(new Image("https://static-secure.guim.co.uk/sys-images/Observer/Pix/pictures/2013/12/23/1387823611665/Library-with-a-book-ladde-014.jpg"));
+        background = new ImageView(new Image("http://cdn.slashgear.com/wp-content/uploads/2014/10/unnamed-6.jpg"));
         background.setFitHeight(200);
         background.setFitWidth(400);
         background.relocate(0, 0); 
@@ -131,7 +131,7 @@ public class Login extends Stage{
         value.setAlignment(Pos.CENTER);
         value.setTextFill(Color.WHITE);
         icon.setGraphic(value);
-        icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#E91E63;");
+        icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
         icon.setPrefSize(60, 60);
         icon.relocate(375,415);               
     }
