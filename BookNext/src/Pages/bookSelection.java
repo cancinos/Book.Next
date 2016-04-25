@@ -10,6 +10,8 @@ import UI.VCard;
 import UI.mainToolbar;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -51,6 +53,7 @@ public class bookSelection extends Stage {
    
     
     public void createView(){
+        
         list = new ListCards();
         list.createHorizontalList();  
         list.relocate(100, 50);      
@@ -60,25 +63,47 @@ public class bookSelection extends Stage {
         list.createHorizontalList();     
         list.relocate(100, 350);
         
-        next = new JFXToggleNode();
+       Label title = new Label("SELECT 3 BOOKS TO CONTINUE...");
+       title.setStyle("-fx-font-size:20; -fx-font-color:BLACK; -fx-font-weight: bold; -fx-label-float:true;");
+       title.relocate(5, 5);
+        centralPage.getChildren().add(title);
+        
+        centralPage.getChildren().add(list.getList());
+    }
+    
+  
+    public void createIcon(){
+        
+         next = new JFXToggleNode();
         Icon value = new Icon("ARROW_RIGHT", "2em");
         value.setAlignment(Pos.CENTER);
         value.setTextFill(Color.WHITE);
         next.setGraphic(value);
         next.setStyle("-fx-background-radius: 4em;" + toolBar.getStyle()+";");
         next.setPrefSize(60, 60);
-        next.relocate(930,550);
-        
+        next.relocate(925,550);
         next.setVisible(false);
-        centralPage.getChildren().add(list.getList());
         centralPage.getChildren().add(next);
+        
+           next.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+               BookDescriptionPage book = new BookDescriptionPage();
+               book.setSize(1100,700);
+                Stage loginStage = book.getStage();
+                loginStage.show();               
+                getScene().getWindow().hide();
+                }
+            });
+        
     }
     
-  
     public Stage getStage(){
          this.initStyle(StageStyle.UNDECORATED);             
        
         createView();
+        createIcon();
         page.setTop(this.toolBar);
         page.setCenter(centralPage);
         Scene scene = new Scene(page, 1000, 700);

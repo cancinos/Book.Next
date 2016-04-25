@@ -9,18 +9,23 @@ import UI.giantCard;
 import UI.Button;
 import UI.textField;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,7 +40,7 @@ public class Login extends Stage{
         
        private Pane page = new Pane();
        private giantCard  card;
-       private TabPane tabPane ;
+       private JFXTabPane tabPane ;
        private Tab tab;
        private textField fields;
        private VBox logbox;
@@ -87,12 +92,17 @@ public class Login extends Stage{
     }
     
     public void createTabs(){
-      tabPane = new TabPane();
-      tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-      tabPane.getStylesheets().add("/style/jfoenix-components.css");
+      tabPane = new JFXTabPane();
+      //tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+      tabPane.setStyle("-fx-background-color:WHITE;");
+      //tabPane.getStylesheets().add("/style/jfoenix-components.css");
+      
+      //SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+      //selectionModel.select(0); //what tab is selected
       
       title = new Label("Sing in");
-      title.setTextFill(Color.web("#E91E63"));      
+     // title.setTextFill(Color.web("#E91E63"));      
+      title.setTextFill(Color.WHITE);
       title.setStyle("-fx-font-size:15px;");
       tab = new Tab();      
       tab.setStyle("-fx-background-color:TRANSPARENT; -fx-alignment:center; -fx-font-weight: bold");
@@ -103,7 +113,8 @@ public class Login extends Stage{
       tabPane.getTabs().add(tab);
       
       title = new Label("Sing up");
-      title.setTextFill(Color.web("#E91E63"));     
+      //title.setTextFill(Color.web("#E91E63"));      
+      title.setTextFill(Color.WHITE);     
       title.setStyle("-fx-font-size:15px;");
       tab = new Tab();      
       tab.setStyle("-fx-background-color:TRANSPARENT; -fx-alignment:center; -fx-font-weight: bold");
@@ -133,7 +144,23 @@ public class Login extends Stage{
         icon.setGraphic(value);
         icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
         icon.setPrefSize(60, 60);
-        icon.relocate(375,415);               
+        icon.relocate(375,415);  
+        
+        icon.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    
+               bookSelection book = new bookSelection();
+                Stage loginStage = book.getStage();
+                loginStage.show();
+               
+                   
+                getScene().getWindow().hide();
+                }
+            });
+        
+        
     }
     
     public Stage getStage(){
