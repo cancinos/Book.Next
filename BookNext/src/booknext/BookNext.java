@@ -8,6 +8,7 @@ package booknext;
 import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import Pages.Login;
+import Pages.bookSelection;
 import UI.Button;
 import UI.NavigationDrawer;
 import UI.giantCard;
@@ -88,6 +89,11 @@ public class BookNext extends Application {
             
             JFXButton button3 = new Button("Sing In".toUpperCase(),"WHITE","").getButton();
              button3.relocate(445, 420);
+             
+             
+            JFXButton button4 = new Button("Welcome".toUpperCase(),"WHITE","").getButton();
+             button4.relocate(745, 420);
+             
             //Closing Program
             button.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -129,13 +135,24 @@ public class BookNext extends Application {
                 }
             });
            
+            //For opening welcome
+              button4.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+               bookSelection book = new bookSelection();
+                Stage loginStage = book.getStage();
+                loginStage.show();
+                stage.getScene().getWindow().hide();
+                }
+            });
                
             
             
-            
-            navDrawer.getContent().getChildren().addAll(button, button2,button3);
     
                     
+            navDrawer.getContent().getChildren().addAll(button, button2,button3,button4);
+
             BorderPane page = new BorderPane();
             page.setCenter(navDrawer);
             page.setTop(toolBar);

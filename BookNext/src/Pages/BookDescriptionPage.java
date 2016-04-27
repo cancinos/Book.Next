@@ -43,6 +43,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *  Stage used for see an specific book info.
@@ -348,7 +349,7 @@ public class BookDescriptionPage extends Stage{
         btnMore.relocate(990, 55);
         addComponent(btnMore);
         
-        ListCards list = new ListCards(true);
+        ListCards list = new ListCards();
         list.createVerticalList();
         addComponent(list.getList());
     }
@@ -428,6 +429,8 @@ public class BookDescriptionPage extends Stage{
      */
     public Stage getStage()
     {
+        
+         this.initStyle(StageStyle.UNDECORATED); 
         createView();
         addComponents();
         this.page.setCenter(this.navDrawer);
