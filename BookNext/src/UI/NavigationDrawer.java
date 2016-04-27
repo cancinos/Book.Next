@@ -5,18 +5,23 @@
  */
 package UI;
 
+import Pages.BookDescriptionPage;
+import Pages.EditProfile;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 /**
  *
@@ -55,7 +60,6 @@ public class NavigationDrawer extends JFXDrawersStack{
 //        node2.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
         
         content = new Pane();
-        //content.getChildren().add(node2);
         content.setStyle("-fx-background-color: -fx-background-color: WHITE;");
 
         
@@ -75,22 +79,59 @@ public class NavigationDrawer extends JFXDrawersStack{
     
     private void setNavDrawerList()
     {
+        // <editor-fold defaultstate="collapsed" desc="Mouse event creation">
+        EventHandler<MouseEvent> goToHome = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+                BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
+                bookDescript.setSize(1100, 700); //Resizing
+                content = bookDescript.getContent();
+                //Stage bookDescriptStage = bookDescript.getStage(); //Getting Stage
+                //bookDescriptStage.show(); //Showing Stage
+                //stage.getScene().getWindow().hide(); //Hiding old Stage
+            }
+        };
+        
+        EventHandler<MouseEvent> goToProfile = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent me) {
+                    BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
+                bookDescript.setSize(1100, 700); //Resizing
+                content = bookDescript.getContent();
+                //Stage bookDescriptStage = bookDescript.getStage(); //Getting Stage
+                //bookDescriptStage.show(); //Showing Stage
+                //stage.getScene().getWindow().hide(); //Hiding old Stage
+            }
+        };
+        // </editor-fold>
+        
         JFXListView<Label> menuList = new JFXListView<Label>();
         menuList.setStyle("-fx-padding: 10 10 10 10;");
-        Label lblAct = new Label("    Home");
-        lblAct.setStyle("-fx-font-size: 14; -fx-font-weight: LIGHT;");
+        
+        Label lblHome = new Label("    Home");
+        lblHome.setStyle("-fx-font-size: 14; -fx-font-weight: LIGHT;");
         Image imgUser = new Image("/Icons/home.png");
-        lblAct.setGraphic(new ImageView(imgUser));
-        lblAct.setTextAlignment(TextAlignment.CENTER);
-        menuList.getItems().add(lblAct);
+        lblHome.setGraphic(new ImageView(imgUser));
+        lblHome.setTextAlignment(TextAlignment.CENTER);
+        menuList.getItems().add(lblHome);
+        lblHome.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+			BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
+                        bookDescript.setSize(1100, 700); //Resizing
+                        content = bookDescript.getContent();
+                        this.setContent(content);
+		});
+        //lblHome.setOnMouseClicked(goToHome);
         
-        lblAct = new Label("    Profile");
-        lblAct.setStyle("-fx-font-size: 14;");
+        Label lblProfile = new Label("    Profile");
+        lblProfile.setStyle("-fx-font-size: 14;");
         imgUser = new Image("/Icons/profile.png");
-        lblAct.setGraphic(new ImageView(imgUser));
-        lblAct.setTextAlignment(TextAlignment.CENTER);
-        menuList.getItems().add(lblAct);
-        
+        lblProfile.setGraphic(new ImageView(imgUser));
+        lblProfile.setTextAlignment(TextAlignment.CENTER);
+        menuList.getItems().add(lblProfile);
+        lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+			EditProfile profile = new EditProfile();
+                        profile.setSize(1100, 700); //Resizing
+                        content = profile.getContent();
+                        this.setContent(content);
+		});
         
         this.leftDrawerPane.getChildren().add(menuList);
     }

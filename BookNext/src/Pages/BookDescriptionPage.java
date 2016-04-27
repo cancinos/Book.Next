@@ -13,6 +13,9 @@ import UI.RatingStars;
 import UI.giantCard;
 import UI.mainToolbar;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXSlider.IndicatorPosition;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.AwesomeIcon;
 import de.jensd.fx.fontawesome.Icon;
@@ -20,11 +23,13 @@ import java.io.File;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +37,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -90,6 +96,7 @@ public class BookDescriptionPage extends Stage{
         infoCard.createCard();
         infoCard.relocate(50, 50);
         
+        // <editor-fold defaultstate="collapsed" desc="Book basic info">
         ImageView iv1 = new ImageView(new Image("https://books.google.com.gt/books/content?id=lJiXBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"));
         iv1.relocate(20, 20);
         
@@ -151,7 +158,9 @@ public class BookDescriptionPage extends Stage{
         Rectangle separator = new Rectangle(500,1);
         separator.relocate(165, 213);
         separator.setFill(Color.web("#B6B6B6"));
+        // </editor-fold>
         
+        // <editor-fold defaultstate="collapsed" desc="Book description">
         Label description = new Label("In Harry Potter and the Deathly Hallows, the seventh and final book in the epic tale of Harry Potter, Harry and Lord Voldemort each prepare for their ultimate encounter. Voldemort takes control of the Ministry of Magic, installs Severus Snape as headmaster at Hogwarts, and sends his Death Eaters across the country to wreak havoc and find Harry. Meanwhile, Harry, Ron, and Hermione embark on a desperate quest the length and breadth of Britain, trying to locate and destroy Voldemort’s four remaining Horcruxes, the magical objects in which he has hidden parts of his broken soul. They visit the Burrow, Grimmauld Place, the Ministry, Godric’s Hollow, Malfoy Manor, Diagon Alley…But every time they solve one mystery, three more evolve—and not just about Voldemort, but about Dumbledore, and Harry’s own past, and three mysterious objects called the Deathly Hallows. The Hallows are literally things out of a children’s tale, which, if real, promise to make their possessor the “Master of Death;” and they ensnare Harry with their tantalizing claim of invulnerability. It is only after a nigh-unbearable loss that he is brought back to his true purpose, and the trio returns to Hogwarts for the final breathtaking battle between the forces of good and evil. They fight the Death Eaters alongside members of the Order of the Phoenix, Dumbledore’s Army, the Weasley clan, and the full array of Hogwarts teachers and students. Yet everything turns upon the moment the entire series has been building up to, the same meeting with which our story began: the moment when Harry and Voldemort face each other at last.");
         description.setStyle("-fx-font-size:15px;");
         description.setWrapText(true);
@@ -168,17 +177,35 @@ public class BookDescriptionPage extends Stage{
         Rectangle separator2 = new Rectangle(500,1);
         separator2.relocate(165, 363);
         separator2.setFill(Color.web("#B6B6B6"));
+        // </editor-fold>
+        
+        showRating(infoCard); //Shows total users rating
+        
+        // <editor-fold defaultstate="collapsed" desc="Actuser's rating">
+        RatingStars rateStars = new RatingStars("4em");
+        HBox stars = rateStars.showEmptyStars(3);//we need to Get actual user rating... if haven't rating, shows 0 stars
+        stars.relocate(400, 290);
+        stars.setDisable(true);
+        
+        Icon editIcon = new Icon("PENCIL", "1.5em");
+        editIcon.setTextFill(Color.web("#727272"));
+        JFXButton btnEdit = new JFXButton("Edit rating");
+        btnEdit.setGraphic(editIcon);
+        btnEdit.relocate(465, 240);
+        btnEdit.setStyle("-fx-text-fill:BLACK; -fx-backgroud-color:WHITE;");
+        btnEdit.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
+            if (stars.isDisable())
+                stars.setDisable(false); else
+                stars.setDisable(true);
+           });  
+        // </editor-fold>
         
         infoBox.getChildren().addAll(lblName, moreInfo);
         infoBox.setSpacing(10);
         infoBox.relocate(180, 30);
-        showRating(infoCard);
-        infoCard.getChildren().addAll(iv1, infoBox, btnSave, heartToggle, separator, infoPane, separator2);
+        infoCard.getChildren().addAll(iv1, infoBox, btnSave, heartToggle, separator, infoPane, separator2, stars, btnEdit);
        
         addComponent(infoCard);
-        
-        //new InnerShadow(5d, 0d, -4d, Color.GRAY)
-        
         addSimilarRecomendation();
 
     }
@@ -189,6 +216,7 @@ public class BookDescriptionPage extends Stage{
         infoCard.createCard();
         infoCard.relocate(50, 50);
         
+        // <editor-fold defaultstate="collapsed" desc="Book basic info">
         ImageView iv1 = new ImageView(new Image(book.getBook_image()));
         iv1.relocate(20, 20);
         
@@ -198,7 +226,7 @@ public class BookDescriptionPage extends Stage{
         heartToggle.setGraphic(emptyHeart);
         heartToggle.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
         heartToggle.relocate(610, 30);
-        //Determinar por medio de entidad libro-usuario si es favorito. si sí, mostrar toggle seleccionado
+        //verificar que si es favorito, salga selected.
         
         VBox infoBox = new VBox();
         infoBox.setMaxHeight(150);
@@ -211,14 +239,14 @@ public class BookDescriptionPage extends Stage{
         lblName.setMaxWidth(450);
         lblName.setMaxHeight(200);
         
-        String infoStr = book.getBook_authorsStr() + "\n" + book.getBook_publisher() + "\n" + book.getBook_publishYear();
-        Label moreInfo = new Label("by " + infoStr);
+        String info = book.getBook_authorsStr() + "\n" + book.getBook_publisher() + "\n" + book.getBook_publishYear();
+        Label moreInfo = new Label("by " + info);
         moreInfo.setStyle("-fx-font-size:15px;");
         moreInfo.setWrapText(true);
         
         JFXButton btnSave = new JFXButton();
-        //Determinar por medio de entidad libro-usuario si está guardado en biblioteca
-        if (saved)
+        
+        if (saved) //Get if user has saved this book
         {
             btnSave.setText("SAVED"); 
             btnSave.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color:#4CAF50");
@@ -236,7 +264,7 @@ public class BookDescriptionPage extends Stage{
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     saved = !saved;
-                    if (!saved)
+                    if (!saved) //Until the user exit this page, we'll refresh all the data within the DB
                     {
                         btnSave.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color:#FF5252");
                         btnSave.setText("SAVE BOOK");
@@ -252,16 +280,54 @@ public class BookDescriptionPage extends Stage{
         Rectangle separator = new Rectangle(500,1);
         separator.relocate(165, 213);
         separator.setFill(Color.web("#B6B6B6"));
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Book description">
+        Label description = new Label(book.getBook_description());
+        description.setStyle("-fx-font-size:15px;");
+        description.setWrapText(true);
+        description.setMaxWidth(625);
+        
+        ScrollPane infoPane = new ScrollPane();
+        infoPane.setStyle("-fx-background-color:TRANSPARENT;");
+        infoPane.setBorder(Border.EMPTY);
+        infoPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        infoPane.setContent(description);
+        infoPane.relocate(20, 380);
+        infoPane.setPrefSize(648, 150);
+        
+        Rectangle separator2 = new Rectangle(500,1);
+        separator2.relocate(165, 363);
+        separator2.setFill(Color.web("#B6B6B6"));
+        // </editor-fold>
+        
+        showRating(infoCard); //Shows total users rating
+        
+        // <editor-fold defaultstate="collapsed" desc="Actuser's rating">
+        RatingStars rateStars = new RatingStars("4em");
+        HBox stars = rateStars.showEmptyStars(3);//we need to Get actual user rating... if haven't rating, shows 0 stars
+        stars.relocate(400, 290);
+        stars.setDisable(true);
+        
+        Icon editIcon = new Icon("PENCIL", "1.5em");
+        editIcon.setTextFill(Color.web("#727272"));
+        JFXButton btnEdit = new JFXButton("Edit rating");
+        btnEdit.setGraphic(editIcon);
+        btnEdit.relocate(465, 240);
+        btnEdit.setStyle("-fx-text-fill:BLACK; -fx-backgroud-color:WHITE;");
+        btnEdit.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
+            if (stars.isDisable())
+                stars.setDisable(false); else
+                stars.setDisable(true);
+           });  
+        // </editor-fold>
+        
         infoBox.getChildren().addAll(lblName, moreInfo);
         infoBox.setSpacing(10);
         infoBox.relocate(180, 30);
-        infoCard.getChildren().addAll(iv1, infoBox, btnSave, heartToggle, separator);
-        
-        
+        infoCard.getChildren().addAll(iv1, infoBox, btnSave, heartToggle, separator, infoPane, separator2, stars, btnEdit);
+       
         addComponent(infoCard);
-        
-        //new InnerShadow(5d, 0d, -4d, Color.GRAY)
-        
         addSimilarRecomendation();
 
     }
@@ -335,9 +401,8 @@ public class BookDescriptionPage extends Stage{
         stars.getChildren().add(new ImageView(new Image("/Icons/1stars.png")));
         stars.relocate(250, 245);
         infoCard.getChildren().addAll(lblAv,stars, lbl1, lbl2, lbl3, lbl4, lbl5);
-        
     }
-    
+        
     private double getAverage(double s5, double s4, double s3, double s2, double s1, double cont)
     {
         double average = (5*s5 + 4*s4 + 3*s3 + 2*s2 + 1*s1)/cont;
@@ -372,5 +437,12 @@ public class BookDescriptionPage extends Stage{
         this.setScene(scene);
         this.setScene(scene);
         return this;
+    }
+    
+    public Pane getContent()
+    {
+        createView();
+        addComponents();
+        return navDrawer.getContent();
     }
 }

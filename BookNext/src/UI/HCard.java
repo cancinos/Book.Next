@@ -62,6 +62,7 @@ public class HCard extends Pane{
         name_author.setSpacing(5);
         
         RatingStars stars = new RatingStars("1em");
+        stars.relocate(85, 90);
         Random  rnd = new Random();
         double rating = rnd.nextDouble() * 5;
         this.setCursor(Cursor.HAND);
@@ -96,7 +97,7 @@ public class HCard extends Pane{
         name_author.setSpacing(5);
         
         RatingStars stars = new RatingStars("1em");
-        
+        stars.relocate(85, 90);
         this.setCursor(Cursor.HAND);
         this.getChildren().addAll(iv1, name_author, stars.showRating(4.3)); //Change rating with original book rating
     }

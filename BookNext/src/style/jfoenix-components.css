@@ -58,10 +58,12 @@
 .jfx-text-field .errorLabel, .jfx-password-field .errorLabel , .jfx-text-area .errorLabel{
 	-fx-text-fill : #D34336;
 	-fx-font-size: 0.75em;
+        -fx-padding: 6 6 6 6;
 }
 .jfx-text-field .errorIcon, .jfx-password-field .errorIcon, .jfx-text-area .errorIcon{
 	-fx-text-fill : #D34336;
-	-fx-font-size: 1em;
+	-fx-font-size: 0.8em;
+        -fx-padding: 4;
 }
 
 
@@ -410,4 +412,27 @@
 	-fx-border-width: 0 0 2 0;
 }
 
+.jfx-radio-button .dot {
+	-fx-fill: #727272;
+	
+}
+
+.jfx-slider-style {
+	-fx-indicator-position: right;
+}
+
+.jfx-slider-style > .thumb {
+	-fx-background-color:#FFC107;
+}
+
+.jfx-slider-style .track {
+	-fx-background-color: #B6B6B6;
+	-fx-pref-height: 2px;
+	-fx-pref-width: 2px;
+}
+
+.jfx-slider-style .sliderValue {
+	-fx-stroke: WHITE;
+	-fx-font-size: 10.0;
+}
 
