@@ -8,13 +8,16 @@ package Pages;
 import UI.ListCards;
 import UI.VCard;
 import UI.mainToolbar;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Light.Point;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -34,7 +37,9 @@ public class bookSelection extends Stage {
     private Pane centralPage = new Pane();
     private  ListCards list;
     public static int selected = 0; 
-    public static JFXToggleNode next;
+    public static JFXToggleNode next;    
+    public static JFXToggleNode back;
+    private Icon value;
     
     public bookSelection(){
         
@@ -75,7 +80,7 @@ public class bookSelection extends Stage {
     public void createIcon(){
         
          next = new JFXToggleNode();
-        Icon value = new Icon("ARROW_RIGHT", "2em");
+        value = new Icon("ARROW_RIGHT", "2em");
         value.setAlignment(Pos.CENTER);
         value.setTextFill(Color.WHITE);
         next.setGraphic(value);
@@ -97,6 +102,33 @@ public class bookSelection extends Stage {
                 }
             });
         
+           
+           
+        back = new JFXToggleNode();
+        value = new Icon("ARROW_RIGHT", "2em");
+        value.setAlignment(Pos.CENTER);
+        value.setTextFill(Color.BLACK);
+        back.setGraphic(value);
+        //next.setStyle("-fx-background-radius: 4em;" + toolBar.getStyle()+";");
+        back.setPrefSize(60, 60);
+        back.relocate(0,0);
+        back.setVisible(true);
+        centralPage.getChildren().add(back);
+       
+            //Closing Program
+            next.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                   // list.getList().relocate(list.getList().getLayoutX()+10, list.getList().getLayoutY());
+                    
+                    list.getList().setHvalue(list.getList().getHvalue()+0.1);
+                }
+            });
+           
+           
+           
+           
     }
     
     public Stage getStage(){
