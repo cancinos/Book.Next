@@ -8,6 +8,7 @@ package UI;
 import Classes.CBook;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.FlowPane;
@@ -98,27 +99,35 @@ public class ListCards extends ScrollPane{
     
     /**
      * This method shows rows and columns of books
-     * @param bookList
-     * @return 
+     * @param bookList user's book list
      */
-    public void createMatrixList(int booksPerRow, List<CBook> bookList)
+    public void createMatrixList(List<CBook> bookList)
     {
-        //giantCard infoCard = new giantCard(750,550);
-        HBox firstRow = new HBox();
-        FlowPane bookMatrix = new FlowPane();
-        bookMatrix.setPrefSize(700,500);
-        bookMatrix.setStyle("-fx-padding: 20 20 20 20; -fx-background-color:TRANSPARENT;");
+        FlowPane cardsMatrix = new FlowPane();
+        cardsMatrix.setVgap(25);
+        cardsMatrix.setHgap(15);
+        cardsMatrix.setPrefWrapLength(700);
+        cardsMatrix.setMaxHeight(550);
+        cardsMatrix.setPadding(new Insets(15,15,15,15));
+        cardsMatrix.setStyle("-fx-background-color:TRANSPARENT;");
 
         VCard newCard;
         
-        for (CBook book : bookList) {
+            for (CBook book : bookList) {
             newCard = new VCard(128,250);
-            newCard.createCard();
-            bookMatrix.getChildren().add(newCard);
-        }
+            newCard.createSimpleCard();
+            cardsMatrix.getChildren().add(newCard);
+  }
         
-        //this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-        bookMatrix.setMaxHeight(450);
+        
+        this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        
+        //firstRow.relocate(0,0);
+        this.setContent(cardsMatrix);
+        this.setStyle(" -fx-background-color:TRANSPARENT;");
+        this.relocate(5, 0);
+        this.setMinSize(745, 560);
+        this.setMaxSize(745, 560);
     }
     
     

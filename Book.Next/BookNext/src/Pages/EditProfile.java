@@ -12,11 +12,16 @@ import UI.giantCard;
 import UI.mainToolbar;
 import UI.textField;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import java.awt.Container;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -24,10 +29,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
@@ -92,18 +99,18 @@ public class EditProfile extends Stage {
         view.fitWidthProperty().bind(square.widthProperty());
         view.fitHeightProperty().bind(square.heightProperty());
         view.setClip(clip);
-        view.relocate(75, 50);
+        view.relocate(95, 40);
         // </editor-fold>
                       
         VBox vbox = new VBox();
         vbox.setMinHeight(350);
         vbox.setMinWidth(150);
+        vbox.setStyle("-fx-background-color:WHITE;");
         vbox.setSpacing(15);
-        giantCard infoCard = new giantCard(750,550);
-        infoCard.createCard();
-        infoCard.relocate(300, 50);
-        
-        showUserLibrary(infoCard);
+        Label lblBooks = new Label("My books");
+        lblBooks.setStyle("-fx-font-size:22");
+        lblBooks.relocate(335,45);
+        showUserLibrary();
         
         
         
@@ -119,6 +126,14 @@ public class EditProfile extends Stage {
         txtFullname.setText("Juan Carlos Durini");
         txtFullname.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
         
+        
+        
+        JFXDatePicker DatePicker = new JFXDatePicker();
+        DatePicker.setPromptText("pick a date");
+        DatePicker.setStyle("-fx-font-size: 18;");
+        DatePicker.setDefaultColor(Color.web("#F44336"));
+        DatePicker.setEditable(false);
+        DatePicker.setValue(LocalDate.of(1994, 9, 30));
 //        JFXPasswordField txtPassword;
 //        txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
 //        //txtPassword.setText("durini1230");
@@ -128,17 +143,17 @@ public class EditProfile extends Stage {
         JFXButton btnLogOut = new JFXButton("LOG OUT");
         btnLogOut.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #F44336;");
         btnLogOut.relocate(120, 557);
+
         
-        vbox.getChildren().addAll(txtUsername, txtFullname);
+        vbox.getChildren().addAll(txtUsername, txtFullname, DatePicker);
         vbox.relocate(40, 200);
         addComponent(vbox);
         addComponent(btnLogOut);
-        
-        addComponent(infoCard);
+        addComponent(lblBooks);
         addComponent(view);
     }
     
-    private void showUserLibrary(giantCard infoCard)
+    private void showUserLibrary()
     {
         List<CBook> myBooks;
         myBooks = new ArrayList<>();
@@ -152,12 +167,15 @@ public class EditProfile extends Stage {
         
         
         
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 7; i++) {
             myBooks.add(ejemplo);
         }
         
         ListCards list = new ListCards();
-        //infoCard.getChildren().add(list.createMatrixList(10, myBooks));
+        list.createMatrixList(myBooks);
+        list.relocate(320, 70);
+        addComponent(list);
+        //infoCard.getChildren().add(list.getList());
     }
     
     /**
