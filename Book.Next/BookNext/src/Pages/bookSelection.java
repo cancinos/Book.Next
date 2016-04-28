@@ -68,10 +68,10 @@ public class bookSelection extends Stage {
         list.createHorizontalList();     
         list.relocate(100, 350);
         
-       Label title = new Label("SELECT 3 BOOKS TO CONTINUE...");
-       title.setStyle("-fx-font-size:20; -fx-font-color:BLACK; -fx-font-weight: bold; -fx-label-float:true;");
-       title.relocate(5, 5);
-        centralPage.getChildren().add(title);
+//       Label title = new Label("SELECT 3 BOOKS TO CONTINUE...");
+//       title.setStyle("-fx-font-size:20; -fx-font-color:BLACK; -fx-font-weight: bold; -fx-label-float:true;");
+//       title.relocate(5, 5);
+//        centralPage.getChildren().add(title);
         
         centralPage.getChildren().add(list.getList());
     }

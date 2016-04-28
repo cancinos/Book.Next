@@ -8,12 +8,22 @@ package Pages;
 import UI.giantCard;
 import UI.Button;
 import UI.textField;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialog.DialogTransition;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -28,16 +38,19 @@ import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sun.security.util.Password;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -48,6 +61,7 @@ public class Login extends Stage{
     /*
     Components
     */
+       private Desktop desktop = Desktop.getDesktop();
        private Pane page = new Pane();
        private giantCard  card;
        private JFXTabPane tabPane ;
@@ -63,7 +77,14 @@ public class Login extends Stage{
        private JFXTextField user;
        private JFXPasswordField pass;
        private ScrollPane scrollpane;
-       
+       private ImageView profile_pic;   
+       private JFXTextField new_name;
+        private  JFXTextField new_user;
+        private JFXPasswordField new_pass;
+        private JFXTextField country;
+        private JFXDatePicker date;
+    
+    //Create Card with Components   
     public void createView(){
         
         card = new giantCard(400,500);
@@ -78,6 +99,7 @@ public class Login extends Stage{
         page.getChildren().add(card);
     }
     
+    //Create components for Login
     public void createLogin(){
         logbox =new VBox();
         logbox.setStyle("-fx-alignment: center");
@@ -90,6 +112,7 @@ public class Login extends Stage{
         logbox.getChildren().add(pass);
     }
     
+    //Create components for new User
     public void createUser(){
         //scrollpane
         scrollpane = new ScrollPane();
@@ -100,24 +123,27 @@ public class Login extends Stage{
         scrollpane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         
         
-        
+        //User box with components
         userbox =new VBox();
         userbox.setStyle("-fx-alignment: center; -fx-background-color:WHITE;");
         userbox.setSpacing(35);
         userbox.setPrefSize(400,250);
+        //Text fields
         fields = new textField();              
-        JFXTextField name = fields.textField("Full Name", "16");
-        JFXTextField user = fields.validateTextField("Username","User name can't be empty","15");    
-        JFXPasswordField pass = fields.PasswordField("Password","Password can't be empty","15"); 
-        JFXTextField country = fields.textField("Country","16");
-        JFXDatePicker date = new JFXDatePicker();        
-        createProfilePicture();
-        userbox.getChildren().add(name);
-        userbox.getChildren().add(user);
-        userbox.getChildren().add(pass);
+         new_name = fields.textField("Full Name", "16");
+         new_user = fields.validateTextField("Username","User name can't be empty","15");    
+         new_pass = fields.PasswordField("Password","Password can't be empty","15"); 
+        country = fields.textField("Country","16");
+         date = new JFXDatePicker();        
+        profilePicture("/Icons/user.png");
+        
+     
+        userbox.getChildren().add(new_name);
+        userbox.getChildren().add(new_user);
+        userbox.getChildren().add(new_pass);
         userbox.getChildren().add(country);
         userbox.getChildren().add(date);
-        userbox.getChildren().add(up_down);
+        
         
         scrollpane.setContent(userbox);
     }
@@ -165,8 +191,7 @@ public class Login extends Stage{
             }
         });
     }
-  
-    
+      
     public void loginPic(){
               
         background = new ImageView(new Image("Icons/login.jpg"));        
@@ -177,31 +202,49 @@ public class Login extends Stage{
         
     }   
     
-    public void selectPic(){
+    public void createProfilePicture(){
         
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        configureFileChooser(fileChooser);        
+         File file = fileChooser.showOpenDialog(this);
+
+        if (file != null) {            
+            profile_pic.setImage(new Image(file.toURI().toString()));
+        }
+
     }
     
-    public void createProfilePicture(){
-            // <editor-fold defaultstate="collapsed" desc="Circle Image">
+    public void profilePicture(String picture){
+         // <editor-fold defaultstate="collapsed" desc="Circle Image">
         
-        ImageView view = (new ImageView(new Image("/Icons/durini.jpg")));
+        profile_pic = (new ImageView(new Image(picture)));
         Rectangle square = new Rectangle();
         square.setWidth(150);
         square.setHeight(150);
-        view.setClip(square);
+        profile_pic.setClip(square);
         Circle clip = new Circle();
         clip.setCenterX(75);
         clip.setCenterY(75);
         clip.setRadius(75);
-        view.fitWidthProperty().bind(square.widthProperty());
-        view.fitHeightProperty().bind(square.heightProperty());
-        view.setClip(clip);
+        profile_pic.fitWidthProperty().bind(square.widthProperty());
+        profile_pic.fitHeightProperty().bind(square.heightProperty());
+        profile_pic.setClip(clip);
         
         
+          profile_pic.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+          @Override
+          public void handle(MouseEvent arg0) {
+            createProfilePicture();
+          }
+
+      });
+          
+        userbox.getChildren().add(profile_pic);
+        // </editor-fold>  
         
         
-        userbox.getChildren().add(view);
-        // </editor-fold>
         
     }
     
@@ -237,7 +280,7 @@ public class Login extends Stage{
         save_icon.setGraphic(value2);
         save_icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
         save_icon.setPrefSize(60, 60);
-        save_icon.relocate(375,415);
+        save_icon.relocate(375,450);
         save_icon.setVisible(false);
         
          save_icon.setOnAction(new EventHandler<ActionEvent>() {
@@ -245,33 +288,11 @@ public class Login extends Stage{
                 @Override
                 public void handle(ActionEvent actionEvent) {
             
-          //      validateLogin();     
+                    validateNewUser();
                 }
             });
          // </editor-fold>
         
-        // <editor-fold desc="UP Down Icon">
-         up_down = new JFXToggleNode();
-        Icon value3 = new Icon("LONG_ARROW_DOWN", "2em");
-        value3.setAlignment(Pos.CENTER);
-        value3.setTextFill(Color.GRAY);
-        up_down.setGraphic(value3);
-        up_down.setStyle("-fx-background-color:#TRANSPARENT;");
-        up_down.setPrefSize(60, 60);
-        up_down.relocate(150,500);
-        up_down.setVisible(true);
-        
-         up_down.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent actionEvent) {
-            
-          //      validateLogin();     
-                }
-            });
-         
-         // </editor-fold>
-         
          
     }
     
@@ -282,8 +303,7 @@ public class Login extends Stage{
                 bookSelection book = new bookSelection();
                 Stage loginStage = book.getStage();
                 loginStage.show();
-                getScene().getWindow().hide();
-               
+                getScene().getWindow().hide();               
         }else{
             
             if(user.getText().length()<4){
@@ -296,6 +316,33 @@ public class Login extends Stage{
         }        
     }
   
+    public void validateNewUser(){
+        
+        
+         if(new_user.getText().length()>4 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){            
+            //Connect to Database
+                bookSelection book = new bookSelection();
+                Stage loginStage = book.getStage();
+                loginStage.show();
+                getScene().getWindow().hide();               
+        }else{
+            
+            if(new_user.getText().length()<4){
+                new_user.validate();
+            }else{
+                if(new_pass.getText().length()<4){
+                    new_pass.validate();
+                }else{
+                   //SHOW DIALOG
+                }
+            }
+        } 
+        
+        
+        
+        
+    }
+    
     public Stage getStage(){
         this.initStyle(StageStyle.UNDECORATED);       
        page.setStyle("-fx-background-color:#455A64");
@@ -311,4 +358,30 @@ public class Login extends Stage{
        
        return this;
     }
+
+    
+    //OPENFILEDIALOG
+    
+    private static void configureFileChooser(final FileChooser fileChooser) {      
+            fileChooser.setTitle("View Pictures");
+            fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+            );                 
+            fileChooser.getExtensionFilters().addAll(
+             //   new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+            );
+    }
+
+     private void openFile(File file) {
+        try {
+            desktop.open(file);
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(
+                Level.SEVERE, null, ex
+            );
+        }
+    }
 }
+
