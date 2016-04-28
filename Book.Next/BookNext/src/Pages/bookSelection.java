@@ -36,9 +36,13 @@ public class bookSelection extends Stage {
     private VCard vcard;
     private Pane centralPage = new Pane();
     private  ListCards list;
+    private ListCards list2;
     public static int selected = 0; 
-    public static JFXToggleNode next;    
-    public static JFXToggleNode back;
+    public static JFXToggleNode next; 
+    public static JFXToggleNode next1;    
+    public static JFXToggleNode back1;
+    public static JFXToggleNode next2;    
+    public static JFXToggleNode back2;
     private Icon value;
     
     public bookSelection(){
@@ -64,16 +68,17 @@ public class bookSelection extends Stage {
         list.relocate(100, 50);      
         
         centralPage.getChildren().add(list.getList());
-        list = new ListCards(); 
-        list.createHorizontalList();     
-        list.relocate(100, 350);
+        
+        list2 = new ListCards(); 
+        list2.createHorizontalList();     
+        list2.relocate(100, 350);
         
 //       Label title = new Label("SELECT 3 BOOKS TO CONTINUE...");
 //       title.setStyle("-fx-font-size:20; -fx-font-color:BLACK; -fx-font-weight: bold; -fx-label-float:true;");
 //       title.relocate(5, 5);
 //        centralPage.getChildren().add(title);
         
-        centralPage.getChildren().add(list.getList());
+        centralPage.getChildren().add(list2.getList());
     }
     
   
@@ -86,7 +91,7 @@ public class bookSelection extends Stage {
         next.setGraphic(value);
         next.setStyle("-fx-background-radius: 4em;" + toolBar.getStyle()+";");
         next.setPrefSize(60, 60);
-        next.relocate(925,550);
+        next.relocate(920,550);
         next.setVisible(false);
         centralPage.getChildren().add(next);
         
@@ -103,42 +108,153 @@ public class bookSelection extends Stage {
             });
         
            
-           
-        back = new JFXToggleNode();
+    }
+    
+    public void createNextButtons(){
+       
+       // <editor-fold desc="next1"> 
+        next1 = new JFXToggleNode();
         value = new Icon("ARROW_RIGHT", "2em");
+        
         value.setAlignment(Pos.CENTER);
         value.setTextFill(Color.BLACK);
-        back.setGraphic(value);
-        //next.setStyle("-fx-background-radius: 4em;" + toolBar.getStyle()+";");
-        back.setPrefSize(60, 60);
-        back.relocate(0,0);
-        back.setVisible(true);
-        centralPage.getChildren().add(back);
+        next1.setStyle("-fx-background-radius: 4em; -fx-background-color:Transparent;");
+        next1.setGraphic(value);
+       next1.setPrefSize(50, 50);
+        next1.relocate(900,150);
+        next1.setVisible(true);
+        centralPage.getChildren().add(next1);
        
             //Closing Program
-            next.setOnAction(new EventHandler<ActionEvent>() {
+            next1.setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
                 public void handle(ActionEvent actionEvent) {
                    // list.getList().relocate(list.getList().getLayoutX()+10, list.getList().getLayoutY());
-                    
+                 if(list.getList().getHvalue() >= list.getList().getHmax()){
+                        next1.setVisible(false);
+                        back1.setVisible(true);
+                    }else{
                     list.getList().setHvalue(list.getList().getHvalue()+0.1);
+                    }    
                 }
             });
-           
-           
-           
-           
+        
+       // </editor-fold>
+            
+            
+       // <editor-fold desc="next2"> 
+        next2 = new JFXToggleNode();
+        value = new Icon("ARROW_RIGHT", "2em");
+        
+        value.setAlignment(Pos.CENTER);
+        value.setTextFill(Color.BLACK);
+        next2.setStyle("-fx-background-radius: 4em; -fx-background-color:Transparent;");
+        next2.setGraphic(value);
+       next2.setPrefSize(50, 50);
+        next2.relocate(900,450);
+        next2.setVisible(true);
+        centralPage.getChildren().add(next2);
+       
+            //Closing Program
+            next2.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                   
+                    if(list2.getList().getHvalue() == list2.getList().getHmax()){
+                        next2.setVisible(false);
+                        back2.setVisible(true);
+                    }else{                        
+                    list2.getList().setHvalue(list2.getList().getHvalue()+0.1);
+                    }
+                }
+            });
+        
+       // </editor-fold>
+            
+            
+        
+    }    
+    
+    public void createBackButtons(){
+       
+       // <editor-fold desc="back1"> 
+        back1 = new JFXToggleNode();
+        value = new Icon("ARROW_LEFT", "2em");
+        
+        value.setAlignment(Pos.CENTER);
+        value.setTextFill(Color.BLACK);
+        back1.setStyle("-fx-background-radius: 4em; -fx-background-color:Transparent;");
+        back1.setGraphic(value);
+       back1.setPrefSize(50, 50);
+        back1.relocate(50,150);
+        back1.setVisible(false);
+        centralPage.getChildren().add(back1);
+       
+            //Closing Program
+            back1.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                   // list.getList().relocate(list.getList().getLayoutX()+10, list.getList().getLayoutY());
+                 if(list.getList().getHvalue() == list.getList().getHmin()){
+                     next1.setVisible(true);
+                     back1.setVisible(false);
+                    }else{
+                    list.getList().setHvalue(list.getList().getHvalue()-0.1);
+                    }    
+                }
+            });
+        
+       // </editor-fold>
+            
+            
+       // <editor-fold desc="back2"> 
+        back2 = new JFXToggleNode();
+        value = new Icon("ARROW_LEFT", "2em");
+        
+        value.setAlignment(Pos.CENTER);
+        value.setTextFill(Color.BLACK);
+        back2.setStyle("-fx-background-radius: 4em; -fx-background-color:Transparent;");
+        back2.setGraphic(value);
+       back2.setPrefSize(50, 50);
+        back2.relocate(50,450);
+        back2.setVisible(false);
+        centralPage.getChildren().add(back2);
+       
+            //Closing Program
+            back2.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                   
+                    if(list2.getList().getHvalue() <= list2.getList().getHmin()){
+                        next2.setVisible(true);
+                     back2.setVisible(false);
+                    }else{
+                    list2.getList().setHvalue(list2.getList().getHvalue()-0.1);
+                    }
+                }
+            });
+        
+       // </editor-fold>
+            
+            
+        
     }
+    
     
     public Stage getStage(){
          this.initStyle(StageStyle.UNDECORATED);             
        
         createView();
         createIcon();
+        createBackButtons();
+        createNextButtons();
         page.setTop(this.toolBar);
         page.setCenter(centralPage);
-        Scene scene = new Scene(page, 1000, 700);
+        Scene scene = new Scene(page, 1000, 720);
         scene.getStylesheets().add("/style/jfoenix-components.css");
         this.setScene(scene);
         this.setScene(scene);
