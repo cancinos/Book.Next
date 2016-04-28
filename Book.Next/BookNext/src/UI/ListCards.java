@@ -61,39 +61,38 @@ public class ListCards extends ScrollPane{
         this.setPrefSize(800,275);
         this.setStyle("-fx-padding: 0 0 0 20; -fx-background-color:TRANSPARENT;");
         
+        //remove Border
         this.setBorder(Border.EMPTY);
-        CBook newBook = new CBook();
+        
+        CBook newBook = new CBook();        
+        newBook.setBook_name("Divergent");
+        List<String> authors = new ArrayList<>();
+        authors.add("Veronica Roth");
+        newBook.setBook_authors(authors);
+        newBook.setBook_image("https://books.google.com.gt/books/content?id=nv9lZM_0RI4C&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE721Uleu1ZcOyJ0R-IY74iLoirdPChX7O9UOvu7n_L6vG30BDwo659QHvZJTcijsv7YR5KQonzT5X1TkxE93kcYEOjgnSLHcHN9uvlfYo8oH2E3Ovsa4W4iqobbanb1wa71xYYsh");
+        
         
         List<CBook> bookList;
         bookList = new ArrayList<>();
         
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             
         bookList.add(newBook);
         }
         
+        //30 = padding
         HBox hbox = new HBox(30);
         VCard newCard;
         
         for (CBook bookList1 : bookList) {
             newCard = new VCard(128,250);
-            newCard.createCard();
+            newCard.createCard(bookList1);
             hbox.getChildren().add(newCard);
         }
         
         
-        for (int i = 0; i < 5; i++) {
-            
-        bookList.add(newBook);
-        }
         
-        for (int i = 0; i < 5; i++) {
-            newCard = new VCard(128,250);
-            newCard.createCard2();
-            hbox.getChildren().add(newCard);
-        }
-        
-        this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setContent(hbox);
     }
     
@@ -111,13 +110,22 @@ public class ListCards extends ScrollPane{
         cardsMatrix.setPadding(new Insets(15,15,15,15));
         cardsMatrix.setStyle("-fx-background-color:TRANSPARENT;");
 
+          CBook newBook = new CBook();        
+        newBook.setBook_name("Divergent");
+        List<String> authors = new ArrayList<>();
+        authors.add("Veronica Roth");
+        newBook.setBook_authors(authors);
+        newBook.setBook_image("https://books.google.com.gt/books/content?id=nv9lZM_0RI4C&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE721Uleu1ZcOyJ0R-IY74iLoirdPChX7O9UOvu7n_L6vG30BDwo659QHvZJTcijsv7YR5KQonzT5X1TkxE93kcYEOjgnSLHcHN9uvlfYo8oH2E3Ovsa4W4iqobbanb1wa71xYYsh");
+        
+        
+        
         VCard newCard;
         
             for (CBook book : bookList) {
-            newCard = new VCard(128,250);
+            newCard = new VCard(128,250)
             newCard.createSimpleCard();
             cardsMatrix.getChildren().add(newCard);
-  }
+        }
         
         
         this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
