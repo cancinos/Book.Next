@@ -24,7 +24,8 @@ public class textField extends TextField {
    
    public JFXTextField validateTextField(String title,String error,String font){
         textField = new JFXTextField();
-        textField.setPromptText(title); 
+        textField.setPromptText(title);
+        textField.setLabelFloat(true);
         textField.setStyle("-fx-font-size:"+font +";");
         validator = new RequiredFieldValidator();
         validator.setMessage(error);
@@ -40,7 +41,7 @@ public class textField extends TextField {
    
    public JFXPasswordField PasswordField(String title,String error,String font){
                 passwordField	 = new JFXPasswordField();
-		passwordField.setStyle("-fx-label-float:true;");
+                passwordField.setLabelFloat(true);
 		passwordField.setPromptText(title);             
                 passwordField.setStyle("-fx-font-size:"+font+";");
                 
