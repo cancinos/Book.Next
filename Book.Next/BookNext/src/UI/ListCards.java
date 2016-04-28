@@ -41,7 +41,6 @@ public class ListCards extends ScrollPane{
         bookList.add(newBook);
         bookList.add(newBook);
         bookList.add(newBook);
-        bookList.add(newBook);
         
         VBox vbox = new VBox(10);
         HCard newCard;
@@ -51,7 +50,7 @@ public class ListCards extends ScrollPane{
             vbox.getChildren().add(newCard);
         }
         
-        this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        this.setVbarPolicy(ScrollBarPolicy.NEVER);
         this.setContent(vbox);
         this.relocate(800, 105);
     }
@@ -122,7 +121,7 @@ public class ListCards extends ScrollPane{
         VCard newCard;
         
             for (CBook book : bookList) {
-            newCard = new VCard(128,250)
+            newCard = new VCard(128,250);
             newCard.createSimpleCard();
             cardsMatrix.getChildren().add(newCard);
         }

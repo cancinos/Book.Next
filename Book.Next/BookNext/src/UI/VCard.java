@@ -7,6 +7,7 @@ package UI;
 
 import Classes.CBook;
 import Pages.bookSelection;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -50,12 +51,14 @@ public class VCard extends Pane{
         Label author = new Label(book.getBook_authorsStr());
         
         title.setStyle("-fx-font-size:15px;");
-        title.setWrapText(true);       
+        title.setMaxWidth(116);
+        title.setPadding(new Insets(0,0,0,10));
         title.relocate(0, 205);
         
         author.relocate(0, 225);
-        title.setStyle("-fx-font-size:11px;");
-        title.setWrapText(true);       
+        author.setStyle("-fx-font-size:12px;");
+        author.setPadding(new Insets(0,0,0,10));
+        author.setMaxWidth(116);    
         author.setTextFill(Color.GRAY);
         
         this.getChildren().add(background);
@@ -76,16 +79,19 @@ public class VCard extends Pane{
         background.setFitWidth(128);
         background.relocate(0, 0);
         
-        Label title = new Label("Divergent");
+        Label title = new Label("Harry Potter and the Deathly");
         Label author = new Label("Veronica Roth");
         
-        title.setStyle("-fx-font-size:15px;");
-        title.setWrapText(true);       
+        title.setStyle("-fx-font-size:14px;");
+        title.setMaxWidth(116);
+        title.setPadding(new Insets(0,0,0,10));
         title.relocate(0, 205);
         
         author.relocate(0, 225);
-        title.setStyle("-fx-font-size:11px;");
-        title.setWrapText(true);       
+        author.setMaxWidth(116);
+        author.setStyle("-fx-font-size:12px;");
+        author.setPadding(new Insets(0,0,0,10));
+        //title.setWrapText(true);       
         author.setTextFill(Color.GRAY);
         
         this.getChildren().add(background);
@@ -94,8 +100,6 @@ public class VCard extends Pane{
         
         this.setCursor(Cursor.HAND);
     }
-    
-    boolean isclicked =false;
     
     public void createEvent(){
         

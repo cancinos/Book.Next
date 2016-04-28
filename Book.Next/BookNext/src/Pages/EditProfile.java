@@ -6,6 +6,7 @@
 package Pages;
 
 import Classes.CBook;
+import Classes.CUser;
 import UI.ListCards;
 import UI.NavigationDrawer;
 import UI.giantCard;
@@ -13,10 +14,20 @@ import UI.mainToolbar;
 import UI.textField;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXRippler;
+import com.jfoenix.controls.JFXRippler.RipplerMask;
+import com.jfoenix.controls.JFXRippler.RipplerPos;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
+import com.jfoenix.controls.JFXToggleNode;
+import de.jensd.fx.fontawesome.Icon;
 import java.awt.Container;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -26,11 +37,19 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
+import javafx.geometry.Insets;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -52,6 +71,9 @@ public class EditProfile extends Stage {
     private mainToolbar toolBar;
     private BorderPane page = new BorderPane();
     private double width, height;
+    //String usrname, String country, String full, String birth, String img, String pass)
+    private CUser actUser = new CUser("pinaconda30", "Guatemala", "Juan Carlos Durini", "30/09/1994", "/Icons/durini.jpg", "lalalolo");
+    Boolean editDisabled = true;
     
     /**
      * This method creates stage's navigation Drawer & toolbar
@@ -87,7 +109,7 @@ public class EditProfile extends Stage {
     private void addComponents()
     {
         // <editor-fold defaultstate="collapsed" desc="Circle Image">
-        ImageView view = (new ImageView(new Image("/Icons/durini.jpg")));
+        ImageView view = (new ImageView(new Image(actUser.getUser_image())));
         Rectangle square = new Rectangle();
         square.setWidth(150);
         square.setHeight(150);
@@ -99,58 +121,107 @@ public class EditProfile extends Stage {
         view.fitWidthProperty().bind(square.widthProperty());
         view.fitHeightProperty().bind(square.heightProperty());
         view.setClip(clip);
-        view.relocate(95, 40);
+        view.relocate(90, 40);
         // </editor-fold>
-                      
+        
         VBox vbox = new VBox();
         vbox.setMinHeight(350);
         vbox.setMinWidth(150);
+        vbox.setDisable(true);
         vbox.setStyle("-fx-background-color:WHITE;");
+        vbox.setEffect(new DropShadow(5d, 0d, 0d, Color.web("#B6B6B6")));
         vbox.setSpacing(15);
+        vbox.setPadding(new Insets(10,10, 10, 10));
         Label lblBooks = new Label("My books");
         lblBooks.setStyle("-fx-font-size:22");
         lblBooks.relocate(335,45);
         showUserLibrary();
-        
-        
-        
+             
         // <editor-fold defaultstate="collapsed" desc="User's info">
         
         JFXTextField txtUsername;
         txtUsername = new textField().validateTextField("Username", "User name can't be empty", "18");
-        txtUsername.setText("@pinaconda30");
+        txtUsername.setText("@" + actUser.gerUsername());
         txtUsername.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
         
         JFXTextField txtFullname;
         txtFullname = new textField().validateTextField("Full name", "Full name can't be empty", "18");
-        txtFullname.setText("Juan Carlos Durini");
+        txtFullname.setText(actUser.getUser_fullName());
         txtFullname.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
         
-        
+        JFXTextField txtCountry;
+        txtCountry = new textField().validateTextField("Country", "Country can't be empty", "18");
+        txtCountry.setText(actUser.getUser_country());
+        txtCountry.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
         
         JFXDatePicker DatePicker = new JFXDatePicker();
         DatePicker.setPromptText("pick a date");
         DatePicker.setStyle("-fx-font-size: 18;");
         DatePicker.setDefaultColor(Color.web("#F44336"));
         DatePicker.setEditable(false);
-        DatePicker.setValue(LocalDate.of(1994, 9, 30));
-//        JFXPasswordField txtPassword;
-//        txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
-//        //txtPassword.setText("durini1230");
-//        txtPassword.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
+        DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
+        
+        JFXPasswordField txtPassword;
+        txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
+        txtPassword.setText("durini1230");
+        txtPassword.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
+        
+        // </editor-fold>
+        // <editor-fold defaultstate="collapsed" desc="Buttons">
+        JFXButton btnEdit = new JFXButton("EDIT");
+        EventHandler<ActionEvent> editHandler = new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    editDisabled = !editDisabled;
+                    vbox.setDisable(editDisabled);
+                    if (editDisabled == true)
+                    {
+                        Icon editIcon = new Icon("PENCIL", "1em");
+                        editIcon.setTextFill(Color.WHITE);
+                        editIcon.setPadding(new Insets(0,10,0,0));
+                        btnEdit.setGraphic(editIcon);
+                        btnEdit.setText("Edit");
+                    } else
+                    {
+                        Icon saveIcon = new Icon("SAVE", "1em");
+                        saveIcon.setTextFill(Color.WHITE);
+                        saveIcon.setPadding(new Insets(0,10,0,0));
+                        btnEdit.setGraphic(saveIcon);
+                        btnEdit.setText("Save");
+                    }
+                }
+        };
+        btnEdit.setOnAction(editHandler);
+        JFXButton btnLogOut = new JFXButton("Log Out");
+        btnLogOut.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #F44336;");
+        btnLogOut.relocate(180, 570);
+        
+        Icon editIcon = new Icon("PENCIL", "1em");
+        editIcon.setTextFill(Color.WHITE);
+        editIcon.setPadding(new Insets(0,10,0,0));
+        
+        btnEdit.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #F44336;");
+        btnEdit.setMinWidth(75);
+        btnEdit.setMaxWidth(75);
+        btnEdit.relocate(100, 570);
+        btnEdit.setGraphic(editIcon);
         // </editor-fold>
         
-        JFXButton btnLogOut = new JFXButton("LOG OUT");
-        btnLogOut.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #F44336;");
-        btnLogOut.relocate(120, 557);
-
         
-        vbox.getChildren().addAll(txtUsername, txtFullname, DatePicker);
-        vbox.relocate(40, 200);
+        
+        vbox.getChildren().addAll(txtUsername, txtFullname, DatePicker, txtCountry, txtPassword);
+        vbox.relocate(35, 200);
         addComponent(vbox);
         addComponent(btnLogOut);
+        addComponent(btnEdit);
         addComponent(lblBooks);
         addComponent(view);
+    }
+    
+    private LocalDate stringToDate(String strDate)
+    {
+        String[] nums = strDate.split("/");
+        return LocalDate.of(Integer.parseInt(nums[2]), Integer.parseInt(nums[1]), Integer.parseInt(nums[0]));
     }
     
     private void showUserLibrary()
