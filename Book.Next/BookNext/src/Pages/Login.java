@@ -135,7 +135,7 @@ public class Login extends Stage{
          new_pass = fields.PasswordField("Password","Password can't be empty","15"); 
         country = fields.textField("Country","16");
          date = new JFXDatePicker();        
-        profilePicture("/Icons/user.png");
+        profilePicture("/Icons/user.PNG");
         
      
         userbox.getChildren().add(new_name);
