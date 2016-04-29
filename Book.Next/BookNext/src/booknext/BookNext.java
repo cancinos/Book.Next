@@ -5,6 +5,8 @@
  */
 package booknext;
 
+import Classes.CBook;
+import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import Pages.Login;
 import Pages.bookSelection;
@@ -12,6 +14,15 @@ import UI.Button;
 import UI.NavigationDrawer;
 import UI.mainToolbar;
 import com.jfoenix.controls.JFXButton;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,8 +30,11 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import org.json.JSONException;
 
 /**
  *
@@ -31,6 +45,7 @@ public class BookNext extends Application {
     private mainToolbar toolBar;
     private NavigationDrawer navDrawer;
     Scene scene;
+    private List<CBook> allBooks = new ArrayList<>();
     private void createView()
     {
         // <editor-fold defaultstate="collapsed" desc="Navigation Drawer Creation">
@@ -47,6 +62,9 @@ public class BookNext extends Application {
                     });
         // </editor-fold>
     }
+    
+    
+    
     
     @Override
     public void start(Stage primaryStage) {
@@ -70,7 +88,10 @@ public class BookNext extends Application {
              
              
             JFXButton button4 = new Button("Welcome".toUpperCase(),"WHITE","").getButton();
-             button4.relocate(745, 420);
+            button4.relocate(745, 420);
+             
+            JFXButton button5 = new Button("Load ISBN".toUpperCase(),"WHITE","").getButton();
+            button5.relocate(745, 370);
              
             //Closing Program
             button.setOnAction(new EventHandler<ActionEvent>() {
@@ -80,6 +101,7 @@ public class BookNext extends Application {
                     Platform.exit();
                 }
             });
+            
             
             //For opening new page...
             button2.setOnAction(new EventHandler<ActionEvent>() {
@@ -128,7 +150,7 @@ public class BookNext extends Application {
                 }
             });
               
-              navDrawer.getContent().getChildren().addAll(button, button2,button3,button4);
+            navDrawer.getContent().getChildren().addAll(button, button2,button3,button4, button5);
 
             BorderPane page = new BorderPane();
             page.setCenter(navDrawer);

@@ -167,6 +167,7 @@ public class EditProfile extends Stage {
         txtPassword.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
         
         // </editor-fold>
+        
         // <editor-fold defaultstate="collapsed" desc="Buttons">
         JFXButton btnEdit = new JFXButton("EDIT");
         EventHandler<ActionEvent> editHandler = new EventHandler<ActionEvent>() {
@@ -174,7 +175,7 @@ public class EditProfile extends Stage {
                 public void handle(ActionEvent actionEvent) {
                     editDisabled = !editDisabled;
                     vbox.setDisable(editDisabled);
-                    if (editDisabled == true)
+                    if (editDisabled == true) //Update user's info
                     {
                         Icon editIcon = new Icon("PENCIL", "1em");
                         editIcon.setTextFill(Color.WHITE);
@@ -206,8 +207,6 @@ public class EditProfile extends Stage {
         btnEdit.relocate(100, 570);
         btnEdit.setGraphic(editIcon);
         // </editor-fold>
-        
-        
         
         vbox.getChildren().addAll(txtUsername, txtFullname, DatePicker, txtCountry, txtPassword);
         vbox.relocate(35, 200);

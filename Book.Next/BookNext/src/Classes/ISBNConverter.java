@@ -6,6 +6,9 @@
 package Classes;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,6 +17,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFileChooser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,26 +51,36 @@ public class ISBNConverter {
     }
   }
 
-  //String ISBNUrl
-  public void readJSON() throws IOException, JSONException {
-    //JSONObject json = readJsonFromUrl(ISBNUrl);https://graph.facebook.com/19292868552
-    JSONObject json = readJsonFromUrl("https://www.googleapis.com/books/v1/volumes?q=isbn:0735619670");
+
+  public CBook isbnToBook(String isbn) throws IOException, JSONException {
+    JSONObject json = readJsonFromUrl("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn);
     createBookObj(json);
+    return  newBook;
   }
   
-  private void createBookObj(JSONObject json) throws IOException, JSONException
+  private void createBookObj(JSONObject json ) throws IOException, JSONException
   {
        JSONArray obj1 = json.getJSONArray("items");
        JSONObject items = obj1.getJSONObject(0);
        JSONObject volumeInfo = items.getJSONObject("volumeInfo");
-       JSONArray authors =  volumeInfo.getJSONArray("authors");
+       JSONArray authors;
        
-       newBook.setBook_name(volumeInfo.getString("title"));
-       newBook.setBook_publishYear(volumeInfo.getString("publishedDate"));
-       newBook.setBook_description(volumeInfo.getString("description"));
-       newBook.setBook_publisher(volumeInfo.getString("publisher"));
-       newBook.setBook_authors(convertToString(authors));
-       newBook.setBook_image(volumeInfo.getJSONObject("imageLinks").getString("thumbnail"));
+       if (!volumeInfo.isNull("title"))
+           newBook.setBook_name(volumeInfo.getString("title"));
+       if (!volumeInfo.isNull("publishedDate"))
+        newBook.setBook_publishYear(volumeInfo.getString("publishedDate"));
+       if (!volumeInfo.isNull("description"))
+        newBook.setBook_description(volumeInfo.getString("description"));
+       if (!volumeInfo.isNull("publisher"))
+        newBook.setBook_publisher(volumeInfo.getString("publisher"));
+       if (!volumeInfo.isNull("authors"))
+       {
+           authors  =  volumeInfo.getJSONArray("authors");
+           newBook.setBook_authors(convertToString(authors));
+       }
+       if (!volumeInfo.isNull("imageLinks"))
+           newBook.setBook_image(volumeInfo.getJSONObject("imageLinks").getString("thumbnail")); else
+           newBook.setBook_image("/Icons/No_Cover.jpg");
       /**
        * Historia
        * Literatura
@@ -77,10 +91,6 @@ public class ISBNConverter {
       
   }
   
-  public CBook getCreatedBook()
-  {
-      return newBook;
-  }
   
   /**
    * This Function is used to convert a JSONArray to a List<String>
