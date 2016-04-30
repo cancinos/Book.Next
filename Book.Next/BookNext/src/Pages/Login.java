@@ -6,6 +6,7 @@
 package Pages;
 
 import Classes.CUser;
+import ANN.ANN;
 import Classes.MysqlConnection;
 import UI.giantCard;
 import UI.Button;
@@ -306,7 +307,7 @@ public class Login extends Stage{
     }
     
     public void validateLogin(){
-                 
+           
            try {
                //Connect to Database
                MysqlConnection conection = new MysqlConnection();
@@ -350,6 +351,8 @@ public class Login extends Stage{
                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
            }
     }
+
+    
 
     public void validateNewUser(){
         
@@ -449,6 +452,12 @@ public class Login extends Stage{
                 Level.SEVERE, null, ex
             );
         }
+    }
+
+    private void activeRecommendations() {
+        ANN nn = new ANN();
+        nn.NeuralNetwork(7, 4, 1);
+        nn.run(50000, 0.001);
     }
 }
 
