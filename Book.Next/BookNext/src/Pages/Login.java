@@ -388,7 +388,7 @@ public class Login extends Stage{
 
     private void activeRecommendations() {
         ANN nn = new ANN();
-        nn.NeuralNetwork(2, 4, 1);
+        nn.NeuralNetwork(7, 4, 1);
         nn.run(50000, 0.001);
     }
 }
