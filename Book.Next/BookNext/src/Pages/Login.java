@@ -316,7 +316,7 @@ public class Login extends Stage{
                if(user.getText().length()>3 & pass.getText().length()>4){
                    CUser uss = conection.consultUser(user.getText());
            
-                   if(uss!=null & pass.getText().equals(uss.getUser_password())){
+                   if(uss!=null && pass.getText().equals(uss.getUser_password())){
                                           
                        bookSelection book = new bookSelection();
                        Stage loginStage = book.getStage();
