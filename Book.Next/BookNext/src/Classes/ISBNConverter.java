@@ -52,19 +52,19 @@ public class ISBNConverter {
   }
 
 
-  public CBook isbnToBook(String isbn) throws IOException, JSONException {
+  public CBook isbnToBook(String isbn, int id) throws IOException, JSONException {
     JSONObject json = readJsonFromUrl("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn);
-    createBookObj(json);
+    createBookObj(json, id);
     return  newBook;
   }
   
-  private void createBookObj(JSONObject json ) throws IOException, JSONException
+  private void createBookObj(JSONObject json, int id ) throws IOException, JSONException
   {
        JSONArray obj1 = json.getJSONArray("items");
        JSONObject items = obj1.getJSONObject(0);
        JSONObject volumeInfo = items.getJSONObject("volumeInfo");
        JSONArray authors;
-       
+       newBook.setBookId(id);
        if (!volumeInfo.isNull("title"))
            newBook.setBook_name(volumeInfo.getString("title"));
        if (!volumeInfo.isNull("publishedDate"))

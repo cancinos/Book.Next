@@ -69,11 +69,16 @@ public class EditProfile extends Stage {
     
     private NavigationDrawer navDrawer;
     private mainToolbar toolBar;
-    private BorderPane page = new BorderPane();
+    private final BorderPane page = new BorderPane();
     private double width, height;
-    //String usrname, String country, String full, String birth, String img, String pass)
-    private CUser actUser = new CUser("pinaconda30", "Guatemala", "Juan Carlos Durini", "30/09/1994", "/Icons/durini.jpg", "lalalolo");
+    private final CUser actUser = new CUser("pinaconda30", "Guatemala", "Juan Carlos Durini", "30/09/1994", "/Icons/durini.jpg", "lalalolo");
     Boolean editDisabled = true;
+    private final List<CBook> allBooks;
+    
+    public EditProfile(List<CBook> myBooks)
+    {
+        allBooks = myBooks;
+    }
     
     /**
      * This method creates stage's navigation Drawer & toolbar
@@ -225,24 +230,8 @@ public class EditProfile extends Stage {
     
     private void showUserLibrary()
     {
-        List<CBook> myBooks;
-        myBooks = new ArrayList<>();
-        
-        CBook ejemplo = new CBook();
-        ejemplo.setBook_description("");
-        ejemplo.setBook_image("https://books.google.com.gt/books/content?id=lJiXBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api");
-        ejemplo.setBook_name("Harry Potter and the Deadly Hallows");
-        ejemplo.setBook_publishYear("2009");
-        ejemplo.setBook_publisher("Editorial el pato");
-        
-        
-        
-        for (int i = 0; i < 7; i++) {
-            myBooks.add(ejemplo);
-        }
-        
         ListCards list = new ListCards();
-        list.createMatrixList(myBooks);
+        list.createMatrixList(allBooks);
         list.relocate(320, 70);
         addComponent(list);
         //infoCard.getChildren().add(list.getList());
