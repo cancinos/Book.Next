@@ -112,27 +112,27 @@ public class VCard extends Pane{
     
     public void createEvent(){
         
-        book.selected =0;
-       
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{                
-        
-            if(isclicked ==true){
-                isclicked =false;
-                book.selected--;
-            if(book.selected <3){
-               book.next.setVisible(false);                        
-                    }
-        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
-        }else{
-            isclicked =true;            
-            book.selected++;
-            if(book.selected >=3){
-               book.next.setVisible(true);                        
-                    }
-        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
-        this.setEffect(new DropShadow(10d, 10d, 3d, Color.web("#727272")));    
-           }
-        });     
+//        book.selected =0;
+//       
+//        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{                
+//        
+//            if(isclicked ==true){
+//                isclicked =false;
+//                book.selected--;
+//            if(book.selected <3){
+//               book.next.setVisible(false);                        
+//                    }
+//        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
+//        }else{
+//            isclicked =true;            
+//            book.selected++;
+//            if(book.selected >=3){
+//               book.next.setVisible(true);                        
+//                    }
+//        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
+//        this.setEffect(new DropShadow(10d, 10d, 3d, Color.web("#727272")));    
+//           }
+//        });     
     }
     
 }

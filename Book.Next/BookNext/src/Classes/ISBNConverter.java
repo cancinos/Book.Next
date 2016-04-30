@@ -6,9 +6,6 @@
 package Classes;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,7 +14,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFileChooser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,7 +60,8 @@ public class ISBNConverter {
        JSONObject items = obj1.getJSONObject(0);
        JSONObject volumeInfo = items.getJSONObject("volumeInfo");
        JSONArray authors;
-       newBook.setBookId(id);
+       
+       newBook.setBookId(id); //Set isbn as ID
        if (!volumeInfo.isNull("title"))
            newBook.setBook_name(volumeInfo.getString("title"));
        if (!volumeInfo.isNull("publishedDate"))

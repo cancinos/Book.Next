@@ -25,13 +25,14 @@ public class CBook {
     private ImageView book_img;
     private int num_ratings = 0;
     private long bookId;
+    private int autoIncId = 0;
     private double book_rating;
-    public CBook()
-    {
-    }
+    
+    
+    public int getAutoInc() { return autoIncId; }
     
     public long getBookId() { return bookId; }
-    public void setBookId(long id) { bookId = id; }
+    public void setBookId(long id) { bookId = id; autoIncId++; }
     
     public String getBook_name() { return book_name; }
     public void setBook_name(String book_name) { this.book_name = book_name; } 
@@ -57,14 +58,12 @@ public class CBook {
     
     public double getBook_rating() { return book_rating; }
     
-    
-    
     private void newRating(double rating)
     {
+        num_ratings++;
         book_rating *= num_ratings;
         book_rating += rating;
         book_rating /= num_ratings;
-        num_ratings++;
     }
     
     public String getBook_authorsStr()
