@@ -6,9 +6,6 @@
 package Classes;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,7 +14,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFileChooser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,19 +48,20 @@ public class ISBNConverter {
   }
 
 
-  public CBook isbnToBook(String isbn) throws IOException, JSONException {
+  public CBook isbnToBook(String isbn, int id) throws IOException, JSONException {
     JSONObject json = readJsonFromUrl("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn);
-    createBookObj(json);
+    createBookObj(json, id);
     return  newBook;
   }
   
-  private void createBookObj(JSONObject json ) throws IOException, JSONException
+  private void createBookObj(JSONObject json, int id ) throws IOException, JSONException
   {
        JSONArray obj1 = json.getJSONArray("items");
        JSONObject items = obj1.getJSONObject(0);
        JSONObject volumeInfo = items.getJSONObject("volumeInfo");
        JSONArray authors;
        
+       newBook.setBookId(id); //Set isbn as ID
        if (!volumeInfo.isNull("title"))
            newBook.setBook_name(volumeInfo.getString("title"));
        if (!volumeInfo.isNull("publishedDate"))

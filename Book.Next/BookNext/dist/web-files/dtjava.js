@@ -1034,6 +1034,7 @@ var dtjava = function() {
     var Version = function(VersionString, UpgradeFromOldJavaVersion) {
         if (typeof UpgradeFromOldJavaVersion === 'undefined') {
             var UpgradeFromOldJavaVersion = true;
+<<<<<<< HEAD
         }
 
         // Constants
@@ -1055,6 +1056,29 @@ var dtjava = function() {
         if (!VersionString) {
             return null;
         }
+=======
+        }
+
+        // Constants
+        var MAX_DIGITS = 4;
+
+        // Private
+        var FVersionString = null;
+        var FOld = false;
+        var FVersion = null;
+        var FBuild = null;
+        var FPre = null;
+        var FMatch = null;
+        var FMajor = null;
+        var FMinor = null;
+        var FSecurity = null;
+        var FPatch = null;
+
+        // Class constructor
+        if (!VersionString) {
+            return null;
+        }
+>>>>>>> 091fec1fde00f82a3d67ae8af7cb081830470b82
         else {
             FVersionString = VersionString;
             var v = parseAndSplitVersionString(VersionString, UpgradeFromOldJavaVersion)
@@ -1816,6 +1840,7 @@ var dtjava = function() {
 
     // This is similar to version check rules except there is a range
     // over versions (3-7) that are not valid.
+<<<<<<< HEAD
     //
     // JavaFX version requirements are always treated as "not earlier than this update".
     // I.e. we expect
@@ -1832,6 +1857,15 @@ var dtjava = function() {
             q = new Version(query + "+", false);
         }
 
+=======
+    function versionCheckFX(query, version) {
+        var q = new Version(query, false);
+
+        if (parseInt(q.major) >= 3 && parseInt(q.major) <= 7) {
+            return false;
+        }
+
+>>>>>>> 091fec1fde00f82a3d67ae8af7cb081830470b82
         var v = new Version(version, false);
 
         return v.check(q);

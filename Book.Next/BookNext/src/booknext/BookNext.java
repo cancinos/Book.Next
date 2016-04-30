@@ -45,7 +45,6 @@ public class BookNext extends Application {
     private mainToolbar toolBar;
     private NavigationDrawer navDrawer;
     Scene scene;
-    private List<CBook> allBooks = new ArrayList<>();
     private void createView()
     {
         // <editor-fold defaultstate="collapsed" desc="Navigation Drawer Creation">
@@ -68,8 +67,7 @@ public class BookNext extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        
+            primaryStage.initStyle(StageStyle.UNDECORATED);
         // <editor-fold defaultstate="collapsed" desc="Nav Drawer">
             createView();
             
@@ -151,7 +149,7 @@ public class BookNext extends Application {
             });
               
             navDrawer.getContent().getChildren().addAll(button, button2,button3,button4, button5);
-
+            navDrawer.setStage(primaryStage);
             BorderPane page = new BorderPane();
             page.setCenter(navDrawer);
             page.setTop(toolBar);

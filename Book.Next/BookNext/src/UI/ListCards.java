@@ -108,21 +108,12 @@ public class ListCards extends ScrollPane{
         cardsMatrix.setMaxHeight(550);
         cardsMatrix.setPadding(new Insets(15,15,15,15));
         cardsMatrix.setStyle("-fx-background-color:TRANSPARENT;");
-
-          CBook newBook = new CBook();        
-        newBook.setBook_name("Divergent");
-        List<String> authors = new ArrayList<>();
-        authors.add("Veronica Roth");
-        newBook.setBook_authors(authors);
-        newBook.setBook_image("https://books.google.com.gt/books/content?id=nv9lZM_0RI4C&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE721Uleu1ZcOyJ0R-IY74iLoirdPChX7O9UOvu7n_L6vG30BDwo659QHvZJTcijsv7YR5KQonzT5X1TkxE93kcYEOjgnSLHcHN9uvlfYo8oH2E3Ovsa4W4iqobbanb1wa71xYYsh");
-        
-        
-        
+                
         VCard newCard;
         
             for (CBook book : bookList) {
             newCard = new VCard(128,250);
-            newCard.createSimpleCard();
+            newCard.createSimpleCard(book);
             cardsMatrix.getChildren().add(newCard);
         }
         

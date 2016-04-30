@@ -37,7 +37,6 @@ public class VCard extends Pane{
         this.setPrefSize(width, height);
         this.setStyle("-fx-background-color:WHITE;");
         this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
-       // ImageView background = new ImageView(new Image("https://books.google.com.gt/books/content?id=nv9lZM_0RI4C&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE721Uleu1ZcOyJ0R-IY74iLoirdPChX7O9UOvu7n_L6vG30BDwo659QHvZJTcijsv7YR5KQonzT5X1TkxE93kcYEOjgnSLHcHN9uvlfYo8oH2E3Ovsa4W4iqobbanb1wa71xYYsh"));
         ImageView background = new ImageView(new Image(book.getBook_image()));
         
         background.setFitHeight(198);
@@ -69,18 +68,28 @@ public class VCard extends Pane{
         createEvent();
     }
     
-    public void createSimpleCard()
+    public void createSimpleCard(CBook book)
     {
+        /*
+            NOTA MENTAL:
+                Para que las imagenes no se tarden mucho, guardarlas en una lista de Images, y luego
+                sólo ir a traerlas. Haciendo esto, solo al inicio será lo tardado.
+        */
+        String strImage, strName, strAuthor;
         this.setPrefSize(width, height);
         this.setStyle("-fx-background-color:WHITE;");
         this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
-        ImageView background = new ImageView(new Image("https://books.google.com.gt/books/content?id=nv9lZM_0RI4C&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE721Uleu1ZcOyJ0R-IY74iLoirdPChX7O9UOvu7n_L6vG30BDwo659QHvZJTcijsv7YR5KQonzT5X1TkxE93kcYEOjgnSLHcHN9uvlfYo8oH2E3Ovsa4W4iqobbanb1wa71xYYsh"));
+        strImage = book.getBook_image();
+        strName = book.getBook_name();
+        strAuthor = book.getBook_authorsStr();
+        strAuthor = strAuthor.substring(0, strAuthor.length() - 1);
+        ImageView background = new ImageView(new Image(strImage));
         background.setFitHeight(198);
         background.setFitWidth(128);
         background.relocate(0, 0);
         
-        Label title = new Label("Harry Potter and the Deathly");
-        Label author = new Label("Veronica Roth");
+        Label title = new Label(strName);
+        Label author = new Label(strAuthor);
         
         title.setStyle("-fx-font-size:14px;");
         title.setMaxWidth(116);
@@ -103,27 +112,27 @@ public class VCard extends Pane{
     
     public void createEvent(){
         
-        book.selected =0;
-       
-        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{                
-        
-            if(isclicked ==true){
-                isclicked =false;
-                book.selected--;
-            if(book.selected <3){
-               book.next.setVisible(false);                        
-                    }
-        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
-        }else{
-            isclicked =true;            
-            book.selected++;
-            if(book.selected >=3){
-               book.next.setVisible(true);                        
-                    }
-        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
-        this.setEffect(new DropShadow(10d, 10d, 3d, Color.web("#727272")));    
-           }
-        });     
+//        book.selected =0;
+//       
+//        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{                
+//        
+//            if(isclicked ==true){
+//                isclicked =false;
+//                book.selected--;
+//            if(book.selected <3){
+//               book.next.setVisible(false);                        
+//                    }
+//        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
+//        }else{
+//            isclicked =true;            
+//            book.selected++;
+//            if(book.selected >=3){
+//               book.next.setVisible(true);                        
+//                    }
+//        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
+//        this.setEffect(new DropShadow(10d, 10d, 3d, Color.web("#727272")));    
+//           }
+//        });     
     }
     
 }

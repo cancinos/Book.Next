@@ -5,6 +5,7 @@
  */
 package UI;
 
+import Classes.CBook;
 import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import Pages.EditProfile;
@@ -19,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.EventHandler;
@@ -40,11 +43,12 @@ import org.json.JSONException;
  */
 public class NavigationDrawer extends JFXDrawersStack{
     
-    private double width;
-    private JFXDrawer leftDrawer;
-    private StackPane leftDrawerPane;
+    private final double width;
+    private final JFXDrawer leftDrawer;
+    private final StackPane leftDrawerPane;
     private Pane content;
     private Stage contentStage;
+    private List<CBook> allBooks = new ArrayList<>();
     
     public NavigationDrawer(double width)
     {
@@ -136,7 +140,7 @@ public class NavigationDrawer extends JFXDrawersStack{
                         this.setContent(content);
 		});
         //lblHome.setOnMouseClicked(goToHome);
-        
+        CBook newBook;
         Label lblProfile = new Label("    Profile");
         lblProfile.setStyle("-fx-font-size: 14;");
         imgUser = new Image("/Icons/profile.png");
@@ -144,31 +148,31 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblProfile.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblProfile);
         lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
-//                    String allIsbn = "";
-//                    try {
-//                        allIsbn = readFile(primaryStage);
-//                    } catch (IOException ex) {
-//                        Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                    allIsbn = allIsbn.substring(0,allIsbn.length()-1);
-//                    System.out.println(allIsbn);
-//                    String[] separated = allIsbn.split(",");
-//                    for (String str : separated)
-//                    {
-//                        try {
-//                            allBooks.add(new ISBNConverter().isbnToBook(str));
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-//                        } catch (JSONException ex) {
-//                            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                    allIsbn = allIsbn;
-			EditProfile profile = new EditProfile();
-                        profile.setSize(1100, 700); //Resizing
-                        content = profile.getContent();
-                        this.setContent(content);
-		});
+            String allIsbn = "";
+            try {
+                allIsbn = readFile(contentStage);
+            } catch (IOException ex) {
+                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            allIsbn = allIsbn.substring(0,allIsbn.length()-1);
+            System.out.println(allIsbn);
+            String[] separated = allIsbn.split(",");
+            int cont = 0;
+            for (String str : separated) //
+            {
+                try {
+                    allBooks.add(new ISBNConverter().isbnToBook(str, cont));
+                    cont++;
+                } catch (IOException | JSONException ex) {
+                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            EditProfile profile = new EditProfile(allBooks);
+            profile.setSize(1100, 700); //Resizing
+            content = profile.getContent();
+            this.setContent(content);
+        });
         
         this.leftDrawerPane.getChildren().add(menuList);
     }

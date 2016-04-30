@@ -5,7 +5,11 @@
  */
 package Pages;
 
+<<<<<<< HEAD
 import ANN.ANN;
+=======
+import Classes.MysqlConnection;
+>>>>>>> 091fec1fde00f82a3d67ae8af7cb081830470b82
 import UI.giantCard;
 import UI.Button;
 import UI.textField;
@@ -22,6 +26,7 @@ import de.jensd.fx.fontawesome.Icon;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.embed.swing.SwingFXUtils;
@@ -298,25 +303,45 @@ public class Login extends Stage{
     }
     
     public void validateLogin(){
-        
-        if(user.getText().length()>4 & pass.getText().length()>5){            
+                 
             //Connect to Database
+            
+             MysqlConnection conection = new MysqlConnection();
+             
+            try {
+                conection.connect();
+                
+               if(user.getText().length()>3 & pass.getText().length()>3){
+                
+                 conection.getUser(user.getText());
+                    
                 bookSelection book = new bookSelection();
                 Stage loginStage = book.getStage();
                 activeRecommendations();
                 loginStage.show();
-                getScene().getWindow().hide();               
-        }else{
-            
-            if(user.getText().length()<4){
-                user.validate();
-            }else{
-                if(pass.getText().length()<4){
-                    pass.validate();
-                }
+                getScene().getWindow().hide();  
+                
+                    
+                
+                }else{            
+                        if(user.getText().length()<4){
+                            user.validate();
+                        }else{
+                            if(pass.getText().length()<4){
+                                pass.validate();
+                            }
+                        }
+                            System.out.println("You are connected");
+           }
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                
+             System.err.println("Connection fail");
             }
-        }        
     }
+
+
+                
   
     public void validateNewUser(){
         

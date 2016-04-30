@@ -9,31 +9,17 @@ import Classes.CBook;
 import Classes.CUser;
 import UI.ListCards;
 import UI.NavigationDrawer;
-import UI.giantCard;
 import UI.mainToolbar;
 import UI.textField;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXRippler;
-import com.jfoenix.controls.JFXRippler.RipplerMask;
-import com.jfoenix.controls.JFXRippler.RipplerPos;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
-import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
-import java.awt.Container;
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -41,25 +27,14 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXPopup.PopupHPosition;
-import com.jfoenix.controls.JFXPopup.PopupVPosition;
 import javafx.geometry.Insets;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 /**
  *
@@ -69,11 +44,16 @@ public class EditProfile extends Stage {
     
     private NavigationDrawer navDrawer;
     private mainToolbar toolBar;
-    private BorderPane page = new BorderPane();
+    private final BorderPane page = new BorderPane();
     private double width, height;
-    //String usrname, String country, String full, String birth, String img, String pass)
-    private CUser actUser = new CUser("pinaconda30", "Guatemala", "Juan Carlos Durini", "30/09/1994", "/Icons/durini.jpg", "lalalolo");
+    private final CUser actUser = new CUser("pinaconda30", "Guatemala", "Juan Carlos Durini", "30/09/1994", "/Icons/durini.jpg", "lalalolo");
     Boolean editDisabled = true;
+    private final List<CBook> allBooks;
+    
+    public EditProfile(List<CBook> myBooks)
+    {
+        allBooks = myBooks;
+    }
     
     /**
      * This method creates stage's navigation Drawer & toolbar
@@ -225,24 +205,8 @@ public class EditProfile extends Stage {
     
     private void showUserLibrary()
     {
-        List<CBook> myBooks;
-        myBooks = new ArrayList<>();
-        
-        CBook ejemplo = new CBook();
-        ejemplo.setBook_description("");
-        ejemplo.setBook_image("https://books.google.com.gt/books/content?id=lJiXBgAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api");
-        ejemplo.setBook_name("Harry Potter and the Deadly Hallows");
-        ejemplo.setBook_publishYear("2009");
-        ejemplo.setBook_publisher("Editorial el pato");
-        
-        
-        
-        for (int i = 0; i < 7; i++) {
-            myBooks.add(ejemplo);
-        }
-        
         ListCards list = new ListCards();
-        list.createMatrixList(myBooks);
+        list.createMatrixList(allBooks);
         list.relocate(320, 70);
         addComponent(list);
         //infoCard.getChildren().add(list.getList());
