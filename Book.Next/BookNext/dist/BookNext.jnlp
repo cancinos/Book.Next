@@ -8,19 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <jar href="BookNext.jar" size="539390" download="eager" />
-=======
-    <jar href="BookNext.jar" size="571772" download="eager" />
->>>>>>> 508d37942922350017dbe7ea15e9bf48e28e6ac4
-=======
-    <jar href="BookNext.jar" size="539635" download="eager" />
->>>>>>> develop
-=======
-    <jar href="BookNext.jar" size="566647" download="eager" />
->>>>>>> 091fec1fde00f82a3d67ae8af7cb081830470b82
+    <jar href="BookNext.jar" size="567984" download="eager" />
     <jar href="lib\fontawesomefx-8.0.10.jar" size="108930" download="eager" />
     <jar href="lib\java-json.jar" size="84697" download="eager" />
     <jar href="lib\jfoenix.jar" size="1800613" download="eager" />

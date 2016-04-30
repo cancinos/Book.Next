@@ -19,7 +19,7 @@ public class CUser {
     private String user_image;
     private String user_password;
     
-    public CUser(String usrname, String country, String full, String birth, String img, String pass)
+    public CUser(String usrname,  String full, String pass, String birth, String img,String country)
     {
         username = usrname;
         user_country = country;
