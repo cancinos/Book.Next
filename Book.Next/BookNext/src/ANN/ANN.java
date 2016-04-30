@@ -32,7 +32,7 @@ public class ANN {
     final double learningRate = 0.9f;
     final double momentum = 0.7f;
     
-    double inputs[][] = { { 1, 1 }, { 1, 0 }, { 0, 1 }, { 0, 0 } };
+    double inputs[][] = new double[100][7];//{ { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 1, 1, 1 } };
     final double expectedOutputs[][] = { { 0 }, { 1 }, { 1 }, { 0 } };
     double resultOutputs[][] = { { -1 }, { -1 }, { -1 }, { -1 } }; // dummy init
     double output[];
@@ -41,13 +41,28 @@ public class ANN {
     final HashMap<String, Double> weightUpdate = new HashMap<String, Double>();
  
     public void generateRandomInputs(){
-        
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 7; j++) {
+                if (j < 5) 
+                    inputs[i][j] = randInt(0,1);
+            }
+        }
+    }
+    public static int randInt(int min, int max) {
+        // Usually this can be a field rather than a method variable
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
     }
     
     public void NeuralNetwork(int input, int hidden, int output) {
         this.layers = new int[] { input, hidden, output };
         df = new DecimalFormat("#.0#");
- 
+        generateRandomInputs();
         /**
          * Create all neurons and connections Connections are created in the
          * neuron class
@@ -227,6 +242,7 @@ public class ANN {
                 applyBackpropagation(expectedOutputs[p]);
             }
         }
+        int a = 0;
     }
  
     String weightKey(int neuronId, int conId) {
