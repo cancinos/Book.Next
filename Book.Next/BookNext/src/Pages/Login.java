@@ -5,6 +5,7 @@
  */
 package Pages;
 
+import ANN.ANN;
 import UI.giantCard;
 import UI.Button;
 import UI.textField;
@@ -302,6 +303,7 @@ public class Login extends Stage{
             //Connect to Database
                 bookSelection book = new bookSelection();
                 Stage loginStage = book.getStage();
+                activeRecommendations();
                 loginStage.show();
                 getScene().getWindow().hide();               
         }else{
@@ -382,6 +384,12 @@ public class Login extends Stage{
                 Level.SEVERE, null, ex
             );
         }
+    }
+
+    private void activeRecommendations() {
+        ANN nn = new ANN();
+        nn.NeuralNetwork(2, 4, 1);
+        nn.run(50000, 0.001);
     }
 }
 
