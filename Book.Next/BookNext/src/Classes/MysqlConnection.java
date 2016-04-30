@@ -66,7 +66,7 @@ public class MysqlConnection {
     
     // <editor-fold desc="User Querys">
     
-    public boolean addNewUser(String user,String fullname,Date birthday,String password,String imagen,String country) throws SQLException{
+    public boolean addNewUser(String user,String fullname,String birthday,String password,String imagen,String country) throws SQLException{
         
         boolean add=false;
         try { 
@@ -76,7 +76,7 @@ public class MysqlConnection {
           query =connection.prepareStatement("insert into users(username,fullname,birthday,passwoord,imagen,country) values (?,?,?,?,?,?)");
           query.setString(1, user);
           query.setString(2, fullname);
-          query.setDate(3, birthday);
+          query.setString(3, birthday);
           query.setString(4, password);
           query.setString(5, imagen);
           query.setString(6, country);
@@ -110,8 +110,8 @@ public class MysqlConnection {
                     cuser = new CUser(
                     result.getString("username"),
                     result.getString("fullname"),
-                    result.getString("passwoord"),
-                    result.getDate("birthday").toString(),
+                    result.getString("passwoord"),                            
+                    result.getString("birthday"),
                     result.getString("imagen"),
                     result.getString("country")
                     );
@@ -150,7 +150,7 @@ public class MysqlConnection {
         return cuser;
     }
     
-    public boolean updateUser(String user,String fullname,Date birthday,String password,String country) throws SQLException{
+    public boolean updateUser(String user,String fullname,String birthday,String password,String country) throws SQLException{
         
         boolean add=false;
         try { 
@@ -160,7 +160,7 @@ public class MysqlConnection {
           query =connection.prepareStatement("update users set username = ?, fullname = ?, birthday = ? ,passwoord = ?, country = ?  where username = ?");
           query.setString(1, user);
           query.setString(2, fullname);
-          query.setDate(3, birthday);
+          query.setString(3, birthday);
           query.setString(4, password);
           query.setString(5, country);
           query.setString(6, user);

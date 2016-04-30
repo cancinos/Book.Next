@@ -5,6 +5,7 @@
  */
 package Pages;
 
+import Classes.CUser;
 import Classes.MysqlConnection;
 import UI.giantCard;
 import UI.Button;
@@ -32,6 +33,8 @@ import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
@@ -85,6 +88,7 @@ public class Login extends Stage{
         private JFXPasswordField new_pass;
         private JFXTextField country;
         private JFXDatePicker date;
+        private Image image_user;
     
     //Create Card with Components   
     public void createView(){
@@ -196,7 +200,8 @@ public class Login extends Stage{
       
     public void loginPic(){
               
-        background = new ImageView(new Image("Icons/login.jpg"));        
+        image_user = new Image("Icons/login.jpg");
+        background = new ImageView(image_user);        
         background.setFitHeight(200);
         background.setFitWidth(400);
         background.relocate(0, 0); 
@@ -212,7 +217,9 @@ public class Login extends Stage{
          File file = fileChooser.showOpenDialog(this);
 
         if (file != null) {            
-            profile_pic.setImage(new Image(file.toURI().toString()));
+            
+        image_user = new Image(file.toURI().toString());
+            profile_pic.setImage(image_user);
         }
 
     }
@@ -300,68 +307,106 @@ public class Login extends Stage{
     
     public void validateLogin(){
                  
-            //Connect to Database
-            
-             MysqlConnection conection = new MysqlConnection();
-             
-            try {
-                conection.connect();
-                
-               if(user.getText().length()>3 & pass.getText().length()>3){
-                
-                 conection.getUser(user.getText());
-                    
-                bookSelection book = new bookSelection();
-                Stage loginStage = book.getStage();
-                loginStage.show();
-                getScene().getWindow().hide();  
-                
-                    
-                
-                }else{            
-                        if(user.getText().length()<4){
-                            user.validate();
-                        }else{
-                            if(pass.getText().length()<4){
-                                pass.validate();
-                            }
-                        }
-                            System.out.println("You are connected");
+           try {
+               //Connect to Database
+               MysqlConnection conection = new MysqlConnection();
+               conection.connect();
+         //      System.out.println("You are connected");
+               
+               if(user.getText().length()>3 & pass.getText().length()>4){
+                   CUser uss = conection.consultUser(user.getText());
+           
+                   if(uss!=null & pass.getText().equals(uss.getUser_password())){
+                                          
+                       bookSelection book = new bookSelection();
+                       Stage loginStage = book.getStage();
+                       loginStage.show();
+                       getScene().getWindow().hide();
+                                   
+                   }else{
+                       Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User name does not exist");
+                        alert.setContentText("Please enter a existing user name");
+                        alert.showAndWait();
+                   }
+               }else{
+                   if(user.getText().length()<4){
+                       user.validate();
+                   }else{
+                       if(pass.getText().length()<4){
+                           pass.validate();
+                       }else{
+                           
+                           Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User form not complete");
+                        alert.setContentText("Please complete user form");
+                        alert.showAndWait();
+                       }
+                   }
+               }
+           } catch (SQLException ex) {
+               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
            }
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                
-             System.err.println("Connection fail");
-            }
     }
 
-
-                
-  
     public void validateNewUser(){
         
-        
-         if(new_user.getText().length()>4 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){            
-            //Connect to Database
-                bookSelection book = new bookSelection();
-                Stage loginStage = book.getStage();
-                loginStage.show();
-                getScene().getWindow().hide();               
-        }else{
-            
-            if(new_user.getText().length()<4){
-                new_user.validate();
-            }else{
-                if(new_pass.getText().length()<4){
-                    new_pass.validate();
-                }else{
-                   //SHOW DIALOG
-                }
-            }
-        } 
-        
-        
-        
+           try {
+               MysqlConnection conection = new MysqlConnection();
+               
+               conection.connect();
+               System.out.println("You are connected");
+               
+               if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){
+                   //Connect to Database
+                   
+                   CUser uss = conection.consultUser(new_user.getText());
+           
+                   if(uss !=null){
+                       
+                       Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User Already Exist");
+                        alert.setContentText("Please select another user");
+                        alert.showAndWait();
+
+                   }else{
+                   boolean validate= conection.addNewUser(new_user.getText(),new_name.getText(),date.getTime().toString(),new_pass.getText(),image_user.toString(),country.getText());
+                   
+                   if(validate = true){
+                    
+                   bookSelection book = new bookSelection();
+                   Stage loginStage = book.getStage();
+                   loginStage.show();
+                   getScene().getWindow().hide();   
+                   }else{
+                       Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Impossible to connect DataBase");
+                        alert.setContentText("Please verify connections");
+                        alert.showAndWait();
+                   }
+                   }
+               }else{
+                   
+                   if(new_user.getText().length()<4){
+                       new_user.validate();
+                   }else{
+                       if(new_pass.getText().length()<4){
+                           new_pass.validate();
+                       }else{
+                           Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User form not complete");
+                        alert.setContentText("Please complete user form");
+                        alert.showAndWait();
+                       }
+                   }
+               }  } catch (SQLException ex) { 
+               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+           }
         
     }
     
