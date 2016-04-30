@@ -307,7 +307,7 @@ public class Login extends Stage{
             try {
                 conection.connect();
                 
-               if(user.getText().length()>4 & pass.getText().length()>5){
+               if(user.getText().length()>3 & pass.getText().length()>3){
                 
                  conection.getUser(user.getText());
                     
