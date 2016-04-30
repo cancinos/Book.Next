@@ -3,10 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/iiscancinos/Documents/Ingenieria%20en%20informatica%20y%20sistemas/Semestre%20VIII/IA/Book.Next/Book.Next/BookNext/src/ANN/ANN.java</file>
             <file>file:/C:/Users/iiscancinos/Documents/Ingenieria%20en%20informatica%20y%20sistemas/Semestre%20VIII/IA/Book.Next/Book.Next/BookNext/src/ANN/Connection.java</file>
             <file>file:/C:/Users/iiscancinos/Documents/Ingenieria%20en%20informatica%20y%20sistemas/Semestre%20VIII/IA/Book.Next/Book.Next/BookNext/src/ANN/Neuron.java</file>
             <file>file:/C:/Users/iiscancinos/Documents/Ingenieria%20en%20informatica%20y%20sistemas/Semestre%20VIII/IA/Book.Next/Book.Next/BookNext/src/Pages/Login.java</file>
+=======
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/booknext/BookNext.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/NavigationDrawer.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Classes/ISBNConverter.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/textField.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/ListCards.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/VCard.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/mainToolbar.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Pages/EditProfile.java</file>
+            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/giantCard.java</file>
+>>>>>>> 508d37942922350017dbe7ea15e9bf48e28e6ac4
         </group>
     </open-files>
 </project-private>

@@ -5,13 +5,22 @@
  */
 package UI;
 
+import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import Pages.EditProfile;
+import booknext.BookNext;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -21,7 +30,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.json.JSONException;
 
 /**
  *
@@ -33,6 +44,7 @@ public class NavigationDrawer extends JFXDrawersStack{
     private JFXDrawer leftDrawer;
     private StackPane leftDrawerPane;
     private Pane content;
+    private Stage contentStage;
     
     public NavigationDrawer(double width)
     {
@@ -40,6 +52,11 @@ public class NavigationDrawer extends JFXDrawersStack{
         this.width = width;
         this.leftDrawer = new JFXDrawer();
         this.leftDrawerPane = new StackPane();
+    }
+    
+    public void setStage(Stage act)
+    {
+        contentStage = act;
     }
     
     public Pane getContent()
@@ -127,6 +144,26 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblProfile.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblProfile);
         lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+//                    String allIsbn = "";
+//                    try {
+//                        allIsbn = readFile(primaryStage);
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                    allIsbn = allIsbn.substring(0,allIsbn.length()-1);
+//                    System.out.println(allIsbn);
+//                    String[] separated = allIsbn.split(",");
+//                    for (String str : separated)
+//                    {
+//                        try {
+//                            allBooks.add(new ISBNConverter().isbnToBook(str));
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+//                        } catch (JSONException ex) {
+//                            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                    allIsbn = allIsbn;
 			EditProfile profile = new EditProfile();
                         profile.setSize(1100, 700); //Resizing
                         content = profile.getContent();
@@ -139,6 +176,34 @@ public class NavigationDrawer extends JFXDrawersStack{
     public JFXDrawer getSideMenu()
     {
         return leftDrawer;
+    }
+    
+    public String readFile(Stage parent) throws FileNotFoundException, IOException
+    {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File selectedFile = fileChooser.showOpenDialog(parent);
+        String everything = "";
+        if (selectedFile != null) 
+        {
+            BufferedReader br = new BufferedReader(new FileReader(selectedFile.getAbsoluteFile()));
+            try {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    sb.append(",");
+                    line = br.readLine();
+                }
+                everything = sb.toString();
+                System.out.println(everything);
+            } finally {
+                br.close();
+            }
+        }
+
+        return everything; 
+      
     }
     
 }
