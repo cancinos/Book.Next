@@ -46,12 +46,13 @@ public class EditProfile extends Stage {
     private mainToolbar toolBar;
     private final BorderPane page = new BorderPane();
     private double width, height;
-    private final CUser actUser = new CUser("pinaconda30", "Guatemala", "Juan Carlos Durini", "30/09/1994", "/Icons/durini.jpg", "lalalolo");
+    private final CUser actUser;
     Boolean editDisabled = true;
     private final List<CBook> allBooks;
     
-    public EditProfile(List<CBook> myBooks)
+    public EditProfile(CUser actUser, List<CBook> myBooks)
     {
+        this.actUser = actUser;
         allBooks = myBooks;
     }
     
@@ -228,13 +229,13 @@ public class EditProfile extends Stage {
      */
     public Stage getStage()
     {
+        this.setSize(1110, 700);
         createView();
         addComponents();
         this.page.setCenter(this.navDrawer);
         this.page.setTop(this.toolBar);
         Scene scene = new Scene(this.page, width, height);
         scene.getStylesheets().add("/style/jfoenix-components.css");
-        this.setScene(scene);
         this.setScene(scene);
         return this;
     }

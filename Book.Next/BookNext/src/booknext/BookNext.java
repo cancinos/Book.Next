@@ -5,20 +5,34 @@
  */
 package booknext;
 
+import ANN.ANN;
 import Classes.CBook;
+import Classes.CUser;
 import Classes.ISBNConverter;
+import Classes.MysqlConnection;
 import Pages.BookDescriptionPage;
+import Pages.EditProfile;
 import Pages.Login;
 import Pages.bookSelection;
 import UI.Button;
 import UI.NavigationDrawer;
+import UI.giantCard;
 import UI.mainToolbar;
+import UI.textField;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleNode;
+import de.jensd.fx.fontawesome.Icon;
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,9 +41,23 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -42,121 +70,448 @@ import org.json.JSONException;
  */
 public class BookNext extends Application {
     
-    private mainToolbar toolBar;
-    private NavigationDrawer navDrawer;
-    Scene scene;
-    private void createView()
+     private Desktop desktop = Desktop.getDesktop();
+    private Pane page = new Pane();
+    private giantCard  card;
+    private JFXTabPane tabPane ;
+    private Tab tab;
+    private textField fields;
+    private VBox logbox;
+    private VBox userbox;
+    private Label title;
+    private ImageView background;
+    private JFXToggleNode icon;
+    private JFXToggleNode save_icon;
+    private JFXToggleNode up_down;
+    private JFXTextField user;
+    private JFXPasswordField pass;
+    private ScrollPane scrollpane;
+    private ImageView profile_pic;   
+    private JFXTextField new_name;
+    private  JFXTextField new_user;
+    private JFXPasswordField new_pass;
+    private JFXTextField country;
+    private JFXDatePicker date;
+    private Image image_user;
+    private List<CBook> allBooks = new ArrayList();
+    /**
+     * This Function reads isbn.txt file and creates every single isbn to a CBook object
+     * @param parent stage where is beeing called
+     * @return strng whit isbn separated by commas
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    public String readFile(Stage parent) throws FileNotFoundException, IOException
     {
-        // <editor-fold defaultstate="collapsed" desc="Navigation Drawer Creation">
-            navDrawer = new NavigationDrawer(300);
-            navDrawer.createNavDrawer();
-        // </editor-fold>
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File selectedFile = fileChooser.showOpenDialog(parent);
+        String everything = "";
+        if (selectedFile != null) 
+        {
+            BufferedReader br = new BufferedReader(new FileReader(selectedFile.getAbsoluteFile()));
+            try {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    sb.append(",");
+                    line = br.readLine();
+                }
+                everything = sb.toString();
+                System.out.println(everything);
+            } finally {
+                br.close();
+            }
+        }
+
+        return everything; 
+      
+    }
+    
+    public void convertAllBooks(String allIsbn)
+    {
+        allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
+        System.out.println(allIsbn);
+        String[] separated = allIsbn.split(",");
+        int cont = 0;
+        for (String str : separated) //
+        {
+            try {
+                allBooks.add(new ISBNConverter().isbnToBook(str, cont));
+                cont++;
+            } catch (IOException | JSONException ex) {
+                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    //Create Card with Components   
+    public void createView(){
         
-        // <editor-fold defaultstate="collapsed" desc="Toolbar Creation">
-            toolBar = new mainToolbar(1100, 60, "-fx-background-color: #F44336; -fx-padding: 0 0 0 0;", "Book.Next");
-            toolBar.createToolbar();
-            //Setting onHamburgerClick
-            toolBar.getHamburger().addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
-                            navDrawer.toggle(navDrawer.getSideMenu());
-                    });
-        // </editor-fold>
+        card = new giantCard(400,500);
+        card.createCard();        
+        card.setEffect(new DropShadow(10d, 5d, 0d, Color.web("#212121")));
+        card.setStyle( "-fx-background-color:#FFFFFF; -fx-background-radius:1em");
+        card.relocate(150, 100);             
+        card.getChildren().add(background);
+        card.getChildren().add(tabPane);   
+        card.getChildren().add(icon);
+        card.getChildren().add(save_icon);
+        page.getChildren().add(card);
+    }
+    
+    public void createLogin(){
+        logbox =new VBox();
+        logbox.setStyle("-fx-alignment: center");
+        logbox.setSpacing(35);
+        logbox.setPrefSize(400,250);
+        fields = new textField();
+        user = fields.validateTextField("Username","User name can't be empty","16");    
+        pass = fields.PasswordField("Password","Password can't be empty","16");
+        logbox.getChildren().add(user);
+        logbox.getChildren().add(pass);
+    }
+    
+    //Create components for new User
+    public void createUser(Stage theStage){
+        //scrollpane
+        scrollpane = new ScrollPane();
+        scrollpane.setPrefSize(400,250);        
+        scrollpane.setStyle("-fx-padding: 10 0 0 0; -fx-background-color:TRANSPARENT;");
+        scrollpane.setBorder(Border.EMPTY);
+        scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollpane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        
+        
+        //User box with components
+        userbox =new VBox();
+        userbox.setStyle("-fx-alignment: center; -fx-background-color:WHITE;");
+        userbox.setSpacing(35);
+        userbox.setPrefSize(400,250);
+        //Text fields
+        fields = new textField();              
+         new_name = fields.textField("Full Name", "16");
+         new_user = fields.validateTextField("Username","User name can't be empty","15");    
+         new_pass = fields.PasswordField("Password","Password can't be empty","15"); 
+        country = fields.textField("Country","16");
+         date = new JFXDatePicker();        
+        profilePicture("/Icons/user.PNG",theStage);
+        
+     
+        userbox.getChildren().add(new_name);
+        userbox.getChildren().add(new_user);
+        userbox.getChildren().add(new_pass);
+        userbox.getChildren().add(country);
+        userbox.getChildren().add(date);
+        
+        
+        scrollpane.setContent(userbox);
+    }
+    
+    public void createTabs(Stage theStage){
+      
+        //Create Tab with log in box
+      createLogin();  
+      tabPane = new JFXTabPane();
+      tabPane.setStyle("-fx-background-color:WHITE;");      
+      title = new Label("Sing in");     
+      title.setTextFill(Color.WHITE);
+      title.setStyle("-fx-font-size:15px;");
+      tab = new Tab();      
+      tab.setStyle("-fx-background-color:TRANSPARENT; -fx-alignment:center; -fx-font-weight: bold");
+      tab.setContent(logbox);    
+      tab.setText("");
+      tab.setGraphic(title);
+      
+      tabPane.getTabs().add(tab);
+      
+      
+      // Create Tab with sing up box
+       createUser(theStage);      
+      title = new Label("Sing up");      
+      title.setTextFill(Color.WHITE);     
+      title.setStyle("-fx-font-size:15px;");
+      tab = new Tab();      
+      tab.setStyle("-fx-background-color:TRANSPARENT; -fx-alignment:center; -fx-font-weight: bold");
+      tab.setContent(scrollpane);    
+      tab.setText("");  
+      tab.setGraphic(title);
+      
+      tabPane.getTabs().add(tab);
+      tabPane.relocate(0, 200);
+      
+      
+      tabPane.getSelectionModel().selectedItemProperty().addListener((obs,ov,nv)->{
+            if(tabPane.getSelectionModel().isSelected(0)==true){
+                icon.setVisible(true);
+                save_icon.setVisible(false);
+            }else{
+                save_icon.setVisible(true);
+                icon.setVisible(false);
+            }
+        });
+    }
+      
+    public void loginPic(){
+              
+        image_user = new Image("Icons/login.jpg");
+        background = new ImageView(image_user);        
+        background.setFitHeight(200);
+        background.setFitWidth(400);
+        background.relocate(0, 0); 
+        background.setStyle("-fx-background-radius:1em");
+        
+    }   
+    
+    public void createProfilePicture(Stage theStage){
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        configureFileChooser(fileChooser);        
+         File file = fileChooser.showOpenDialog(theStage);
+
+        if (file != null) {            
+            
+        image_user = new Image(file.toURI().toString());
+            profile_pic.setImage(image_user);
+        }
+
+    
+    
     }
     
     
     
+    public void profilePicture(String picture, Stage theStage){
+         // <editor-fold defaultstate="collapsed" desc="Circle Image">
+        
+        profile_pic = (new ImageView(new Image(picture)));
+        Rectangle square = new Rectangle();
+        square.setWidth(150);
+        square.setHeight(150);
+        profile_pic.setClip(square);
+        Circle clip = new Circle();
+        clip.setCenterX(75);
+        clip.setCenterY(75);
+        clip.setRadius(75);
+        profile_pic.fitWidthProperty().bind(square.widthProperty());
+        profile_pic.fitHeightProperty().bind(square.heightProperty());
+        profile_pic.setClip(clip);
+        
+        
+          profile_pic.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+          @Override
+          public void handle(MouseEvent arg0) {
+            createProfilePicture(theStage);
+          }
+
+      });
+          
+        userbox.getChildren().add(profile_pic);
+        // </editor-fold>  
+        
+        
+        
+    }
+    
+    public void createToggle(Stage theStage){
+        
+        // <editor-fold desc="Validate Icon">
+        icon = new JFXToggleNode();
+        Icon value = new Icon("ARROW_RIGHT", "2em");
+        value.setAlignment(Pos.CENTER);
+        value.setTextFill(Color.WHITE);
+        icon.setGraphic(value);
+        icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
+        icon.setPrefSize(60, 60);
+        icon.relocate(375,415);  
+        
+        icon.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {            
+                validateLogin(theStage);     
+                }
+            });
+        
+        
+        
+        // </editor-fold>
+        
+        // <editor-fold desc="Save icon">
+        save_icon = new JFXToggleNode();
+        Icon value2 = new Icon("SAVE", "2em");
+        value2.setAlignment(Pos.CENTER);
+        value2.setTextFill(Color.WHITE);
+        save_icon.setGraphic(value2);
+        save_icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
+        save_icon.setPrefSize(60, 60);
+        save_icon.relocate(375,450);
+        save_icon.setVisible(false);
+        
+         save_icon.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent actionEvent) {
+            
+                    validateNewUser(theStage);
+                }
+            });
+         // </editor-fold>
+        
+         
+    }
+    
+    public void validateLogin(Stage theStage){
+           
+           try {
+               //Connect to Database
+               MysqlConnection conection = new MysqlConnection();
+               conection.connect();
+         //      System.out.println("You are connected");
+               
+               if(user.getText().length()>3 & pass.getText().length()>4){
+                   CUser uss = conection.consultUser(user.getText());
+           
+                   if(uss!=null && pass.getText().equals(uss.getUser_password())){ //Entering this means that the user was succesfully logged       
+                       EditProfile mainPage = new EditProfile(uss, allBooks);
+                       Stage loginStage = mainPage.getStage();
+                       loginStage.show();
+                       theStage.getScene().getWindow().hide();
+                                   
+                   }else{
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Incorrect Password or UserName");
+                        alert.setContentText("Please enter a existing user name with correct password");
+                        alert.showAndWait();
+                   }
+               }else{
+                   if(user.getText().length()<4){
+                       user.validate();
+                   }else{
+                       if(pass.getText().length()<4){
+                           pass.validate();
+                       }else{
+                           
+                           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("User form not complete");
+                            alert.setContentText("Please complete user form");
+                            alert.showAndWait();
+                       }
+                   }
+               }
+           } catch (SQLException ex) {
+               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+           }
+    }
+
+    
+    public void validateNewUser(Stage theStage){
+        
+           try {
+               MysqlConnection conection = new MysqlConnection();
+               
+               conection.connect();
+               System.out.println("You are connected");
+               
+               if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){                   
+                   CUser uss = conection.consultUser(new_user.getText());
+           
+                   if(uss !=null){
+                       
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User Already Exist");
+                        alert.setContentText("Please select another user");
+                        alert.showAndWait();
+
+                   }else{
+                   boolean validate= conection.addNewUser(new_user.getText(),new_name.getText(),date.getTime().toString(),new_pass.getText(),image_user.toString(),country.getText());
+                   
+                   if(validate = true){
+                    
+                   bookSelection book = new bookSelection();
+                   Stage loginStage = book.getStage();
+                   loginStage.show();
+                   theStage.getScene().getWindow().hide();   
+                   }else{
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("Impossible to connect DataBase");
+                        alert.setContentText("Please verify connections");
+                        alert.showAndWait();
+                   }
+                   }
+               }else{
+                   
+                   if(new_user.getText().length()<4){
+                       new_user.validate();
+                   }else{
+                       if(new_pass.getText().length()<4){
+                           new_pass.validate();
+                       }else{
+                           Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("User form not complete");
+                        alert.setContentText("Please complete user form");
+                        alert.showAndWait();
+                       }
+                   }
+               }  } catch (SQLException ex) { 
+               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+           }
+        
+    }
+    
+    private static void configureFileChooser(final FileChooser fileChooser) {      
+            fileChooser.setTitle("View Pictures");
+            fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+            );                 
+            fileChooser.getExtensionFilters().addAll(
+             //   new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+            );
+    }
+
+     private void openFile(File file) {
+        try {
+            desktop.open(file);
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(
+                Level.SEVERE, null, ex
+            );
+        }
+    }
+
+    private void activeRecommendations() {
+        ANN nn = new ANN();
+        nn.NeuralNetwork(7, 4, 1);
+        nn.run(50000, 0.001);
+    }
     
     @Override
     public void start(Stage primaryStage) {
             primaryStage.initStyle(StageStyle.UNDECORATED);
-        // <editor-fold defaultstate="collapsed" desc="Nav Drawer">
-            createView();
-            
-            JFXButton button = new JFXButton("Exit".toUpperCase());
-            button.getStyleClass().add("button-raised");
-            button.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE;");
-            button.relocate(445, 320);
-            
-            JFXButton button2 = new JFXButton("Open book".toUpperCase());
-            button2.getStyleClass().add("button-raised");
-            button2.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE;");
-            button2.relocate(445, 370);
-            
-            JFXButton button3 = new Button("Sing In".toUpperCase(),"WHITE","").getButton();
-             button3.relocate(445, 420);
-             
-             
-            JFXButton button4 = new Button("Welcome".toUpperCase(),"WHITE","").getButton();
-            button4.relocate(745, 420);
-             
-            JFXButton button5 = new Button("Load ISBN".toUpperCase(),"WHITE","").getButton();
-            button5.relocate(745, 370);
-             
-            //Closing Program
-            button.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    Platform.exit();
-                }
-            });
-            
-            
-            //For opening new page...
-            button2.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-//                    ISBNConverter converter = new ISBNConverter();
-//                    try {
-//                        converter.readJSON();
-//                    } catch (IOException ex) {
-//                        Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-//                    } catch (JSONException ex) {
-//                        Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-                    BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
-                    bookDescript.setSize(1100, 700); //Resizing
-                    Stage bookDescriptStage = bookDescript.getStage(); //Getting Stage
-                    bookDescriptStage.show(); //Showing Stage
-                    primaryStage.getScene().getWindow().hide(); //Hiding old Stage
-                }
-            });
-            
-            
-            
-            //For opening sing in
-              button3.setOnAction(new EventHandler<ActionEvent>() {
-
-                  
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                Login login = new Login();
-                Stage loginStage = login.getStage();
-                loginStage.show();
-                primaryStage.getScene().getWindow().hide();
-                }
-            });
-           
-            //For opening welcome
-              button4.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent actionEvent) {
-               bookSelection book = new bookSelection();
-                Stage loginStage = book.getStage();
-                loginStage.show();
-                primaryStage.getScene().getWindow().hide();
-                }
-            });
-              
-            navDrawer.getContent().getChildren().addAll(button, button2,button3,button4, button5);
-            navDrawer.setStage(primaryStage);
-            BorderPane page = new BorderPane();
-            page.setCenter(navDrawer);
-            page.setTop(toolBar);
-            scene = new Scene(page, 1110, 700);
+            page.setStyle("-fx-background-color:#455A64");
+            Scene  scene = new Scene(page, 700, 700);       
             scene.getStylesheets().add("/style/jfoenix-components.css");
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
+            try {
+                convertAllBooks(readFile(primaryStage));
+            } catch (IOException ex) {
+                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            loginPic();
+            createToggle(primaryStage);
+            createTabs(primaryStage);       
+            createView(); //Contains all the components
             primaryStage.show();    
             // </editor-fold>
     }

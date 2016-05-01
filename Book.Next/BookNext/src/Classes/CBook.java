@@ -24,7 +24,7 @@ public class CBook {
     private List<String> key_words;
     private ImageView book_img;
     private int num_ratings = 0;
-    private long bookId;
+    private long bookId; //ISBN
     private int autoIncId = 0;
     private double book_rating;
     

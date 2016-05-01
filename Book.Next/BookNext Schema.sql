@@ -1,5 +1,4 @@
 DROP SCHEMA IF EXISTS BookNext;
-DROP USER booknext;
 
 create schema BookNext;
 create user 'booknext' identified by 'book';

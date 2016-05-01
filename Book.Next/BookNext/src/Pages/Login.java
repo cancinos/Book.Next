@@ -414,7 +414,7 @@ public class Login extends Stage{
     }
     
     public Stage getStage(){
-        this.initStyle(StageStyle.UNDECORATED);       
+       this.initStyle(StageStyle.UNDECORATED);       
        page.setStyle("-fx-background-color:#455A64");
        
        loginPic();

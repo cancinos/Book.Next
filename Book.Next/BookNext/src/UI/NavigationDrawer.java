@@ -81,7 +81,7 @@ public class NavigationDrawer extends JFXDrawersStack{
 //        node2.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
         
         content = new Pane();
-        content.setStyle("-fx-background-color: -fx-background-color: WHITE;");
+        content.setStyle("-fx-background-color: WHITE;");
 
         
         leftDrawer.setSidePane(leftDrawerPane);
@@ -133,7 +133,7 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblHome.setGraphic(new ImageView(imgUser));
         lblHome.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblHome);
-        lblHome.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+        lblHome.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to book description (later will be modified
 			BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
                         bookDescript.setSize(1100, 700); //Resizing
                         content = bookDescript.getContent();
@@ -147,31 +147,12 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblProfile.setGraphic(new ImageView(imgUser));
         lblProfile.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblProfile);
-        lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
-            String allIsbn = "";
-            try {
-                allIsbn = readFile(contentStage);
-            } catch (IOException ex) {
-                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            allIsbn = allIsbn.substring(0,allIsbn.length()-1);
-            System.out.println(allIsbn);
-            String[] separated = allIsbn.split(",");
-            int cont = 0;
-            for (String str : separated) //
-            {
-                try {
-                    allBooks.add(new ISBNConverter().isbnToBook(str, cont));
-                    cont++;
-                } catch (IOException | JSONException ex) {
-                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to actUser profile
             
-            EditProfile profile = new EditProfile(allBooks);
-            profile.setSize(1100, 700); //Resizing
-            content = profile.getContent();
-            this.setContent(content);
+//            EditProfile profile = new EditProfile(allBooks);
+//            profile.setSize(1100, 700); //Resizing
+//            content = profile.getContent();
+//            this.setContent(content);
         });
         
         this.leftDrawerPane.getChildren().add(menuList);
