@@ -327,8 +327,8 @@ public class Login extends Stage{
                    }else{
                        Alert alert = new Alert(AlertType.INFORMATION);
                         alert.setTitle("Error");
-                        alert.setHeaderText("User name does not exist");
-                        alert.setContentText("Please enter a existing user name");
+                        alert.setHeaderText("Incorrect Password or UserName");
+                        alert.setContentText("Please enter a existing user name with correct password");
                         alert.showAndWait();
                    }
                }else{
