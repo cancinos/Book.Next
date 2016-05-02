@@ -24,57 +24,23 @@ import javafx.scene.paint.Color;
 public class VCard extends Pane{
     
     private double width, height;
-   public bookSelection book = new bookSelection(); 
-   public boolean isclicked =false;
+    public bookSelection selectionClass; 
+    public boolean isclicked =false;
     public VCard(double width, double height)
     {
         this.width = width;
         this.height = height;
     }
     
-    public void createCard(CBook book)
+    public void setBookClass(bookSelection theClass)
     {
-        this.setPrefSize(width, height);
-        this.setStyle("-fx-background-color:WHITE;");
-        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
-        ImageView background = new ImageView(new Image(book.getBook_image()));
-        
-        background.setFitHeight(198);
-        background.setFitWidth(128);
-        background.relocate(0, 0);
-        
-//        
-//        Label title = new Label("Divergent");
-//        Label author = new Label("Veronica Roth");
-        Label title = new Label(book.getBook_name());
-        Label author = new Label(book.getBook_authorsStr());
-        
-        title.setStyle("-fx-font-size:15px;");
-        title.setMaxWidth(116);
-        title.setPadding(new Insets(0,0,0,10));
-        title.relocate(0, 205);
-        
-        author.relocate(0, 225);
-        author.setStyle("-fx-font-size:12px;");
-        author.setPadding(new Insets(0,0,0,10));
-        author.setMaxWidth(116);    
-        author.setTextFill(Color.GRAY);
-        
-        this.getChildren().add(background);
-        this.getChildren().add(title);
-        this.getChildren().add(author);
-        
-        this.setCursor(Cursor.HAND);
-        createEvent();
+        selectionClass = theClass;
     }
+    
+   
     
     public void createSimpleCard(CBook book)
     {
-        /*
-            NOTA MENTAL:
-                Para que las imagenes no se tarden mucho, guardarlas en una lista de Images, y luego
-                sólo ir a traerlas. Haciendo esto, solo al inicio será lo tardado.
-        */
         String strImage, strName, strAuthor;
         this.setPrefSize(width, height);
         this.setStyle("-fx-background-color:WHITE;");
@@ -100,8 +66,7 @@ public class VCard extends Pane{
         author.setMaxWidth(116);
         author.setStyle("-fx-font-size:12px;");
         author.setPadding(new Insets(0,0,0,10));
-        //title.setWrapText(true);       
-        author.setTextFill(Color.GRAY);
+        author.setTextFill(Color.GRAY); 
         
         this.getChildren().add(background);
         this.getChildren().add(title);
@@ -110,6 +75,65 @@ public class VCard extends Pane{
         this.setCursor(Cursor.HAND);
     }
     
+    public void createCardsToSelect(CBook book)
+    {
+        String strImage, strName, strAuthor;
+        this.setPrefSize(width, height);
+        this.setStyle("-fx-background-color:WHITE;");
+        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
+        strImage = book.getBook_image();
+        strName = book.getBook_name();
+        strAuthor = book.getBook_authorsStr();
+        strAuthor = strAuthor.substring(0, strAuthor.length() - 1);
+        ImageView background = new ImageView(new Image(strImage));
+        background.setFitHeight(198);
+        background.setFitWidth(128);
+        background.relocate(0, 0);
+        
+        Label title = new Label(strName);
+        Label author = new Label(strAuthor);
+        
+        title.setStyle("-fx-font-size:14px;");
+        title.setMaxWidth(116);
+        title.setPadding(new Insets(0,0,0,10));
+        title.relocate(0, 205);
+        
+        author.relocate(0, 225);
+        author.setMaxWidth(116);
+        author.setStyle("-fx-font-size:12px;");
+        author.setPadding(new Insets(0,0,0,10));
+        author.setTextFill(Color.GRAY);
+        ImageView selectedIcon;
+        
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
+            
+            if(isclicked ==true){
+                isclicked =false;
+                selectionClass.selected--;
+            if(selectionClass.selected <3){
+               //selectionClass.next.setVisible(false);                        
+                    }
+        this.setEffect(new DropShadow(8d, 0d, 0d, Color.web("#727272")));
+        }else{
+            isclicked =true;            
+            selectionClass.selected++;
+            if(selectionClass.selected >=3){
+               //selectionClass.next.setVisible(true);                        
+                    }
+        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
+        this.setEffect(new DropShadow(28d, 0d, 0d, Color.web("#727272")));    
+           }
+        }); 
+        
+        this.getChildren().add(background);
+        this.getChildren().add(title);
+        this.getChildren().add(author);
+        
+        this.setCursor(Cursor.HAND);
+    }
+    
+    
+    private boolean selected = false;
     public void createEvent(){
         
 //        book.selected =0;

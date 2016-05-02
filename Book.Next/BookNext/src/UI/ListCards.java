@@ -85,7 +85,7 @@ public class ListCards extends ScrollPane{
         
         for (CBook bookList1 : bookList) {
             newCard = new VCard(128,250);
-            newCard.createCard(bookList1);
+            newCard.createSimpleCard(bookList1);
             hbox.getChildren().add(newCard);
         }
         
@@ -99,7 +99,7 @@ public class ListCards extends ScrollPane{
      * This method shows rows and columns of books
      * @param bookList user's book list
      */
-    public void createMatrixList(List<CBook> bookList)
+    public void createMatrixList(List<CBook> bookList, boolean willBeSelected)
     {
         FlowPane cardsMatrix = new FlowPane();
         cardsMatrix.setVgap(25);
@@ -113,7 +113,9 @@ public class ListCards extends ScrollPane{
         
             for (CBook book : bookList) {
             newCard = new VCard(128,250);
-            newCard.createSimpleCard(book);
+            if (willBeSelected)
+                newCard.createCardsToSelect(book); else
+                newCard.createSimpleCard(book);
             cardsMatrix.getChildren().add(newCard);
         }
         

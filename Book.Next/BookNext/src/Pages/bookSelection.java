@@ -35,13 +35,17 @@ import javafx.stage.StageStyle;
 public class bookSelection extends Stage {
     
     private Pane page = new Pane();
-    private final List<CBook> allBooks;
+    private List<CBook> allBooks;
     public static int selected = 0;
-    
+    public JFXButton next;
     public bookSelection()
     {
-        allBooks = new ArrayList();
         page.setPrefSize(1000, 720);
+    }
+    
+    public void setBookList(List<CBook> books)
+    {
+        allBooks = books;
     }
     
 //    public bookSelection(){
@@ -244,16 +248,21 @@ public class bookSelection extends Stage {
     private void showUserLibrary()
     {
         ListCards cards = new ListCards();
-        cards.createMatrixList(allBooks);
-        cards.relocate(320, 70);
-        cards.relocate(100, 100);
-        page.getChildren().add(cards);
+        cards.createMatrixList(allBooks, true);
+        cards.relocate(140, 80);
+        
+        Label lblSelect = new Label("Choose your 3 favorite books");
+        lblSelect.setStyle("-fx-font-size:22px");
+        lblSelect.relocate(150, 50);
+        
+        page.getChildren().addAll(cards, lblSelect);
         //infoCard.getChildren().add(list.getList());
     }
     
     
     public Stage getStage(){
-         this.initStyle(StageStyle.UNDECORATED);             
+        //this.initStyle(StageStyle.UNDECORATED);             
+        showUserLibrary();
         Scene scene = new Scene(page, 1000, 720);
         scene.getStylesheets().add("/style/jfoenix-components.css");
         this.setScene(scene);

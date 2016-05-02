@@ -421,7 +421,7 @@ public class BookNext extends Application {
                if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){                   
                    CUser uss = conection.consultUser(new_user.getText());
            
-                   if(uss !=null){
+                   if(uss !=null){ //If uss !=null means that the username is already registered
                        
                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Error");
@@ -430,16 +430,19 @@ public class BookNext extends Application {
                         alert.showAndWait();
 
                    }else{
-                   boolean validate= conection.addNewUser(new_user.getText(),new_name.getText(),date.getTime().toString(),new_pass.getText(),image_user.toString(),country.getText());
-                   
-                   if(validate = true){
+                   boolean validate;//= conection.addNewUser(new_user.getText(),new_name.getText(),date.getTime().toString(),new_pass.getText(),image_user.toString(),country.getText());
+                   validate = true;
+                   if(validate = true){ //if this is true, means that all the fields are correct.
                     
                    bookSelection book = new bookSelection();
+                   book.setBookList(allBooks);
                    Stage loginStage = book.getStage();
                    loginStage.show();
                    theStage.getScene().getWindow().hide();   
-                   }else{
-                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                   }
+                   else
+                   {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Error");
                         alert.setHeaderText("Impossible to connect DataBase");
                         alert.setContentText("Please verify connections");
