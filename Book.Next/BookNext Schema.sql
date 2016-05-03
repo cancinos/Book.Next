@@ -92,3 +92,9 @@ insert into users(username,fullname,birthday,passwoord,imagen,country) values ('
 
 insert into users(username,fullname,birthday,passwoord,imagen,country) values ('Ludwing','Ludwing Cano','23/08/1994','123pass','https://scontent-atl3-1.xx.fbcdn.net/t31.0-8/s960x960/12068740_10153524436238100_3708907581614942786_o.jpg','Guatemala');
 
+CREATE TABLE `booknext`.`ann` (
+  `idANN` INT NOT NULL AUTO_INCREMENT,
+  `weightKey` VARCHAR(45) NOT NULL,
+  `value` DOUBLE NOT NULL DEFAULT 0,
+  PRIMARY KEY (`idANN`))
+COMMENT = 'To store weights of Artificial neural network';
