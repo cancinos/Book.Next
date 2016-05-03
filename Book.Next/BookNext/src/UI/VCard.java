@@ -75,6 +75,7 @@ public class VCard extends Pane{
         this.setCursor(Cursor.HAND);
     }
     
+    ImageView selectedIcon;
     public void createCardsToSelect(CBook book)
     {
         String strImage, strName, strAuthor;
@@ -103,25 +104,37 @@ public class VCard extends Pane{
         author.setStyle("-fx-font-size:12px;");
         author.setPadding(new Insets(0,0,0,10));
         author.setTextFill(Color.GRAY);
-        ImageView selectedIcon;
+        
         
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
             
-            if(isclicked ==true){
-                isclicked =false;
-                selectionClass.selected--;
-            if(selectionClass.selected <3){
-               //selectionClass.next.setVisible(false);                        
-                    }
-        this.setEffect(new DropShadow(8d, 0d, 0d, Color.web("#727272")));
-        }else{
-            isclicked =true;            
-            selectionClass.selected++;
-            if(selectionClass.selected >=3){
-               //selectionClass.next.setVisible(true);                        
-                    }
-        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
-        this.setEffect(new DropShadow(28d, 0d, 0d, Color.web("#727272")));    
+        if(isclicked ==true)
+        {
+            isclicked =false;
+            selectionClass.selected--;
+            if(selectionClass.selected <3)
+            {
+               //selectionClass.next.setVisible(false);
+                
+            }
+            this.getChildren().remove(selectedIcon);
+            this.setEffect(new DropShadow(8d, 0d, 0d, Color.web("#727272")));
+        }else
+        {            
+            if(selectionClass.selected >= 3) //3 cards are already selected
+            {
+               //selectionClass.next.setVisible(true);                      
+               
+            } else
+            {
+                isclicked =true;
+                selectionClass.selected++;
+                this.setEffect(new DropShadow(28d, 0d, 0d, Color.BLACK)); 
+                selectedIcon = new ImageView(new Image("/Icons/followed.png"));
+                selectedIcon.relocate(108, -11);
+                this.getChildren().add(selectedIcon);    
+            }
+        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));
            }
         }); 
         
