@@ -12,7 +12,6 @@ import Classes.ISBNConverter;
 import Classes.MysqlConnection;
 import Pages.BookDescriptionPage;
 import Pages.EditProfile;
-import Pages.Login;
 import Pages.bookSelection;
 import UI.Button;
 import UI.NavigationDrawer;
@@ -33,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -94,6 +94,7 @@ public class BookNext extends Application {
     private JFXDatePicker date;
     private Image image_user;
     private List<CBook> allBooks = new ArrayList();
+    private String imageURL = "/Icons/user.PNG";
     /**
      * This Function reads isbn.txt file and creates every single isbn to a CBook object
      * @param parent stage where is beeing called
@@ -195,7 +196,8 @@ public class BookNext extends Application {
          new_user = fields.validateTextField("Username","User name can't be empty","15");    
          new_pass = fields.PasswordField("Password","Password can't be empty","15"); 
         country = fields.textField("Country","16");
-         date = new JFXDatePicker();        
+         date = new JFXDatePicker();  
+         date.setEditable(false);
         profilePicture("/Icons/user.PNG",theStage);
         
      
@@ -215,7 +217,7 @@ public class BookNext extends Application {
       createLogin();  
       tabPane = new JFXTabPane();
       tabPane.setStyle("-fx-background-color:WHITE;");      
-      title = new Label("Sing in");     
+      title = new Label("Sign in");     
       title.setTextFill(Color.WHITE);
       title.setStyle("-fx-font-size:15px;");
       tab = new Tab();      
@@ -227,9 +229,9 @@ public class BookNext extends Application {
       tabPane.getTabs().add(tab);
       
       
-      // Create Tab with sing up box
+      // Create Tab with sign up box
        createUser(theStage);      
-      title = new Label("Sing up");      
+      title = new Label("Sign up");      
       title.setTextFill(Color.WHITE);     
       title.setStyle("-fx-font-size:15px;");
       tab = new Tab();      
@@ -269,13 +271,14 @@ public class BookNext extends Application {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Profile Picture");
         configureFileChooser(fileChooser);        
-         File file = fileChooser.showOpenDialog(theStage);
-
+        File file = fileChooser.showOpenDialog(theStage);
+        
         if (file != null) {            
             
         image_user = new Image(file.toURI().toString());
+        imageURL = file.toURI().toString();
             profile_pic.setImage(image_user);
-        }
+        } 
 
     
     
@@ -370,7 +373,6 @@ public class BookNext extends Application {
                //Connect to Database
                MysqlConnection conection = new MysqlConnection();
                conection.connect();
-         //      System.out.println("You are connected");
                
                if(user.getText().length()>3 & pass.getText().length()>4){
                    CUser uss = conection.consultUser(user.getText());
@@ -405,7 +407,7 @@ public class BookNext extends Application {
                    }
                }
            } catch (SQLException ex) {
-               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+               Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
            }
     }
 
@@ -429,25 +431,29 @@ public class BookNext extends Application {
                         alert.setContentText("Please select another user");
                         alert.showAndWait();
 
-                   }else{
-                   boolean validate;//= conection.addNewUser(new_user.getText(),new_name.getText(),date.getTime().toString(),new_pass.getText(),image_user.toString(),country.getText());
-                   validate = true;
-                   if(validate = true){ //if this is true, means that all the fields are correct.
-                    
-                   bookSelection book = new bookSelection();
-                   book.setBookList(allBooks);
-                   Stage loginStage = book.getStage();
-                   loginStage.show();
-                   theStage.getScene().getWindow().hide();   
-                   }
-                   else
-                   {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Impossible to connect DataBase");
-                        alert.setContentText("Please verify connections");
-                        alert.showAndWait();
-                   }
+                   } else
+                   {   
+                       //public CUser(String usrname,  String full, String pass, String birth, String img,String country)
+                       uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-','/') , imageURL, country.getText());
+                       boolean validate = true; //= conection.addNewUser(uss.gerUsername(),uss.getUser_fullName(),
+                               //uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());
+                       validate = true;
+                       if(validate = true){ //if this is true, means that all the fields are correct.
+
+                       bookSelection book = new bookSelection(uss);
+                       book.setBookList(allBooks);
+                       Stage loginStage = book.getStage();
+                       loginStage.show();
+                       theStage.getScene().getWindow().hide();   
+                       }
+                       else
+                       {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Impossible to connect DataBase");
+                            alert.setContentText("Please verify connections");
+                            alert.showAndWait();
+                       }
                    }
                }else{
                    
@@ -465,7 +471,7 @@ public class BookNext extends Application {
                        }
                    }
                }  } catch (SQLException ex) { 
-               Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+               Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
            }
         
     }
@@ -486,7 +492,7 @@ public class BookNext extends Application {
         try {
             desktop.open(file);
         } catch (IOException ex) {
-            Logger.getLogger(Login.class.getName()).log(
+            Logger.getLogger(BookNext.class.getName()).log(
                 Level.SEVERE, null, ex
             );
         }
@@ -524,6 +530,12 @@ public class BookNext extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    private LocalDate stringToDate(String strDate)
+    {
+        String[] nums = strDate.split("/");
+        return LocalDate.of(Integer.parseInt(nums[2]), Integer.parseInt(nums[1]), Integer.parseInt(nums[0]));
     }
     
 }

@@ -6,6 +6,7 @@
 package Pages;
 
 import Classes.CBook;
+import Classes.CUser;
 import UI.ListCards;
 import UI.NavigationDrawer;
 import UI.VCard;
@@ -42,6 +43,7 @@ public class bookSelection extends Stage {
     private NavigationDrawer navDrawer;
     private mainToolbar toolBar;
     private final BorderPane page = new BorderPane();
+    public CUser loggedUser;
     /**
      * This method creates stage's navigation Drawer & toolbar
      */
@@ -59,8 +61,9 @@ public class bookSelection extends Stage {
     }
     
     
-    public bookSelection()
+    public bookSelection(CUser actUser)
     {
+        loggedUser = actUser;
         page.setPrefSize(1000, 720);
     }
     
@@ -88,15 +91,13 @@ public class bookSelection extends Stage {
         save_icon.setPrefSize(60, 60);
         save_icon.relocate(1000,550);
         save_icon.setVisible(false);
-        
-//         save_icon.setOnAction(new EventHandler<ActionEvent>() {
-//
-//                @Override
-//                public void handle(ActionEvent actionEvent) {
-//            
-//                    validateNewUser();
-//                }
-//            });
+        save_icon.setOnAction((ActionEvent actionEvent) -> {
+            EditProfile mainPage = new EditProfile(loggedUser, allBooks); //Verificar que sea la lista de sus libros
+            mainPage.setSize(1100, 700);
+            Stage profileStage = mainPage.getStage();
+            profileStage.show();
+            this.getScene().getWindow().hide();  
+        });
         
         navDrawer.getContent().getChildren().addAll(cards, lblSelect, save_icon);
         navDrawer.getContent().setStyle("-fx-background-color");
