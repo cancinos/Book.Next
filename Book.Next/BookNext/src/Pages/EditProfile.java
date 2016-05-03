@@ -207,7 +207,7 @@ public class EditProfile extends Stage {
     private void showUserLibrary()
     {
         ListCards list = new ListCards();
-        list.createMatrixList(allBooks);
+        list.createMatrixList(allBooks, false);
         list.relocate(320, 70);
         addComponent(list);
         //infoCard.getChildren().add(list.getList());
