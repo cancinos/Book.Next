@@ -101,8 +101,8 @@ public class Login extends Stage{
         card.relocate(150, 100);             
         card.getChildren().add(background);
         card.getChildren().add(tabPane);   
-        card.getChildren().add(icon);
-        card.getChildren().add(save_icon);
+        //card.getChildren().add(icon);
+        //card.getChildren().add(save_icon);
         page.getChildren().add(card);
     }
     
@@ -269,7 +269,7 @@ public class Login extends Stage{
         icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
         icon.setPrefSize(60, 60);
         icon.relocate(375,415);  
-        
+        card.getChildren().add(icon);
         icon.setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
@@ -290,9 +290,9 @@ public class Login extends Stage{
         save_icon.setGraphic(value2);
         save_icon.setStyle("-fx-background-radius: 4em; -fx-background-color:#03A9F4;");
         save_icon.setPrefSize(60, 60);
-        save_icon.relocate(375,450);
+        save_icon.relocate(375,115);
         save_icon.setVisible(false);
-        
+        card.getChildren().add(save_icon);
          save_icon.setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
@@ -321,6 +321,7 @@ public class Login extends Stage{
                                           
                        bookSelection book = new bookSelection();
                        Stage loginStage = book.getStage();
+                       
                        loginStage.show();
                        getScene().getWindow().hide();
                                    
