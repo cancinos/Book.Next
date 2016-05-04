@@ -140,7 +140,7 @@ public class EditProfile extends Stage {
         DatePicker.setStyle("-fx-font-size: 18;");
         DatePicker.setDefaultColor(Color.web("#F44336"));
         DatePicker.setEditable(false);
-        DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
+        //DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
         
         JFXPasswordField txtPassword;
         txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
