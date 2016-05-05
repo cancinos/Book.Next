@@ -146,7 +146,7 @@ public class BookNext extends Application {
             {
                 System.out.print(cont + " - " + str);
                 try {
-                    actBook = new ISBNConverter().isbnToBook(str, cont);
+                    actBook = new ISBNConverter().isbnToBook(str, cont);                    
                     connection.addBook(actBook);
                     allBooks.add(actBook);
                     cont++;
@@ -497,7 +497,7 @@ public class BookNext extends Application {
 
     private void activeRecommendations() {
         ANN nn = new ANN();
-        nn.NeuralNetwork(7, 4, 1);
+       // nn.NeuralNetwork(7, 4, 1);
         nn.run(50000, 0.001);
     }
 
@@ -516,7 +516,8 @@ public class BookNext extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
             try {                
-                if(connection.countBooks()<100){       
+                if(connection.countBooks()<100){  
+                    List<CBook> list = connection.getBooks();
                     System.out.print(connection.countBooks());
                 convertAllBooks(readFile(primaryStage));         
                 }

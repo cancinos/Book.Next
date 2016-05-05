@@ -78,6 +78,7 @@ public class ISBNConverter {
        if (!volumeInfo.isNull("imageLinks"))
            newBook.setBook_image(volumeInfo.getJSONObject("imageLinks").getString("thumbnail")); else
            newBook.setBook_image("/Icons/No_Cover.jpg");
+       
        System.out.print(" finished\n");
        
       /**

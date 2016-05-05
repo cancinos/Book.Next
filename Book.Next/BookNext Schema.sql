@@ -50,7 +50,7 @@ imagen varchar (200),
 publish_date varchar(20),
 publisher varchar(40),
 rating_average varchar(3),
-description varchar (200),
+description varchar (500),
 genre varchar(100)
 );
 

@@ -30,17 +30,16 @@ public class CBook {
     private float book_rating;
     
     
-    public void fillCBook(String     isbn,String book_name, String authors, String imagen, String publishDate, String publisher,Float ratingAverage,String description,String genre){
-        this.bookId = Long.getLong(isbn);
+    public void fillCBook(String isbn,String book_name, String authors, String imagen, String publishDate, String publisher,String ratingAverage,String description,String genre){
+        this.bookId = Long.parseLong(isbn);
         this.book_name = book_name;
         this.book_authors = setBook_authorList(authors);
         this.book_image = imagen;
         this.book_publishYear = publishDate;
         this.book_publisher=publisher;
-        this.book_rating = ratingAverage;
+        this.book_rating = Float.parseFloat(ratingAverage);
         this.book_description = description;
-        this.book_genres = genre;
-        
+        this.book_genres = genre;        
     }
     public int getAutoInc() { return autoIncId; }
     
