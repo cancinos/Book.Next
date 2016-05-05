@@ -7,11 +7,18 @@
 *.jar
 *.war
 *.ear
+*~
+*.bak
+*.old
+*.orig
+*.rej
+*.swp
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 nbproject/private/
+nbproject/configs/
 build/
 nbbuild/
 dist/
@@ -19,3 +26,7 @@ nbdist/
 nbactions.xml
 .nb-gradle/
 Book.Next/BookNext/nbproject/jfx-impl_backup_10.xml
+_notes/
+playground/
+tmp/
+temp/
