@@ -129,61 +129,40 @@ public class BookNext extends Application {
         return everything;
 
     }
-<<<<<<< HEAD
+    
 
     public void convertAllBooks(String allIsbn) {
-        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
-        System.out.println(allIsbn);
-=======
-    
-    public void convertAllBooks(String allIsbn)
-    {
-<<<<<<< HEAD
-         try {
-             MysqlConnection connection = new MysqlConnection();
-             connection.connect();
-             allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
-             String[] separated = allIsbn.split(",");
-             CBook actBook;
-             int cont = 0;
-             for (String str : separated) //
-             {
-                 System.out.print(cont + " - " + str);
-                 try {
-                     actBook = new ISBNConverter().isbnToBook(str, cont);
-                     //connection.addBook(actBook);
-                     allBooks.add(actBook);
-                     cont++;
-                     
-                     
-                     //HACER QUERY AQUI
-                 } catch (IOException | JSONException ex) {
-                     Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                     cont++;
-                     System.out.print(" not finished\n");
-                 }
-             }} catch (SQLException ex) {
-             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-         }
-=======
-        allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
->>>>>>> origin/master
-        String[] separated = allIsbn.split(",");
-        int cont = 0;
-        for (String str : separated) //
-        {
-            System.out.print(cont + " - " + str);
-            try {
-                allBooks.add(new ISBNConverter().isbnToBook(str, cont));
-                cont++;
-            } catch (IOException | JSONException ex) {
-                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                cont++;
-                System.out.print(" not finished\n");
+        try {
+            allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
+            System.out.println(allIsbn);
+            
+            MysqlConnection connection = new MysqlConnection();
+            connection.connect();
+            allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
+            String[] separated = allIsbn.split(",");
+            CBook actBook;
+            int cont = 0;
+            for (String str : separated) //
+            {
+                System.out.print(cont + " - " + str);
+                try {
+                    actBook = new ISBNConverter().isbnToBook(str, cont);
+                    //connection.addBook(actBook);
+                    allBooks.add(actBook);
+                    cont++;
+                    
+                    
+                    //HACER QUERY AQUI
+                } catch (IOException | JSONException ex) {
+                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                    cont++;
+                    System.out.print(" not finished\n");
+                }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
->>>>>>> origin/master
-    }
+        }
 
     //Create Card with Components   
     public void createView() {
@@ -388,27 +367,7 @@ public class BookNext extends Application {
         // </editor-fold>
 
     }
-<<<<<<< HEAD
-    
-    public void validateLogin(Stage theStage){
-           
-           try {
-               //Connect to Database
-               MysqlConnection connection = new MysqlConnection();
-               connection.connect();
-               
-               if(user.getText().length()>3 & pass.getText().length()>4){
-                   CUser uss = connection.consultUser(user.getText());
-           
-                   if(uss!=null && pass.getText().equals(uss.getUser_password())){ //Entering this means that the user was succesfully logged       
-                       EditProfile mainPage = new EditProfile(uss, allBooks);
-                       Stage loginStage = mainPage.getStage();
-                       loginStage.show();
-                       theStage.getScene().getWindow().hide();
-                                   
-                   }else{
-                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-=======
+
 
     public void validateLogin(Stage theStage) {
         //TODO: Uncomment the login process
@@ -446,7 +405,7 @@ public class BookNext extends Application {
                     } else {
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
->>>>>>> origin/master
+
                         alert.setTitle("Error");
                         alert.setHeaderText("User form not complete");
                         alert.setContentText("Please complete user form");
@@ -461,32 +420,16 @@ public class BookNext extends Application {
 
     public void validateNewUser(Stage theStage) {
 
-        
-        
-<<<<<<< HEAD
-           try {
-               MysqlConnection connection = new MysqlConnection();
-               
-               connection.connect();
-               System.out.println("You are connected");
-               
-               if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){                   
-                   CUser uss = connection.consultUser(new_user.getText());
-           
-                   if(uss !=null){ //If uss !=null means that the username is already registered
-                       
-                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-=======
         try {
-            MysqlConnection conection = new MysqlConnection(); 
-
-            conection.connect();
+            MysqlConnection connection = new MysqlConnection();
+            
+            connection.connect();
             System.out.println("You are connected");
-
-            if (new_user.getText().length() > 3 & new_pass.getText().length() > 5 & new_name.getText().length() > 4 & country.getLength() > 4) {
-                CUser uss = conection.consultUser(new_user.getText());
-
-                if (uss != null) { //If uss !=null means that the username is already registered
+            
+            if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){
+                CUser uss = connection.consultUser(new_user.getText());
+                
+                if(uss !=null){ //If uss !=null means that the username is already registered
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Error");
@@ -508,71 +451,27 @@ public class BookNext extends Application {
                         loginStage.show();
                         theStage.getScene().getWindow().hide();
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
->>>>>>> origin/master
-                        alert.setTitle("Error");
-                        alert.setHeaderText("Impossible to connect DataBase");
-                        alert.setContentText("Please verify connections");
-                        alert.showAndWait();
-                    }
-                }
-            } else {
-
-<<<<<<< HEAD
-                   } else
-                   {   
-                       //public CUser(String usrname,  String full, String pass, String birth, String img,String country)
-                       uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-','/') , imageURL, country.getText());
-                       boolean validate = true; //= connection.addNewUser(uss.gerUsername(),uss.getUser_fullName(),
-                               //uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());
-                       validate = true;
-                       if(validate = true){ //if this is true, means that all the fields are correct.
-
-                       bookSelection book = new bookSelection(uss);
-                       book.setBookList(allBooks);
-                       Stage loginStage = book.getStage();
-                       loginStage.show();
-                       theStage.getScene().getWindow().hide();   
-                       }
-                       else
-                       {
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setTitle("Error");
-                            alert.setHeaderText("Impossible to connect DataBase");
-                            alert.setContentText("Please verify connections");
-                            alert.showAndWait();
-                       }
-                   }
-               }else{
-                   
-                   if(new_user.getText().length()<4){
-                       new_user.validate();
-                   }else{
-                       if(new_pass.getText().length()<4){
-                           new_pass.validate();
-                       }else{
-                           Alert alert = new Alert(Alert.AlertType.INFORMATION);
-=======
-                if (new_user.getText().length() < 4) {
-                    new_user.validate();
-                } else {
-                    if (new_pass.getText().length() < 4) {
-                        new_pass.validate();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
->>>>>>> origin/master
-                        alert.setTitle("Error");
-                        alert.setHeaderText("User form not complete");
-                        alert.setContentText("Please complete user form");
-                        alert.showAndWait();
+                        if (new_user.getText().length() < 4) {
+                            new_user.validate();
+                        } else {
+                            if (new_pass.getText().length() < 4) {
+                                new_pass.validate();
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Error");
+                                alert.setHeaderText("User form not complete");
+                                alert.setContentText("Please complete user form");
+                                alert.showAndWait();
+                            }
+                        }
                     }
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
+    
 
     private static void configureFileChooser(final FileChooser fileChooser) {
         fileChooser.setTitle("View Pictures");
@@ -604,52 +503,32 @@ public class BookNext extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-<<<<<<< HEAD
+
+        try {
+            
+            MysqlConnection connection = new MysqlConnection();
+            connection.connect();
+            
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            page.setStyle("-fx-background-color:#455A64");
+            Scene scene = new Scene(page, 700, 700);
+            scene.getStylesheets().add("/style/jfoenix-components.css");
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("FXML is Simple");
             try {
-                MysqlConnection connection = new MysqlConnection();
-                connection.connect();   
-                
-                primaryStage.initStyle(StageStyle.UNDECORATED);
-                page.setStyle("-fx-background-color:#455A64");
-                Scene  scene = new Scene(page, 700, 700);
-                scene.getStylesheets().add("/style/jfoenix-components.css");
-                primaryStage.setScene(scene);
-                primaryStage.setTitle("FXML is Simple");
-                try {
-                    if(connection.countBooks()<100){
-                        convertAllBooks(readFile(primaryStage));
-                    }
-                } catch (IOException ex) {
-                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                loginPic();
-                createToggle(primaryStage);
-                createTabs(primaryStage);
-                createView(); //Contains all the components
-                primaryStage.show();
-                // </editor-fold>
-            } catch (SQLException ex) {
+                convertAllBooks(readFile(primaryStage));
+            } catch (IOException ex) {
                 Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
             }
-=======
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        page.setStyle("-fx-background-color:#455A64");
-        Scene scene = new Scene(page, 700, 700);
-        scene.getStylesheets().add("/style/jfoenix-components.css");
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("FXML is Simple");
-        try {
-            convertAllBooks(readFile(primaryStage));
-        } catch (IOException ex) {
+            loginPic();
+            createToggle(primaryStage);
+            createTabs(primaryStage);
+            createView(); //Contains all the components
+            primaryStage.show();
+            // </editor-fold>
+        } catch (SQLException ex) {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        loginPic();
-        createToggle(primaryStage);
-        createTabs(primaryStage);
-        createView(); //Contains all the components
-        primaryStage.show();
-        // </editor-fold>
->>>>>>> origin/master
     }
 
     /**

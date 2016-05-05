@@ -247,13 +247,12 @@ public class MysqlConnection {
         try {
             if (makeStatement() != null) {
 
-                PreparedStatement q = null;
-<<<<<<< HEAD
-                q =connection.prepareStatement("Select * from book");
-                
-                
+                PreparedStatement query = null;
+
+                query =connection.prepareStatement("Select * from book");
+                                
                 ResultSet result =null;
-                result = q.executeQuery();
+                result = query.executeQuery();
                 
                 books = new ArrayList<CBook>();
                 while(result.next()){
@@ -271,24 +270,6 @@ public class MysqlConnection {
                     );
                     books.add(cbook);
                 }
-=======
-                q = connection.prepareStatement("Select * from book");
-
-                ResultSet result = null;
-                result = q.executeQuery();
-
-//                books = new ArrayList<CBook>();
-//                if(result.next()){
-//                    cbook = new CBook(
-//                    result.getString("username"),
-//                    result.getString("fullname"),
-//                    result.getString("passwoord"),                            
-//                    result.getString("birthday"),
-//                    result.getString("imagen"),
-//                    result.getString("country")
-//                    );
-//                }
->>>>>>> origin/master
             }
 
         } catch (SQLException ex) {
@@ -296,7 +277,6 @@ public class MysqlConnection {
         }
 
         return books;
-<<<<<<< HEAD
     } 
     
     public boolean addBook(CBook cbook){
@@ -314,7 +294,7 @@ public class MysqlConnection {
                 query.setString(4, cbook.getBook_image());
                 query.setString(5, cbook.getBook_publishYear());
                 query.setString(6, cbook.getBook_publisher());
-                query.setFloat(7, cbook.getBook_rating());
+                //query.setString(7, cbook.getBook_rating());
                 query.setString(8, cbook.getBook_description());
                 query.setString(9, cbook.getBook_genre());
                 
@@ -363,10 +343,7 @@ public class MysqlConnection {
         
         
     }
-=======
-    }
-
->>>>>>> origin/master
+    
     //</editor-fold>
     //<editor-fold desc="User_Books Querys">
     public boolean setUserBook(int id, int ISBN) {
@@ -387,24 +364,17 @@ public class MysqlConnection {
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-<<<<<<< HEAD
             return add;
     } 
     
     public boolean updateRating(int id,int ISBN,int rating){
        boolean add = false;
-=======
-        return add;
-    }
 
-    public boolean updateRating(int id, int rating) {
-        boolean add = false;
->>>>>>> origin/master
         try {
             if (makeStatement() != null) {
 
                 PreparedStatement query = null;
-<<<<<<< HEAD
+
                 query=connection.prepareStatement("UPDATE user_book SET user_rating = ? Where id = ? & isbn = ?)");
                 
                 query.setInt(1, rating);
@@ -412,38 +382,24 @@ public class MysqlConnection {
                 query.setInt(3, ISBN);
                 if(query.executeUpdate()>0){
                     add= true;
-=======
-                query = connection.prepareStatement("UPDATE user_book SET user_rating = ? Where id = ?)");
 
-                query.setInt(1, rating);
-                query.setInt(2, id);
-                if (query.executeUpdate() > 0) {
-                    add = true;
->>>>>>> origin/master
-                }
+            }
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-<<<<<<< HEAD
             return add;
     } 
     
     public boolean updateLiked(int id,int ISBN,int liked){
        boolean add = false;
-=======
-        return add;
-    }
 
-    public boolean updateLiked(int id, int liked) {
-        boolean add = false;
->>>>>>> origin/master
         try {
             if (makeStatement() != null) {
 
                 PreparedStatement query = null;
-<<<<<<< HEAD
+
                 query=connection.prepareStatement("UPDATE user_book SET user_liked = ? Where id = ? & isbn = ?)");
                 
                 query.setInt(1, liked);
@@ -451,38 +407,24 @@ public class MysqlConnection {
                 query.setInt(3, ISBN);
                 if(query.executeUpdate()>0){
                     add= true;
-=======
-                query = connection.prepareStatement("UPDATE user_book SET user_liked = ? Where id = ?)");
 
-                query.setInt(1, liked);
-                query.setInt(2, id);
-                if (query.executeUpdate() > 0) {
-                    add = true;
->>>>>>> origin/master
                 }
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-<<<<<<< HEAD
             return add;
     } 
     
     public boolean updateView(int id,int ISBN , int view){
        boolean add = false;
-=======
-        return add;
-    }
 
-    public boolean updateView(int id, int view) {
-        boolean add = false;
->>>>>>> origin/master
         try {
             if (makeStatement() != null) {
 
                 PreparedStatement query = null;
-<<<<<<< HEAD
+
                 query=connection.prepareStatement("UPDATE user_book SET user_view = ? Where id = ? & isbn = ?)");
                 
                 query.setInt(1, view);
@@ -490,38 +432,24 @@ public class MysqlConnection {
                 query.setInt(3, ISBN);
                 if(query.executeUpdate()>0){
                     add= true;
-=======
-                query = connection.prepareStatement("UPDATE user_book SET user_view = ? Where id = ?)");
 
-                query.setInt(1, view);
-                query.setInt(2, id);
-                if (query.executeUpdate() > 0) {
-                    add = true;
->>>>>>> origin/master
                 }
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-<<<<<<< HEAD
             return add;
     } 
     
     public boolean updateSaved(int id,int saved, int ISBN){
        boolean add = false;
-=======
-        return add;
-    }
 
-    public boolean updateSaved(int id, int saved) {
-        boolean add = false;
->>>>>>> origin/master
         try {
             if (makeStatement() != null) {
 
                 PreparedStatement query = null;
-<<<<<<< HEAD
+
                 query=connection.prepareStatement("UPDATE user_book SET user_saved = ? Where id = ? & isbn = ?)");
                 
                 query.setInt(1, saved);
@@ -529,15 +457,8 @@ public class MysqlConnection {
                 query.setInt(3, ISBN);
                 if(query.executeUpdate()>0){
                     add= true;
-=======
-                query = connection.prepareStatement("UPDATE user_book SET user_saved = ? Where id = ?)");
 
-                query.setInt(1, saved);
-                query.setInt(2, id);
-                if (query.executeUpdate() > 0) {
-                    add = true;
->>>>>>> origin/master
-                }
+            }
             }
 
         } catch (SQLException ex) {
