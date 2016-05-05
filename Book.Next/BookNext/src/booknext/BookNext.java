@@ -132,7 +132,7 @@ public class BookNext extends Application {
     }        
 		        
     public void convertAllBooks(String allIsbn) {
-        allIsbn = allIsbn.substring(0, allIsbn.length() - 1);
+        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //HOLA
         String[] separated = allIsbn.split(",");
         CBook actBook;
         int cont = 0;
