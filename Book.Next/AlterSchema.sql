@@ -2,4 +2,4 @@ DROP TABLE IF EXISTS  genere;
 
 DROP TABLE IF EXISTS  book_genere;	
 
-ALTER TABLE book add COLUMN ( genere varchar(100));
+ALTER TABLE book add COLUMN ( genre varchar(100));
