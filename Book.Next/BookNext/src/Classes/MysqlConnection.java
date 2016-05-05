@@ -286,21 +286,17 @@ public class MysqlConnection {
             if ( makeStatement() !=null){
                 
                 PreparedStatement query = null;
-                query =connection.prepareStatement("Insert into book values (?,?,?,?,?,?,?,?,?)");
+                query =connection.prepareStatement("insert into book(isbn,book_name,author,imagen,publish_date,publisher,rating_average,description,genre) values (?,?,?,?,?,?,?,?,?)");
                 
-                query.setString(1,cbook.getIdString());
+                query.setString(1, cbook.getId_String());
                 query.setString(2, cbook.getBook_name());
                 query.setString(3, cbook.getBook_authorsStr());
                 query.setString(4, cbook.getBook_image());
                 query.setString(5, cbook.getBook_publishYear());
                 query.setString(6, cbook.getBook_publisher());
-                //query.setString(7, cbook.getBook_rating());
+                query.setString(7, cbook.getRating_String());
                 query.setString(8, cbook.getBook_description());
                 query.setString(9, cbook.getBook_genre());
-                
-                
-                ResultSet result =null;
-                result = query.executeQuery();
                 
                 if(query.executeUpdate()>0){
                 add= true;   

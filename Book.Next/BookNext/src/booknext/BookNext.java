@@ -147,14 +147,14 @@ public class BookNext extends Application {
                 System.out.print(cont + " - " + str);
                 try {
                     actBook = new ISBNConverter().isbnToBook(str, cont);
-                    //connection.addBook(actBook);
+                    connection.addBook(actBook);
                     allBooks.add(actBook);
                     cont++;
                     
                     
                     //HACER QUERY AQUI
                 } catch (IOException | JSONException ex) {
-                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
                     cont++;
                     System.out.print(" not finished\n");
                 }
@@ -515,8 +515,11 @@ public class BookNext extends Application {
             scene.getStylesheets().add("/style/jfoenix-components.css");
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
-            try {
-                convertAllBooks(readFile(primaryStage));
+            try {                
+                if(connection.countBooks()<100){       
+                    System.out.print(connection.countBooks());
+                convertAllBooks(readFile(primaryStage));         
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
             }

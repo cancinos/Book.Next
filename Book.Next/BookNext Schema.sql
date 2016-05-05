@@ -51,7 +51,7 @@ publish_date varchar(20),
 publisher varchar(40),
 rating_average varchar(3),
 description varchar (200),
-genere varchar(100)
+genre varchar(100)
 );
 
 CREATE TABLE user_book (

@@ -104,5 +104,7 @@ public class CBook {
             return books;
         }
         
-        public String getIdString(){ return Long.toString(bookId);}
+        public String getId_String(){ return Long.toString(bookId);}
+        
+        public String getRating_String(){ return Float.toString(book_rating);}
 }
