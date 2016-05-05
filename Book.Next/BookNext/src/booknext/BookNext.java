@@ -95,6 +95,7 @@ public class BookNext extends Application {
     private Image image_user;
     private List<CBook> allBooks = new ArrayList();
     private String imageURL = "/Icons/user.PNG";
+    MysqlConnection connection;
 
     /**
      * This Function reads isbn.txt file and creates every single isbn to a
@@ -128,8 +129,10 @@ public class BookNext extends Application {
 
         return everything;
 
-    }
-    
+    }        
+	
+	public void convertAllBooks(String allIsbn)
+    }        
     public void convertAllBooks(String allIsbn) {
         try {
             allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
@@ -419,53 +422,47 @@ public class BookNext extends Application {
 
     public void validateNewUser(Stage theStage) {
 
-        //try {
-            System.out.println("You are connected");
+        System.out.println("You are connected");
+        if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){
+            CUser uss = connection.consultUser(new_user.getText());
             
-            if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){
-                MysqlConnection connection = new MysqlConnection();
-                CUser uss = connection.consultUser(new_user.getText());
+            if(uss !=null){ //If uss !=null means that the username is already registered
                 
-                if(uss !=null){ //If uss !=null means that the username is already registered
-
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("User Already Exist");
-                    alert.setContentText("Please select another user");
-                    alert.showAndWait();
-
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("User Already Exist");
+                alert.setContentText("Please select another user");
+                alert.showAndWait();
+                
+            } else {
+                //public CUser(String usrname,  String full, String pass, String birth, String img,String country)
+                uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-', '/'), imageURL, country.getText());
+                boolean validate = true; //= conection.addNewUser(uss.gerUsername(),uss.getUser_fullName(),
+                //uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());
+                validate = true;
+                if (validate = true) { //if this is true, means that all the fields are correct.
+                    
+                    bookSelection book = new bookSelection(uss);
+                    book.setBookList(allBooks);
+                    Stage loginStage = book.getStage();
+                    loginStage.show();
+                    theStage.getScene().getWindow().hide();
                 } else {
-                    //public CUser(String usrname,  String full, String pass, String birth, String img,String country)
-                    uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-', '/'), imageURL, country.getText());
-                    boolean validate = true; //= conection.addNewUser(uss.gerUsername(),uss.getUser_fullName(),
-                    //uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());
-                    validate = true;
-                    if (validate = true) { //if this is true, means that all the fields are correct.
-
-                        bookSelection book = new bookSelection(uss);
-                        book.setBookList(allBooks);
-                        Stage loginStage = book.getStage();
-                        loginStage.show();
-                        theStage.getScene().getWindow().hide();
+                    if (new_user.getText().length() < 4) {
+                        new_user.validate();
                     } else {
-                        if (new_user.getText().length() < 4) {
-                            new_user.validate();
+                        if (new_pass.getText().length() < 4) {
+                            new_pass.validate();
                         } else {
-                            if (new_pass.getText().length() < 4) {
-                                new_pass.validate();
-                            } else {
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Error");
-                                alert.setHeaderText("User form not complete");
-                                alert.setContentText("Please complete user form");
-                                alert.showAndWait();
-                            }
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("User form not complete");
+                            alert.setContentText("Please complete user form");
+                            alert.showAndWait();
                         }
                     }
                 }
             }
-        /*} catch (SQLException ex) {
-            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }*/
     }
     
@@ -503,7 +500,7 @@ public class BookNext extends Application {
 
         try {
             
-            MysqlConnection connection = new MysqlConnection();
+            connection = new MysqlConnection();
             connection.connect();
             
             primaryStage.initStyle(StageStyle.UNDECORATED);
