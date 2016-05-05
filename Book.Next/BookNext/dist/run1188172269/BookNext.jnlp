@@ -8,11 +8,11 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="BookNext.jar" size="575736" download="eager" />
+    <jar href="BookNext.jar" size="571924" download="eager" />
     <jar href="lib\fontawesomefx-8.0.10.jar" size="108930" download="eager" />
     <jar href="lib\java-json.jar" size="84697" download="eager" />
     <jar href="lib\jfoenix.jar" size="1800613" download="eager" />
-    <jar href="lib\mysql-connector-java-5.1.23-bin.jar" size="827921" download="eager" />
+    <jar href="lib\mysql-connector-java-5.1.23-bin.jar" size="834126" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="BookNext" >
     <param name="requiredFXVersion" value="8.0+"/>

@@ -111,28 +111,26 @@ public class VCard extends Pane{
         if(isclicked ==true)
         {
             isclicked =false;
-            selectionClass.selected--;
-            if(selectionClass.selected <3)
-            {
-               //selectionClass.next.setVisible(false);
-                
-            }
+            bookSelection.selected--;
+            bookSelection.save_icon.setVisible(false);
             this.getChildren().remove(selectedIcon);
             this.setEffect(new DropShadow(8d, 0d, 0d, Color.web("#727272")));
         }else
         {            
-            if(selectionClass.selected >= 3) //3 cards are already selected
+            if(bookSelection.selected < 3 ) //2 cards are already selected, and now, its the 3rd one
             {
-               //selectionClass.next.setVisible(true);                      
+                isclicked =true;
+                bookSelection.selected++;
+                this.setEffect(new DropShadow(28d, 0d, 0d, Color.BLACK)); 
+                selectedIcon = new ImageView(new Image("/Icons/choosen.png"));
+                selectedIcon.relocate(10, 10);
+                this.getChildren().add(selectedIcon);   
+                if (bookSelection.selected == 3)
+                    bookSelection.save_icon.setVisible(true);                      
                
             } else
             {
-                isclicked =true;
-                selectionClass.selected++;
-                this.setEffect(new DropShadow(28d, 0d, 0d, Color.BLACK)); 
-                selectedIcon = new ImageView(new Image("/Icons/followed.png"));
-                selectedIcon.relocate(108, -11);
-                this.getChildren().add(selectedIcon);    
+                
             }
         //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));
            }

@@ -430,7 +430,7 @@ public class BookDescriptionPage extends Stage{
     public Stage getStage()
     {
         
-         this.initStyle(StageStyle.UNDECORATED); 
+        this.initStyle(StageStyle.UNDECORATED); 
         createView();
         addComponents();
         this.page.setCenter(this.navDrawer);

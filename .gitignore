@@ -17,6 +17,9 @@ hs_err_pid*
 /BookNext/nbbuild/
 /BookNext/dist/
 /BookNext/nbdist/
-Book.Next/BookNext/dist/BookNext.jar
+/Book.Next/BookNext/dist/BookNext.jar
+/Book.Next/BookNext/build/built-jar.properties
+/Book.Next/BookNext/dist/BookNext.html
+/Book.Next/BookNext/dist/BookNext.jnlp
 nbactions.xml
 .nb-gradle/

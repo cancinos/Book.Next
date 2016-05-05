@@ -140,11 +140,11 @@ public class EditProfile extends Stage {
         DatePicker.setStyle("-fx-font-size: 18;");
         DatePicker.setDefaultColor(Color.web("#F44336"));
         DatePicker.setEditable(false);
-        DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
+        //DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
         
         JFXPasswordField txtPassword;
         txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
-        txtPassword.setText("durini1230");
+        txtPassword.setText(actUser.getUser_password());
         txtPassword.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
         
         // </editor-fold>
@@ -201,7 +201,11 @@ public class EditProfile extends Stage {
     private LocalDate stringToDate(String strDate)
     {
         String[] nums = strDate.split("/");
-        return LocalDate.of(Integer.parseInt(nums[2]), Integer.parseInt(nums[1]), Integer.parseInt(nums[0]));
+        int year, month, day;
+        year = Integer.parseInt(nums[0]);
+        month = Integer.parseInt(nums[1]);
+        day = Integer.parseInt(nums[2]);
+        return LocalDate.of(year, month, day);
     }
     
     private void showUserLibrary()
