@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS  users;
 
 DROP TABLE IF EXISTS description_bayes;
 
+
 CREATE TABLE description_bayes (
 word varchar(20) primary key,
 genre1 int,
@@ -38,18 +39,6 @@ country varchar(20)
 
 );
 
-CREATE TABLE book (
-
-isbn int primary key,
-book_name varchar(100),
-author varchar (80),
-imagen varchar (200),
-publish_date varchar(20),
-publisher varchar(40),
-rating_average float (100,1),
-description varchar (200),
-genere varchar(100)
-);
 
 
 CREATE TABLE book (
@@ -60,7 +49,7 @@ author varchar (80),
 imagen varchar (200),
 publish_date varchar(20),
 publisher varchar(40),
-rating_average float (100,1),
+rating_average varchar(3),
 description varchar (200),
 genere varchar(100)
 );
@@ -68,7 +57,7 @@ genere varchar(100)
 CREATE TABLE user_book (
 
    
-isbn int,
+isbn varchar(20),
 id int,	
 user_rating int(1),
 user_liked int(1),
