@@ -129,17 +129,10 @@ public class BookNext extends Application {
         return everything;
 
     }
-<<<<<<< HEAD
-
-    public void convertAllBooks(String allIsbn) {
-        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
-        System.out.println(allIsbn);
-=======
     
     public void convertAllBooks(String allIsbn)
     {
         allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
->>>>>>> origin/master
         String[] separated = allIsbn.split(",");
         int cont = 0;
         for (String str : separated) //
