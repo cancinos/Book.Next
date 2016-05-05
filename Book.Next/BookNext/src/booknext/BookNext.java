@@ -128,10 +128,8 @@ public class BookNext extends Application {
 
         return everything;
 
-    }        public void convertAllBooks(String allIsbn)
-        allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
+    }
     
-
     public void convertAllBooks(String allIsbn) {
         try {
             allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
@@ -421,10 +419,11 @@ public class BookNext extends Application {
 
     public void validateNewUser(Stage theStage) {
 
-        try {
+        //try {
             System.out.println("You are connected");
             
             if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){
+                MysqlConnection connection = new MysqlConnection();
                 CUser uss = connection.consultUser(new_user.getText());
                 
                 if(uss !=null){ //If uss !=null means that the username is already registered
@@ -465,9 +464,9 @@ public class BookNext extends Application {
                     }
                 }
             }
-        } catch (SQLException ex) {
+        /*} catch (SQLException ex) {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
     
 
