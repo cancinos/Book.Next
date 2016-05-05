@@ -270,12 +270,6 @@ public class MysqlConnection {
                     );
                     books.add(cbook);
                     
-                     setUserBook(getUserId("Ludwing"),Long.toString(cbook.getBookId()));
-                     setUserBook(getUserId("Durini"),Long.toString(cbook.getBookId()));
-                     updateRating(getUserId("Durini"),Long.toString(cbook.getBookId()),4);
-                      updateView(getUserId("Ludwing"),Long.toString(cbook.getBookId()),2);
-                      updateSaved(getUserId("Durini"),Long.toString(cbook.getBookId()),3);
-                      updateLiked(getUserId("Ludwing"),Long.toString(cbook.getBookId()),1);
                 }
             }
 
