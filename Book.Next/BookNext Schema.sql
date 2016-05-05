@@ -19,6 +19,16 @@ DROP TABLE IF EXISTS  book;
 
 DROP TABLE IF EXISTS  users;
 
+DROP TABLE IF EXISTS description_bayes;
+
+CREATE TABLE description_bayes (
+word varchar(20) primary key,
+genre1 int,
+genre2 int,
+genre3 int,
+genre4 int,
+genre5 int
+);
 
 CREATE TABLE users (
 
