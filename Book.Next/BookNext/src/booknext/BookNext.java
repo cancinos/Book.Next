@@ -511,7 +511,6 @@ public class BookNext extends Application {
             primaryStage.setTitle("FXML is Simple");
             try {                
                 if(connection.countBooks()<100){  
-                    List<CBook> list = connection.getBooks();
                     System.out.print(connection.countBooks());
                 convertAllBooks(readFile(primaryStage));         
                 }
