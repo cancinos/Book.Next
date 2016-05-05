@@ -78,7 +78,9 @@ public class ISBNConverter {
        if (!volumeInfo.isNull("imageLinks"))
            newBook.setBook_image(volumeInfo.getJSONObject("imageLinks").getString("thumbnail")); else
            newBook.setBook_image("/Icons/No_Cover.jpg");
+       
        System.out.print(" finished\n");
+       
       /**
        * Historia
        * Literatura
@@ -97,7 +99,7 @@ public class ISBNConverter {
               + "9780312278670,9780025045415,9781592802609,9780199573202,"
               + "9781405091886,9780470482551,0937539562,9780671646783,9781591842941,"
               + "0316113514,0804139296,9781482075144,1505339111,1617201782,1455611808,"
-              + "9780743234801,0399535403,";
+              + "9780743234801,0399535403,9780071808552,9780964729230,";
       String scienceFiction = "9780439023481,9781594135866,9781908435699,"
               + ",9780385737951,9780385738750,9780375896125,9780804139021,"
               + "9781587673078,9780062217080,1442468351,9780751565355,"
@@ -120,6 +122,17 @@ public class ISBNConverter {
               + "9780345426277,9780307264893,9780345373779,9781420101843,"
               + "9780312946432,9780312609160,9781603091008,9781603090360,"
               + "9780958578349,9781603090704,9781891830969,";
+      String allGenres = "";
+      if (book4Life.contains("," + isbn + ","))
+          allGenres += isbn + ",";
+      if (scienceFiction.contains("," + isbn + ","))
+          allGenres += isbn + ",";
+      if (fantasy.contains("," + isbn + ","))
+          allGenres += isbn + ",";
+      if (romance.contains("," + isbn + ","))
+          allGenres += isbn + ",";
+      if (suspense.contains("," + isbn + ","))
+          allGenres += isbn;
       
   }
   

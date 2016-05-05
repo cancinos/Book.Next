@@ -5,6 +5,10 @@
  */
 package ANN;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -13,11 +17,7 @@ import java.util.*;
  * @author iiscancinos
  */
 public class ANN {
-   static {
-        Locale.setDefault(Locale.ENGLISH);
-    }
- 
-    final boolean isTrained = false;
+    final boolean isTrained = true;
     DecimalFormat df;
     final Random rand = new Random();
     ArrayList<Neuron> inputLayer = new ArrayList<Neuron>();
@@ -29,40 +29,23 @@ public class ANN {
  
     final double epsilon = 0.00000000001;
  
-    final double learningRate = 0.9f;
-    final double momentum = 0.7f;
+    final double learningRate = 0.1f;
+    final double momentum = 0.07f;
     
-    double inputs[][] = new double[100][7];//{ { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 1, 1, 1 } };
-    final double expectedOutputs[][] = { { 0 }, { 1 }, { 1 }, { 0 } };
-    double resultOutputs[][] = { { -1 }, { -1 }, { -1 }, { -1 } }; // dummy init
+    double inputs[][] = new double[1024][10];//{ { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 1, 1, 1 } };
+    final double expectedOutputs[][] = new double[1024][1];//{ { 0 }, { 1 }, { 1 }, { 0 } };
+    double resultOutputs[][] = new double[1024][1];//{ { -1 }, { -1 }, { -1 }, { -1 } }; // dummy init
     double output[];
  
     // for weight update all
-    final HashMap<String, Double> weightUpdate = new HashMap<String, Double>();
+    final HashMap<String, Double> weightUpdate = new HashMap<>();
  
-    public void generateRandomInputs(){
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 7; j++) {
-                if (j < 5) 
-                    inputs[i][j] = randInt(0,1);
-            }
-        }
-    }
-    public static int randInt(int min, int max) {
-        // Usually this can be a field rather than a method variable
-        Random rand = new Random();
-
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        int randomNum = rand.nextInt((max - min) + 1) + min;
-
-        return randomNum;
-    }
     
-    public void NeuralNetwork(int input, int hidden, int output) {
+    
+    public void NeuralNetwork(int input, int hidden, int output) throws IOException {
         this.layers = new int[] { input, hidden, output };
         df = new DecimalFormat("#.0#");
-        generateRandomInputs();
+        getDataToTrain();
         /**
          * Create all neurons and connections Connections are created in the
          * neuron class
@@ -242,7 +225,16 @@ public class ANN {
                 applyBackpropagation(expectedOutputs[p]);
             }
         }
-        int a = 0;
+             printResult();
+         
+        System.out.println("Sum of squared errors = " + error);
+        System.out.println("##### EPOCH " + i+"\n");
+        if (i == maxSteps) {
+            System.out.println("!Error training try again");
+        } else {
+            printAllWeights();
+            printWeightUpdate();
+        }
     }
  
     String weightKey(int neuronId, int conId) {
@@ -277,23 +269,196 @@ public class ANN {
     void trainedWeights() {
         weightUpdate.clear();
          
-        weightUpdate.put(weightKey(3, 0), 1.03);
-        weightUpdate.put(weightKey(3, 1), 1.13);
-        weightUpdate.put(weightKey(3, 2), -.97);
-        weightUpdate.put(weightKey(4, 3), 7.24);
-        weightUpdate.put(weightKey(4, 4), -3.71);
-        weightUpdate.put(weightKey(4, 5), -.51);
-        weightUpdate.put(weightKey(5, 6), -3.28);
-        weightUpdate.put(weightKey(5, 7), 7.29);
-        weightUpdate.put(weightKey(5, 8), -.05);
-        weightUpdate.put(weightKey(6, 9), 5.86);
-        weightUpdate.put(weightKey(6, 10), 6.03);
-        weightUpdate.put(weightKey(6, 11), .71);
-        weightUpdate.put(weightKey(7, 12), 2.19);
-        weightUpdate.put(weightKey(7, 13), -8.82);
-        weightUpdate.put(weightKey(7, 14), -8.84);
-        weightUpdate.put(weightKey(7, 15), 11.81);
-        weightUpdate.put(weightKey(7, 16), .44);
+        weightUpdate.put(weightKey(11, 0), -4.55);
+        weightUpdate.put(weightKey(11, 1), -13.24);
+        weightUpdate.put(weightKey(11, 2), -2.19);
+        weightUpdate.put(weightKey(11, 3), -2.81);
+        weightUpdate.put(weightKey(11, 4), -1.69);
+        weightUpdate.put(weightKey(11, 5), 6.11);
+        weightUpdate.put(weightKey(11, 6), 12.33);
+        weightUpdate.put(weightKey(11, 7), -10.35);
+        weightUpdate.put(weightKey(11, 8), -7.05);
+        weightUpdate.put(weightKey(11, 9), -8.32);
+        weightUpdate.put(weightKey(11, 10), -.64);
+        weightUpdate.put(weightKey(12, 11), -.65);
+        weightUpdate.put(weightKey(12, 12), -.64);
+        weightUpdate.put(weightKey(12, 13), -1.08);
+        weightUpdate.put(weightKey(12, 14), -9.19);
+        weightUpdate.put(weightKey(12, 15), -2.08);
+        weightUpdate.put(weightKey(12, 16), -1.85);
+        weightUpdate.put(weightKey(12, 17), -.08);
+        weightUpdate.put(weightKey(12, 18), -1.49);
+        weightUpdate.put(weightKey(12, 19), 4.93);
+        weightUpdate.put(weightKey(12, 20), -1.01);
+        weightUpdate.put(weightKey(12, 21), .43);
+        weightUpdate.put(weightKey(13, 22), 8.42);
+        weightUpdate.put(weightKey(13, 23), 2.13);
+        weightUpdate.put(weightKey(13, 24), .85);
+        weightUpdate.put(weightKey(13, 25), 1.07);
+        weightUpdate.put(weightKey(13, 26), .45);
+        weightUpdate.put(weightKey(13, 27), -4.39);
+        weightUpdate.put(weightKey(13, 28), 1.52);
+        weightUpdate.put(weightKey(13, 29), 1.61);
+        weightUpdate.put(weightKey(13, 30), .52);
+        weightUpdate.put(weightKey(13, 31), 1.13);
+        weightUpdate.put(weightKey(13, 32), .16);
+        weightUpdate.put(weightKey(14, 33), -1.2);
+        weightUpdate.put(weightKey(14, 34), -1.09);
+        weightUpdate.put(weightKey(14, 35), -1.48);
+        weightUpdate.put(weightKey(14, 36), -.75);
+        weightUpdate.put(weightKey(14, 37), -9.83);
+        weightUpdate.put(weightKey(14, 38), -.39);
+        weightUpdate.put(weightKey(14, 39), .04);
+        weightUpdate.put(weightKey(14, 40), -.75);
+        weightUpdate.put(weightKey(14, 41), -2.32);
+        weightUpdate.put(weightKey(14, 42), 4.83);
+        weightUpdate.put(weightKey(14, 43), .74);
+        weightUpdate.put(weightKey(15, 44), .94);
+        weightUpdate.put(weightKey(15, 45), -.45);
+        weightUpdate.put(weightKey(15, 46), 1.17);
+        weightUpdate.put(weightKey(15, 47), .98);
+        weightUpdate.put(weightKey(15, 48), .97);
+        weightUpdate.put(weightKey(15, 49), -1.21);
+        weightUpdate.put(weightKey(15, 50), -.11);
+        weightUpdate.put(weightKey(15, 51), -1.22);
+        weightUpdate.put(weightKey(15, 52), -1.33);
+        weightUpdate.put(weightKey(15, 53), -1.17);
+        weightUpdate.put(weightKey(15, 54), -.06);
+        weightUpdate.put(weightKey(16, 55), -2.87);
+        weightUpdate.put(weightKey(16, 56), 14.57);
+        weightUpdate.put(weightKey(16, 57), -5.81);
+        weightUpdate.put(weightKey(16, 58), -4.43);
+        weightUpdate.put(weightKey(16, 59), -4.31);
+        weightUpdate.put(weightKey(16, 60), 2.69);
+        weightUpdate.put(weightKey(16, 61), -19.92);
+        weightUpdate.put(weightKey(16, 62), -2.05);
+        weightUpdate.put(weightKey(16, 63), .16);
+        weightUpdate.put(weightKey(16, 64), -.24);
+        weightUpdate.put(weightKey(16, 65), -.21);
+        weightUpdate.put(weightKey(17, 66), 8.26);
+        weightUpdate.put(weightKey(17, 67), -12.2);
+        weightUpdate.put(weightKey(17, 68), .89);
+        weightUpdate.put(weightKey(17, 69), 1.65);
+        weightUpdate.put(weightKey(17, 70), .27);
+        weightUpdate.put(weightKey(17, 71), -19.46);
+        weightUpdate.put(weightKey(17, 72), 1.68);
+        weightUpdate.put(weightKey(17, 73), 6.67);
+        weightUpdate.put(weightKey(17, 74), 1.44);
+        weightUpdate.put(weightKey(17, 75), 1.76);
+        weightUpdate.put(weightKey(17, 76), .98);
+        weightUpdate.put(weightKey(18, 77), 4.09);
+        weightUpdate.put(weightKey(18, 78), 4.21);
+        weightUpdate.put(weightKey(18, 79), 12.59);
+        weightUpdate.put(weightKey(18, 80), 2.79);
+        weightUpdate.put(weightKey(18, 81), 2.24);
+        weightUpdate.put(weightKey(18, 82), .19);
+        weightUpdate.put(weightKey(18, 83), -.12);
+        weightUpdate.put(weightKey(18, 84), -9.7);
+        weightUpdate.put(weightKey(18, 85), 3.44);
+        weightUpdate.put(weightKey(18, 86), 4.07);
+        weightUpdate.put(weightKey(18, 87), .76);
+        weightUpdate.put(weightKey(19, 88), -20.66);
+        weightUpdate.put(weightKey(19, 89), -33.8);
+        weightUpdate.put(weightKey(19, 90), 36.98);
+        weightUpdate.put(weightKey(19, 91), -32.63);
+        weightUpdate.put(weightKey(19, 92), -33.6);
+        weightUpdate.put(weightKey(19, 93), -30.44);
+        weightUpdate.put(weightKey(19, 94), -21.98);
+        weightUpdate.put(weightKey(19, 95), 30.31);
+        weightUpdate.put(weightKey(19, 96), .08);
+    }
+
+    private void getDataToTrain() throws FileNotFoundException, IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\iiscancinos\\Desktop\\sb\\src\\sb\\trainedData.txt"))) {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                setIO(line.split(","), i); 
+                i++;
+                line = br.readLine();
+            }
+        }
+    }
+    public void setIO(String[] data, int index){
+        for (int i = 0; i < data.length; i++) {
+            if (i <= 9) {
+                inputs[index][i] = Integer.parseInt(data[i].trim());
+            }
+            else{
+                expectedOutputs[index][0] = Integer.parseInt(data[i].trim());
+                resultOutputs[index][0] = -1;
+            }
+        }
+    }
+    
+      void printResult()
+    {
+        System.out.println("NN example with xor training");
+        for (int p = 0; p < inputs.length; p++) {
+            System.out.print("INPUTS: ");
+            for (int x = 0; x < layers[0]; x++) {
+                System.out.print(inputs[p][x] + " ");
+            }
+ 
+            System.out.print("EXPECTED: ");
+            for (int x = 0; x < layers[2]; x++) {
+                System.out.print(expectedOutputs[p][x] + " ");
+            }
+ 
+            System.out.print("ACTUAL: ");
+            for (int x = 0; x < layers[2]; x++) {
+                System.out.print(resultOutputs[p][x] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+      
+         public void printWeightUpdate() {
+        System.out.println("printWeightUpdate, put this i trainedWeights() and set isTrained to true");
+        // weights for the hidden layer
+        for (Neuron n : hiddenLayer) {
+            ArrayList<Connection> connections = n.getAllInConnections();
+            for (Connection con : connections) {
+                String w = df.format(con.getWeight());
+                System.out.println("weightUpdate.put(weightKey(" + n.id + ", "
+                        + con.id + "), " + w + ");");
+            }
+        }
+        // weights for the output layer
+        for (Neuron n : outputLayer) {
+            ArrayList<Connection> connections = n.getAllInConnections();
+            for (Connection con : connections) {
+                String w = df.format(con.getWeight());
+                System.out.println("weightUpdate.put(weightKey(" + n.id + ", "
+                        + con.id + "), " + w + ");");
+            }
+        }
+        System.out.println();
+    }
+ 
+    public void printAllWeights(){
+        System.out.println("printAllWeights");
+        // weights for the hidden layer
+        for (Neuron n : hiddenLayer) {
+            ArrayList<Connection> connections = n.getAllInConnections();
+            for (Connection con : connections) {
+                double w = con.getWeight();
+                System.out.println("n=" + n.id + " c=" + con.id + " w=" + w);
+            }
+        }
+        // weights for the output layer
+        for (Neuron n : outputLayer) {
+            ArrayList<Connection> connections = n.getAllInConnections();
+            for (Connection con : connections) {
+                double w = con.getWeight();
+                System.out.println("n=" + n.id + " c=" + con.id + " w=" + w);
+            }
+        }
+        System.out.println();
     }
 }
 
