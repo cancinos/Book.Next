@@ -30,3 +30,10 @@ _notes/
 playground/
 tmp/
 temp/
+Book.Next/BookNext/build/built-jar.properties
+Book.Next/BookNext/dist/BookNext.html
+Book.Next/BookNext/dist/BookNext.jar
+Book.Next/BookNext/dist/BookNext.jnlp
+Book.Next/BookNext/dist/lib/mysql-connector-java-5.1.23-bin.jar
+Book.Next/BookNext/dist/web-files/dtjava.js
+Book.Next/BookNext/nbproject/private/private.properties
