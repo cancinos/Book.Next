@@ -100,7 +100,7 @@ public class bookSelection extends Stage {
         });
         
         navDrawer.getContent().getChildren().addAll(cards, lblSelect, save_icon);
-        navDrawer.getContent().setStyle("-fx-background-color");
+        //navDrawer.getContent().setStyle("-fx-background-color");
         //infoCard.getChildren().add(list.getList());
     }
     

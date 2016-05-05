@@ -9,10 +9,6 @@ Grant all privileges on booknext.* to 'booknext';
 
 use BookNext;
 
-DROP TABLE IF EXISTS  book_genere;
-
-DROP TABLE IF EXISTS  genere;
-
 DROP TABLE IF EXISTS  user_book;
 
 DROP TABLE IF EXISTS  book;
@@ -51,8 +47,8 @@ imagen varchar (200),
 publish_date varchar(20),
 publisher varchar(40),
 rating_average float (100,1),
-description varchar (200)
-
+description varchar (200),
+genere varchar(100)
 );
 
 CREATE TABLE user_book (
@@ -71,26 +67,6 @@ FOREIGN KEY (isbn)
 FOREIGN KEY (id)
       REFERENCES users(id)   
 
-);
-
-CREATE TABLE genere (
-
-id_genere int primary key,
-genere_name varchar(50)
-
-);
-
-CREATE TABLE book_genere (
-
- isbn int,
- id int, 
-
-FOREIGN KEY (isbn)
-      REFERENCES book(isbn),
-      
-FOREIGN KEY (id)
-      REFERENCES users(id)
-      
 );
 
 

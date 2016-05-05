@@ -121,7 +121,6 @@ public class BookNext extends Application {
                     line = br.readLine();
                 }
                 everything = sb.toString();
-                System.out.println(everything);
             } finally {
                 br.close();
             }
@@ -130,19 +129,29 @@ public class BookNext extends Application {
         return everything;
 
     }
+<<<<<<< HEAD
 
     public void convertAllBooks(String allIsbn) {
         allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
         System.out.println(allIsbn);
+=======
+    
+    public void convertAllBooks(String allIsbn)
+    {
+        allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
+>>>>>>> origin/master
         String[] separated = allIsbn.split(",");
         int cont = 0;
         for (String str : separated) //
         {
+            System.out.print(cont + " - " + str);
             try {
                 allBooks.add(new ISBNConverter().isbnToBook(str, cont));
                 cont++;
             } catch (IOException | JSONException ex) {
                 Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                cont++;
+                System.out.print(" not finished\n");
             }
         }
     }
