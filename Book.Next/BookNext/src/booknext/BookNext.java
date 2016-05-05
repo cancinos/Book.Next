@@ -130,39 +130,28 @@ public class BookNext extends Application {
         return everything;
 
     }        
-	
-	public void convertAllBooks(String allIsbn)
-    }        
+		        
     public void convertAllBooks(String allIsbn) {
-        try {
-            allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //Crops 'till last comma
-            System.out.println(allIsbn);
-            
-            MysqlConnection connection = new MysqlConnection();
-            connection.connect();
-            allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
-            String[] separated = allIsbn.split(",");
-            CBook actBook;
-            int cont = 0;
-            for (String str : separated) //
-            {
-                System.out.print(cont + " - " + str);
-                try {
-                    actBook = new ISBNConverter().isbnToBook(str, cont);                    
-                    connection.addBook(actBook);
-                    allBooks.add(actBook);
-                    cont++;
-                    
-                    
-                    //HACER QUERY AQUI
-                } catch (IOException | JSONException ex) {
-                    //Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                    cont++;
-                    System.out.print(" not finished\n");
-                }
+        allIsbn = allIsbn.substring(0, allIsbn.length() - 1);
+        String[] separated = allIsbn.split(",");
+        CBook actBook;
+        int cont = 0;
+        for (String str : separated) //
+        {
+            System.out.print(cont + " - " + str);
+            try {
+                actBook = new ISBNConverter().isbnToBook(str, cont);
+                connection.addBook(actBook);
+                allBooks.add(actBook);
+                cont++;
+                
+                
+                //HACER QUERY AQUI
+            } catch (IOException | JSONException ex) {
+                //Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                cont++;
+                System.out.print(" not finished\n");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
         }
 
@@ -372,51 +361,38 @@ public class BookNext extends Application {
 
 
     public void validateLogin(Stage theStage) {
-        //TODO: Uncomment the login process
-        /*NaiveBayes bayes = new NaiveBayes();
-        for (CBook book : allBooks) {
-            bayes.train(null, book);
-        }*/
-        try {
-            //Connect to Database
-            MysqlConnection conection = new MysqlConnection();
-            conection.connect();
-
-            if (user.getText().length() > 3 & pass.getText().length() > 4) {
-                CUser uss = conection.consultUser(user.getText());
-
-                if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged       
-                    EditProfile mainPage = new EditProfile(uss, allBooks);
-                    Stage loginStage = mainPage.getStage();
-                    loginStage.show();
-                    theStage.getScene().getWindow().hide();
-
+        if (user.getText().length() > 3 & pass.getText().length() > 4) {
+            CUser uss = connection.consultUser(user.getText());
+            
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
+                EditProfile mainPage = new EditProfile(uss, allBooks);
+                Stage loginStage = mainPage.getStage();
+                loginStage.show();
+                theStage.getScene().getWindow().hide();
+                
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Incorrect Password or UserName");
+                alert.setContentText("Please enter a existing user name with correct password");
+                alert.showAndWait();
+            }
+        } else {
+            if (user.getText().length() < 4) {
+                user.validate();
+            } else {
+                if (pass.getText().length() < 4) {
+                    pass.validate();
                 } else {
+                    
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    
                     alert.setTitle("Error");
-                    alert.setHeaderText("Incorrect Password or UserName");
-                    alert.setContentText("Please enter a existing user name with correct password");
+                    alert.setHeaderText("User form not complete");
+                    alert.setContentText("Please complete user form");
                     alert.showAndWait();
                 }
-            } else {
-                if (user.getText().length() < 4) {
-                    user.validate();
-                } else {
-                    if (pass.getText().length() < 4) {
-                        pass.validate();
-                    } else {
-
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-                        alert.setTitle("Error");
-                        alert.setHeaderText("User form not complete");
-                        alert.setContentText("Please complete user form");
-                        alert.showAndWait();
-                    }
-                }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -463,7 +439,7 @@ public class BookNext extends Application {
                     }
                 }
             }
-        }*/
+        }
     }
     
 
