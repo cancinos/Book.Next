@@ -51,7 +51,8 @@ public class ISBNConverter {
   public CBook isbnToBook(String isbn, int id) throws IOException, JSONException {
     JSONObject json = readJsonFromUrl("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn);
     createBookObj(json, id);
-    return  newBook;
+    setGenre(isbn);
+    return newBook;
   }
   
   private void createBookObj(JSONObject json, int id ) throws IOException, JSONException
@@ -78,7 +79,6 @@ public class ISBNConverter {
        if (!volumeInfo.isNull("imageLinks"))
            newBook.setBook_image(volumeInfo.getJSONObject("imageLinks").getString("thumbnail")); else
            newBook.setBook_image("/Icons/No_Cover.jpg");
-       
        System.out.print(" finished\n");
        
       /**
@@ -94,13 +94,14 @@ public class ISBNConverter {
   
   private void setGenre(String isbn)
   {
+      String[] genres = {"Life", "Science Fiction", "Fantasy", "Romance", "Suspense"};
       String book4Life = ",9781633532090,9780345535283,9781451648546,0446677450,"
               + "0446677450,9780553296983,9780060883287,9780061122415,9781582701707,"
               + "9780312278670,9780025045415,9781592802609,9780199573202,"
               + "9781405091886,9780470482551,0937539562,9780671646783,9781591842941,"
               + "0316113514,0804139296,9781482075144,1505339111,1617201782,1455611808,"
               + "9780743234801,0399535403,9780071808552,9780964729230,";
-      String scienceFiction = "9780439023481,9781594135866,9781908435699,"
+      String scienceFiction = ",9780439023481,9781594135866,9781908435699,"
               + ",9780385737951,9780385738750,9780375896125,9780804139021,"
               + "9781587673078,9780062217080,1442468351,9780751565355,"
               + "9780099518471,9780486406534,9780312450151,9780743273565,"
@@ -123,17 +124,22 @@ public class ISBNConverter {
               + "9780312946432,9780312609160,9781603091008,9781603090360,"
               + "9780958578349,9781603090704,9781891830969,";
       String allGenres = "";
-      if (book4Life.contains("," + isbn + ","))
-          allGenres += isbn + ",";
-      if (scienceFiction.contains("," + isbn + ","))
-          allGenres += isbn + ",";
-      if (fantasy.contains("," + isbn + ","))
-          allGenres += isbn + ",";
-      if (romance.contains("," + isbn + ","))
-          allGenres += isbn + ",";
-      if (suspense.contains("," + isbn + ","))
-          allGenres += isbn;
-      
+      List<String> listGenres = new ArrayList();
+      if (book4Life.contains(isbn))
+          listGenres.add(genres[0]);
+      if (scienceFiction.contains(isbn))
+          listGenres.add(genres[1]);
+      if (fantasy.contains(isbn))
+          listGenres.add(genres[2]);
+      if (romance.contains(isbn))
+          listGenres.add(genres[3]);
+      if (suspense.contains(isbn))
+          listGenres.add(genres[4]);
+      for (int i = 0; i < listGenres.size(); i++) {
+          allGenres += listGenres.get(i) + ",";
+      }
+      allGenres = allGenres.substring(0, allGenres.length()-1);
+      newBook.setBook_genre(allGenres);
   }
   
   /**

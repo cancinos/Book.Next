@@ -361,6 +361,7 @@ public class BookNext extends Application {
 
 
     public void validateLogin(Stage theStage) {
+        allBooks.add(null);
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
             
