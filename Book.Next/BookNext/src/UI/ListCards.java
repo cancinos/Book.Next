@@ -98,6 +98,7 @@ public class ListCards extends ScrollPane{
     /**
      * This method shows rows and columns of books
      * @param bookList user's book list
+     * @param willBeSelected if true, meands that will be used for 3 book selection
      */
     public void createMatrixList(List<CBook> bookList, boolean willBeSelected)
     {

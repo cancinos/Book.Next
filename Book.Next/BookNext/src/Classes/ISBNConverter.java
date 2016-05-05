@@ -133,7 +133,7 @@ public class ISBNConverter {
           allGenres += isbn + ",";
       if (suspense.contains("," + isbn + ","))
           allGenres += isbn;
-      
+      newBook.setBook_genre(allGenres);
   }
   
   /**

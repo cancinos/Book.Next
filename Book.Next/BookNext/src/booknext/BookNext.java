@@ -132,7 +132,7 @@ public class BookNext extends Application {
     }        
 		        
     public void convertAllBooks(String allIsbn) {
-        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //HOLA
+        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); 
         String[] separated = allIsbn.split(",");
         CBook actBook;
         int cont = 0;
@@ -141,14 +141,11 @@ public class BookNext extends Application {
             System.out.print(cont + " - " + str);
             try {
                 actBook = new ISBNConverter().isbnToBook(str, cont);
-                connection.addBook(actBook);
+                //connection.addBook(actBook);
                 allBooks.add(actBook);
                 cont++;
-                
-                
-                //HACER QUERY AQUI
             } catch (IOException | JSONException ex) {
-                //Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
                 cont++;
                 System.out.print(" not finished\n");
             }

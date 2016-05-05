@@ -6,6 +6,7 @@
 package UI;
 
 import Classes.CBook;
+import Pages.BookDescriptionPage;
 import Pages.bookSelection;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -16,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 /**
  *
@@ -26,6 +28,7 @@ public class VCard extends Pane{
     private double width, height;
     public bookSelection selectionClass; 
     public boolean isclicked =false;
+    
     public VCard(double width, double height)
     {
         this.width = width;
@@ -36,8 +39,6 @@ public class VCard extends Pane{
     {
         selectionClass = theClass;
     }
-    
-   
     
     public void createSimpleCard(CBook book)
     {
@@ -67,6 +68,13 @@ public class VCard extends Pane{
         author.setStyle("-fx-font-size:12px;");
         author.setPadding(new Insets(0,0,0,10));
         author.setTextFill(Color.GRAY); 
+        
+        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
+            BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
+            bookDescript.setSize(1100, 700); //Resizing
+            Stage actBookStage = bookDescript.getStage(book);
+            actBookStage.show();
+        }); 
         
         this.getChildren().add(background);
         this.getChildren().add(title);
@@ -144,30 +152,6 @@ public class VCard extends Pane{
     }
     
     
-    private boolean selected = false;
-    public void createEvent(){
-        
-//        book.selected =0;
-//       
-//        this.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{                
-//        
-//            if(isclicked ==true){
-//                isclicked =false;
-//                book.selected--;
-//            if(book.selected <3){
-//               book.next.setVisible(false);                        
-//                    }
-//        this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
-//        }else{
-//            isclicked =true;            
-//            book.selected++;
-//            if(book.selected >=3){
-//               book.next.setVisible(true);                        
-//                    }
-//        //this.setEffect(new DropShadow(20d, 0d, 0d, Color.web("#727272")));    
-//        this.setEffect(new DropShadow(10d, 10d, 3d, Color.web("#727272")));    
-//           }
-//        });     
-    }
+ 
     
 }

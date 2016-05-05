@@ -81,7 +81,7 @@ public class NavigationDrawer extends JFXDrawersStack{
 //        node2.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
         
         content = new Pane();
-        content.setStyle("-fx-background-color: WHITE;");
+        content.setStyle("-fx-background-color: #F4F4F4;");
 
         
         leftDrawer.setSidePane(leftDrawerPane);
@@ -92,11 +92,6 @@ public class NavigationDrawer extends JFXDrawersStack{
         this.setContent(content);
     }
     
-    private void createHeader()
-    {
-        String book = "Book";
-        String next = "Next";
-    }
     
     private void setNavDrawerList()
     {
