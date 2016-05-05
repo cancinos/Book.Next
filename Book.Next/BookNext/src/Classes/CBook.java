@@ -5,6 +5,7 @@
  */
 package Classes;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,15 +21,27 @@ public class CBook {
     private String book_description;
     private String book_publisher;
     private String book_publishYear;
-    private List<String> book_categories;
+    private String book_genres;
     private List<String> key_words;
     private ImageView book_img;
     private int num_ratings = 0;
     private long bookId; //ISBN
     private int autoIncId = 0;
-    private double book_rating;
+    private float book_rating;
     
     
+    public void fillCBook(String     isbn,String book_name, String authors, String imagen, String publishDate, String publisher,Float ratingAverage,String description,String genre){
+        this.bookId = Long.getLong(isbn);
+        this.book_name = book_name;
+        this.book_authors = setBook_authorList(authors);
+        this.book_image = imagen;
+        this.book_publishYear = publishDate;
+        this.book_publisher=publisher;
+        this.book_rating = ratingAverage;
+        this.book_description = description;
+        this.book_genres = genre;
+        
+    }
     public int getAutoInc() { return autoIncId; }
     
     public long getBookId() { return bookId; }
@@ -56,7 +69,10 @@ public class CBook {
     public String getBook_publisher() { return this.book_publisher; }
     public void setBook_publisher(String publisher) { this.book_publisher = publisher; }
     
-    public double getBook_rating() { return book_rating; }
+    public float getBook_rating() { return book_rating; }
+    
+    public void setBook_genre(String allGenre) {  book_genres = allGenre; }
+    public String getBook_genre() { return book_genres; }
     
     private void newRating(double rating)
     {
@@ -75,4 +91,18 @@ public class CBook {
         return finalString.substring(0, finalString.length() - 1);
     }
     
+        public List<String> setBook_authorList(String authors)
+        {
+            List<String> books;
+            books = new ArrayList<String>();
+            
+            String[] splitAuthors = authors.split(", ");
+            
+            for (int i = 0; i < splitAuthors.length; i++) {
+                books.add(splitAuthors[i]);
+            }
+            return books;
+        }
+        
+        public String getIdString(){ return Long.toString(bookId);}
 }

@@ -131,21 +131,32 @@ public class BookNext extends Application {
     
     public void convertAllBooks(String allIsbn)
     {
-        allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
-        String[] separated = allIsbn.split(",");
-        int cont = 0;
-        for (String str : separated) //
-        {
-            System.out.print(cont + " - " + str);
-            try {
-                allBooks.add(new ISBNConverter().isbnToBook(str, cont));
-                cont++;
-            } catch (IOException | JSONException ex) {
-                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                cont++;
-                System.out.print(" not finished\n");
-            }
-        }
+         try {
+             MysqlConnection connection = new MysqlConnection();
+             connection.connect();
+             allIsbn = allIsbn.substring(0,allIsbn.length()-1); //Crops 'till last comma
+             String[] separated = allIsbn.split(",");
+             CBook actBook;
+             int cont = 0;
+             for (String str : separated) //
+             {
+                 System.out.print(cont + " - " + str);
+                 try {
+                     actBook = new ISBNConverter().isbnToBook(str, cont);
+                     //connection.addBook(actBook);
+                     allBooks.add(actBook);
+                     cont++;
+                     
+                     
+                     //HACER QUERY AQUI
+                 } catch (IOException | JSONException ex) {
+                     Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                     cont++;
+                     System.out.print(" not finished\n");
+                 }
+             }} catch (SQLException ex) {
+             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }
     
     //Create Card with Components   
@@ -372,11 +383,11 @@ public class BookNext extends Application {
            
            try {
                //Connect to Database
-               MysqlConnection conection = new MysqlConnection();
-               conection.connect();
+               MysqlConnection connection = new MysqlConnection();
+               connection.connect();
                
                if(user.getText().length()>3 & pass.getText().length()>4){
-                   CUser uss = conection.consultUser(user.getText());
+                   CUser uss = connection.consultUser(user.getText());
            
                    if(uss!=null && pass.getText().equals(uss.getUser_password())){ //Entering this means that the user was succesfully logged       
                        EditProfile mainPage = new EditProfile(uss, allBooks);
@@ -416,13 +427,13 @@ public class BookNext extends Application {
     public void validateNewUser(Stage theStage){
         
            try {
-               MysqlConnection conection = new MysqlConnection();
+               MysqlConnection connection = new MysqlConnection();
                
-               conection.connect();
+               connection.connect();
                System.out.println("You are connected");
                
                if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){                   
-                   CUser uss = conection.consultUser(new_user.getText());
+                   CUser uss = connection.consultUser(new_user.getText());
            
                    if(uss !=null){ //If uss !=null means that the username is already registered
                        
@@ -436,7 +447,7 @@ public class BookNext extends Application {
                    {   
                        //public CUser(String usrname,  String full, String pass, String birth, String img,String country)
                        uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-','/') , imageURL, country.getText());
-                       boolean validate = true; //= conection.addNewUser(uss.gerUsername(),uss.getUser_fullName(),
+                       boolean validate = true; //= connection.addNewUser(uss.gerUsername(),uss.getUser_fullName(),
                                //uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());
                        validate = true;
                        if(validate = true){ //if this is true, means that all the fields are correct.
@@ -507,23 +518,32 @@ public class BookNext extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-            primaryStage.initStyle(StageStyle.UNDECORATED);
-            page.setStyle("-fx-background-color:#455A64");
-            Scene  scene = new Scene(page, 700, 700);       
-            scene.getStylesheets().add("/style/jfoenix-components.css");
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("FXML is Simple");
             try {
-                convertAllBooks(readFile(primaryStage));
-            } catch (IOException ex) {
+                MysqlConnection connection = new MysqlConnection();
+                connection.connect();   
+                
+                primaryStage.initStyle(StageStyle.UNDECORATED);
+                page.setStyle("-fx-background-color:#455A64");
+                Scene  scene = new Scene(page, 700, 700);
+                scene.getStylesheets().add("/style/jfoenix-components.css");
+                primaryStage.setScene(scene);
+                primaryStage.setTitle("FXML is Simple");
+                try {
+                    if(connection.countBooks()<100){
+                        convertAllBooks(readFile(primaryStage));
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                loginPic();
+                createToggle(primaryStage);
+                createTabs(primaryStage);
+                createView(); //Contains all the components
+                primaryStage.show();
+                // </editor-fold>
+            } catch (SQLException ex) {
                 Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
             }
-            loginPic();
-            createToggle(primaryStage);
-            createTabs(primaryStage);       
-            createView(); //Contains all the components
-            primaryStage.show();    
-            // </editor-fold>
     }
 
     /**

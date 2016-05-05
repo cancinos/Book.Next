@@ -41,6 +41,20 @@ description varchar (200),
 genere varchar(100)
 );
 
+
+CREATE TABLE book (
+
+isbn varchar(20) primary key,
+book_name varchar(100),
+author varchar (80),
+imagen varchar (200),
+publish_date varchar(20),
+publisher varchar(40),
+rating_average float (100,1),
+description varchar (200),
+genere varchar(100)
+);
+
 CREATE TABLE user_book (
 
    
@@ -58,6 +72,7 @@ FOREIGN KEY (id)
       REFERENCES users(id)   
 
 );
+
 
 
 insert into users(username,fullname,birthday,passwoord,imagen,country) values ('Durini','Juan Carlos Duniri','1994/23/08','123pass','https://scontent-atl3-1.xx.fbcdn.net/v/t1.0-9/10306748_10152843932139579_7297473898267847923_n.jpg?oh=fc106c6a6fa384cb595f8dc75d668e28&oe=57AED28C','Guatemala');
