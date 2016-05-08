@@ -96,6 +96,7 @@ public class bookSelection extends Stage {
             mainPage.setSize(1100, 700);
             Stage profileStage = mainPage.getStage();
             profileStage.show();
+            //*** ANN ***
             this.getScene().getWindow().hide();  
         });
         

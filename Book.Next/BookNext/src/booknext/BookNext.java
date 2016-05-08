@@ -364,6 +364,7 @@ public class BookNext extends Application {
             
             if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
                 EditProfile mainPage = new EditProfile(uss, allBooks);
+                //**
                 Stage loginStage = mainPage.getStage();
                 loginStage.show();
                 theStage.getScene().getWindow().hide();
@@ -462,13 +463,7 @@ public class BookNext extends Application {
             );
         }
     }
-
-    private void activeRecommendations() {
-        ANN nn = new ANN();
-       // nn.NeuralNetwork(7, 4, 1);
-        nn.run(50000, 0.001);
-    }
-
+    
     @Override
     public void start(Stage primaryStage) {
 
