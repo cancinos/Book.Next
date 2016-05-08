@@ -138,7 +138,7 @@ public class BookNext extends Application {
     }
 
     public void convertAllBooks(String allIsbn) {
-        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); //HOLA
+        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); 
         String[] separated = allIsbn.split(",");
         CBook actBook;
         int cont = 0;
@@ -147,13 +147,11 @@ public class BookNext extends Application {
             System.out.print(cont + " - " + str);
             try {
                 actBook = new ISBNConverter().isbnToBook(str, cont);
-                connection.addBook(actBook);
+                //connection.addBook(actBook);
                 allBooks.add(actBook);
                 cont++;
-
-                //HACER QUERY AQUI
             } catch (IOException | JSONException ex) {
-                //Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
                 cont++;
                 System.out.print(" not finished\n");
             }
@@ -391,6 +389,7 @@ public class BookNext extends Application {
 
             if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
                 EditProfile mainPage = new EditProfile(uss, allBooks);
+                //**
                 Stage loginStage = mainPage.getStage();
                 loginStage.show();
                 theStage.getScene().getWindow().hide();
@@ -488,13 +487,7 @@ public class BookNext extends Application {
             );
         }
     }
-
-    private void activeRecommendations() {
-        ANN nn = new ANN();
-        // nn.NeuralNetwork(7, 4, 1);
-        nn.run(50000, 0.001);
-    }
-
+    
     @Override
     public void start(Stage primaryStage) {
 

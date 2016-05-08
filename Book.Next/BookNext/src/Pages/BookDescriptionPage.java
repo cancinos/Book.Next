@@ -42,6 +42,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -211,7 +212,7 @@ public class BookDescriptionPage extends Stage{
 
     }
     
-    private void addComponents(CBook book)
+    public void addComponents(CBook book)
     {
         giantCard infoCard = new giantCard(700,550);
         infoCard.createCard();
@@ -285,6 +286,7 @@ public class BookDescriptionPage extends Stage{
         
         // <editor-fold defaultstate="collapsed" desc="Book description">
         Label description = new Label(book.getBook_description());
+        description.setTextAlignment(TextAlignment.JUSTIFY);
         description.setStyle("-fx-font-size:15px;");
         description.setWrapText(true);
         description.setMaxWidth(625);
@@ -427,12 +429,11 @@ public class BookDescriptionPage extends Stage{
      * the final stage
      * @return Styled beautifull stage
      */
-    public Stage getStage()
+    public Stage getStage(CBook book)
     {
-        
-        this.initStyle(StageStyle.UNDECORATED); 
         createView();
-        addComponents();
+        this.initStyle(StageStyle.UNDECORATED); 
+        addComponents(book);
         this.page.setCenter(this.navDrawer);
         this.page.setTop(this.toolBar);
         Scene scene = new Scene(this.page, width, height);

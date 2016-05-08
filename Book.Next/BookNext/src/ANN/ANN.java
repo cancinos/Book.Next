@@ -5,10 +5,13 @@
  */
 package ANN;
 
+import Classes.CBook;
+import Classes.MysqlConnection;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -32,20 +35,52 @@ public class ANN {
     final double learningRate = 0.1f;
     final double momentum = 0.07f;
     
-    double inputs[][] = new double[1024][10];//{ { 1, 1, 1, 1, 1, 1, 1 }, { 1, 0, 1, 1, 1, 1, 1 }, { 0, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 1, 1, 1 } };
-    final double expectedOutputs[][] = new double[1024][1];//{ { 0 }, { 1 }, { 1 }, { 0 } };
-    double resultOutputs[][] = new double[1024][1];//{ { -1 }, { -1 }, { -1 }, { -1 } }; // dummy init
+    double inputs[][] = new double[1][10];
+    final double expectedOutputs[][] = new double[1][1];
+    double resultOutputs[][] = new double[1][1];
     double output[];
  
     // for weight update all
     final HashMap<String, Double> weightUpdate = new HashMap<>();
+    MysqlConnection connection;
+    
+    public ANN() throws SQLException{
+        connection = new MysqlConnection();
+        connection.connect();
+    }
  
     
-    
-    public void NeuralNetwork(int input, int hidden, int output) throws IOException {
+    /**
+     * 
+     * @param id
+     * @return 
+     */
+    public LinkedList<Long> getRecommendations(int id){
+        
+        LinkedList<Long> recommendedIds = new LinkedList<>();
+        //get user favorite categories
+        
+        //example user actions 
+        inputs[0][5] = 1; inputs[0][6] = 0; inputs[0][7] = 1; inputs[0][8] = 0; inputs[0][9] = 0;
+        
+        
+        //get all the books on the database and iterate over it
+        for (CBook book : connection.getBooks()) {
+            //String[] categories = book.getBook_genre().split(",");
+            inputs[0][0] = 1; inputs[0][1] = 1; inputs[0][2] = 0; inputs[0][3] = 0; inputs[0][4] = 0;
+            NeuralNetwork(10, 8, 1);
+            run(1, 0.001);
+            if (getOutput()[0] > 0.9) {
+                recommendedIds.add(book.getBookId());
+            }
+        }
+        return recommendedIds;
+    }
+   
+    public void NeuralNetwork(int input, int hidden, int output){
         this.layers = new int[] { input, hidden, output };
         df = new DecimalFormat("#.0#");
-        getDataToTrain();
+        //getDataToTrain();
         /**
          * Create all neurons and connections Connections are created in the
          * neuron class
@@ -367,8 +402,8 @@ public class ANN {
         weightUpdate.put(weightKey(19, 95), 30.31);
         weightUpdate.put(weightKey(19, 96), .08);
     }
-
-    private void getDataToTrain() throws FileNotFoundException, IOException {
+    
+    /*private void getDataToTrain() throws FileNotFoundException, IOException {
         try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\iiscancinos\\Desktop\\sb\\src\\sb\\trainedData.txt"))) {
             StringBuilder sb = new StringBuilder();
             int i = 0;
@@ -381,7 +416,7 @@ public class ANN {
                 line = br.readLine();
             }
         }
-    }
+    }*/
     public void setIO(String[] data, int index){
         for (int i = 0; i < data.length; i++) {
             if (i <= 9) {
@@ -394,7 +429,7 @@ public class ANN {
         }
     }
     
-      void printResult()
+    void printResult()
     {
         System.out.println("NN example with xor training");
         for (int p = 0; p < inputs.length; p++) {
@@ -417,7 +452,7 @@ public class ANN {
         System.out.println();
     }
       
-         public void printWeightUpdate() {
+    public void printWeightUpdate() {
         System.out.println("printWeightUpdate, put this i trainedWeights() and set isTrained to true");
         // weights for the hidden layer
         for (Neuron n : hiddenLayer) {
