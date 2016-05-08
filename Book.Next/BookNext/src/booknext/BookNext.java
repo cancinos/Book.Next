@@ -1,4 +1,4 @@
-
+﻿
 package booknext;
 
 import ANN.ANN;
@@ -101,7 +101,7 @@ public class BookNext extends Application {
     boolean shouldTrainBayes = false;
     boolean shouldTestBayes = false;
     boolean shouldDownload = false;
-    boolean shouldLoadBooks = true;
+    boolean shouldLoadBooks = false;
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Other methods">
@@ -561,6 +561,7 @@ public class BookNext extends Application {
 //            } catch (IOException ex) {
 //                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
 //            }
+            //getUserBooks(); //por el momento lee los libros de un archivo
             loginPic();
             createToggle(primaryStage);
             createTabs(primaryStage);
