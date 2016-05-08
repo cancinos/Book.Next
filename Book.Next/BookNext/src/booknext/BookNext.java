@@ -62,6 +62,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import NaiveBayes.*;
+import Pages.HomePage;
 import org.json.JSONException;
 
 /**
@@ -363,6 +364,20 @@ public class BookNext extends Application {
             CUser uss = connection.consultUser(user.getText());
             
             if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
+                
+                //Aquí habría que agarrar los favoritos y los recomendados
+//                try {
+//                    convertAllBooks(readFile(theStage));         
+//                } catch (IOException ex) {
+//                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+
+//                HomePage home = new HomePage();
+//                Stage homeStage = home.getStage(allBooks, allBooks);
+//                homeStage = home.getStage(allBooks, allBooks);
+//                homeStage.show();
+//                theStage.getScene().getWindow().hide();
+                
                 EditProfile mainPage = new EditProfile(uss, allBooks);
                 //**
                 Stage loginStage = mainPage.getStage();
@@ -468,7 +483,7 @@ public class BookNext extends Application {
     public void start(Stage primaryStage) {
 
         try {
-            
+
             connection = new MysqlConnection();
             connection.connect();
             
@@ -478,7 +493,7 @@ public class BookNext extends Application {
             scene.getStylesheets().add("/style/jfoenix-components.css");
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
-            try {                
+            try {
                 if(connection.countBooks()<100){  
                     System.out.print(connection.countBooks());
                 convertAllBooks(readFile(primaryStage));         
