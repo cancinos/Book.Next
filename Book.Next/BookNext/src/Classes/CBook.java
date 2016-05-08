@@ -19,6 +19,7 @@ public class CBook {
     private List<String> book_authors;
     private String book_image;
     private String book_description;
+    public String isbn = "";
     private String book_publisher;
     private String book_publishYear;
     private String book_genres;
@@ -55,7 +56,7 @@ public class CBook {
     public String getBook_image() { return book_image; }
     public void setBook_image(String book_image) { 
         this.book_image = book_image; 
-        this.book_img = new ImageView(new Image(book_image));
+        //this.book_img = new ImageView(new Image(book_image));
     } 
     public ImageView getBook_viewImage() { return book_img; }
     
