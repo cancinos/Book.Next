@@ -55,45 +55,29 @@ public class ListCards extends ScrollPane{
         this.relocate(800, 105);
     }
     
-    public void createHorizontalList()
+    /**
+     * This method is used to show a vertical list of books (4 books) -OJO- every book needs to have a handler
+     * @param books list of books
+     */
+    public void createVerticalList(List<CBook> books)
     {
-        this.setPrefSize(800,275);
-        this.setStyle("-fx-padding: 0 0 0 20; -fx-background-color:TRANSPARENT;");
-        
-        //remove Border
+        this.setPrefSize(260,550);
+        this.setStyle("-fx-padding: 5 0 0 5; -fx-background-color:TRANSPARENT;");
         this.setBorder(Border.EMPTY);
         
-        CBook newBook = new CBook();        
-        newBook.setBook_name("Divergent");
-        List<String> authors = new ArrayList<>();
-        authors.add("Veronica Roth");
-        newBook.setBook_authors(authors);
-        newBook.setBook_image("https://books.google.com.gt/books/content?id=nv9lZM_0RI4C&printsec=frontcover&img=1&zoom=5&edge=curl&imgtk=AFLRE721Uleu1ZcOyJ0R-IY74iLoirdPChX7O9UOvu7n_L6vG30BDwo659QHvZJTcijsv7YR5KQonzT5X1TkxE93kcYEOjgnSLHcHN9uvlfYo8oH2E3Ovsa4W4iqobbanb1wa71xYYsh");
-        
-        
-        List<CBook> bookList;
-        bookList = new ArrayList<>();
-        
-        for (int i = 0; i < 10; i++) {
-            
-        bookList.add(newBook);
+        VBox vbox = new VBox(10);
+        HCard newCard;
+        for (CBook bookList1 : books) {
+            newCard = new HCard(240,115);
+            newCard.createCard();
+            vbox.getChildren().add(newCard);
         }
         
-        //30 = padding
-        HBox hbox = new HBox(30);
-        VCard newCard;
-        
-        for (CBook bookList1 : bookList) {
-            newCard = new VCard(128,250);
-            newCard.createSimpleCard(bookList1);
-            hbox.getChildren().add(newCard);
-        }
-        
-        
-        
-        this.setHbarPolicy(ScrollBarPolicy.NEVER);
-        this.setContent(hbox);
+        this.setVbarPolicy(ScrollBarPolicy.NEVER);
+        this.setContent(vbox);
+        this.relocate(800, 105);
     }
+    
     
     /**
      * This method shows rows and columns of books

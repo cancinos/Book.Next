@@ -6,9 +6,11 @@
 package UI;
 
 import Classes.CBook;
+import Classes.CStaticInfo;
 import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import Pages.EditProfile;
+import Pages.HomePage;
 import booknext.BookNext;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
@@ -74,12 +76,6 @@ public class NavigationDrawer extends JFXDrawersStack{
     }
     public void createNavDrawer()
     {
-        JFXToggleNode node2 = new JFXToggleNode();
-//        
-//        Icon value2 = new Icon("KEY", "2em", ";", "icon");
-//        node2.setGraphic(value2);
-//        node2.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
-        
         content = new Pane();
         content.setStyle("-fx-background-color: #F4F4F4;");
 
@@ -94,32 +90,8 @@ public class NavigationDrawer extends JFXDrawersStack{
     
     
     private void setNavDrawerList()
-    {
-        // <editor-fold defaultstate="collapsed" desc="Mouse event creation">
-        EventHandler<MouseEvent> goToHome = new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent me) {
-                BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
-                bookDescript.setSize(1100, 700); //Resizing
-                content = bookDescript.getContent();
-                //Stage bookDescriptStage = bookDescript.getStage(); //Getting Stage
-                //bookDescriptStage.show(); //Showing Stage
-                //stage.getScene().getWindow().hide(); //Hiding old Stage
-            }
-        };
-        
-        EventHandler<MouseEvent> goToProfile = new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent me) {
-                    BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
-                bookDescript.setSize(1100, 700); //Resizing
-                content = bookDescript.getContent();
-                //Stage bookDescriptStage = bookDescript.getStage(); //Getting Stage
-                //bookDescriptStage.show(); //Showing Stage
-                //stage.getScene().getWindow().hide(); //Hiding old Stage
-            }
-        };
-        // </editor-fold>
-        
-        JFXListView<Label> menuList = new JFXListView<Label>();
+    {   
+        JFXListView<Label> menuList = new JFXListView<>();
         menuList.setStyle("-fx-padding: 10 10 10 10;");
         
         Label lblHome = new Label("    Home");
@@ -129,9 +101,10 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblHome.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblHome);
         lblHome.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to book description (later will be modified
-			BookDescriptionPage bookDescript = new BookDescriptionPage(); //Creating new Stage
-                        bookDescript.setSize(1100, 700); //Resizing
-                        content = bookDescript.getContent();
+			List<CBook> favBooks = new ArrayList(); //mandar a traer favoritos
+                        List<CBook> recBooks = new ArrayList(); //mandar a traer favoritos
+                        HomePage home = new HomePage();
+                        content = home.getContent(favBooks, recBooks);
                         this.setContent(content);
 		});
         //lblHome.setOnMouseClicked(goToHome);
@@ -144,10 +117,10 @@ public class NavigationDrawer extends JFXDrawersStack{
         menuList.getItems().add(lblProfile);
         lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to actUser profile
             
-//            EditProfile profile = new EditProfile(allBooks);
-//            profile.setSize(1100, 700); //Resizing
-//            content = profile.getContent();
-//            this.setContent(content);
+            EditProfile profile = new EditProfile();
+            profile.setSize(1100, 700); //Resizing
+            content = profile.getContent();
+            this.setContent(content);
         });
         
         this.leftDrawerPane.getChildren().add(menuList);

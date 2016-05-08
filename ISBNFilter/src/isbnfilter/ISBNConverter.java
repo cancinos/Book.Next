@@ -63,7 +63,7 @@ public class ISBNConverter {
         finalLines.add(finalLine);
         for (int i = 0; i < isbns.size(); i++) {
         
-            if (cont % 25 == 0) //Para que avise cada X cantidad
+            if (cont % 1000 == 0) //Para que avise cada X cantidad
             {
                 System.out.println("van " + cont + " isbns");
             }
@@ -186,7 +186,7 @@ public class ISBNConverter {
                     i = isbns.size();
         }
         //De aquí para abajo imprime los ISBN (sólo eso imprime)
-        PrintWriter writer = new PrintWriter("C:\\Users\\Pablo\\Dropbox\\URL\\ING EN INFORMATICA Y SISTEMAS\\Séptimo Ciclo 2016\\Inteligencia Artificial\\Articulos\\siSirven.txt", "UTF-8"); //Cambiar path
+        PrintWriter writer = new PrintWriter("C:\\Users\\jcdur\\Desktop\\ISBN\\siSirven.txt", "UTF-8"); //Cambiar path
         for (String theISBN1 : finalLines) {
             writer.println(theISBN1);
         }

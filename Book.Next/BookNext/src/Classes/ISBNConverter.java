@@ -138,8 +138,11 @@ public class ISBNConverter {
       for (int i = 0; i < listGenres.size(); i++) {
           allGenres += listGenres.get(i) + ",";
       }
+      if (allGenres.length() > 0)
+      {
       allGenres = allGenres.substring(0, allGenres.length()-1);
       newBook.setBook_genre(allGenres);
+      }
   }
   
   /**
