@@ -316,6 +316,47 @@ public class MysqlConnection {
         return books;
     } 
     
+     public List<CBook> getUserBooks(int id) {
+
+        List<CBook> books = null;
+
+        CBook cbook = null;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement query = null;
+
+                query =connection.prepareStatement("Select book.* from book JOIN user_book on book.isbn = user_book.isbn AND user_book.id = ?");
+                query.setInt(1, id);
+                ResultSet result =null;
+                result = query.executeQuery();
+                
+                books = new ArrayList<CBook>();
+                while(result.next()){
+                    cbook = new CBook();
+                    cbook.fillCBook(
+                    result.getString("isbn"),
+                    result.getString("book_name"),
+                    result.getString("author"),                            
+                    result.getString("imagen"),
+                    result.getString("publish_date"),
+                    result.getString("publisher"),
+                    result.getString("rating_average"),
+                    result.getString("description"),
+                    result.getString("genre")                           
+                    );
+                    books.add(cbook);
+                    
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return books;
+    } 
+    
     public boolean addBook(CBook cbook){
         boolean add = false;
         
@@ -501,4 +542,120 @@ public class MysqlConnection {
     }
     //</editor-fold> 
 
+      public int getRating1(String isbn) {
+        int id = 0;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement q = null;
+                q = connection.prepareStatement("Select COUNT(*) from user_book where isbn = ? AND user_rating = 1");
+                q.setString(1, isbn);
+
+                ResultSet result = null;
+                result = q.executeQuery();
+
+                if (result.next()) {
+                    id = result.getInt("count(*)");
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+    
+    public int getRating2(String isbn) {
+        int id = 0;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement q = null;
+                q = connection.prepareStatement("Select COUNT(*) from user_book where isbn = ? AND user_rating = 2");
+                q.setString(1, isbn);
+
+                ResultSet result = null;
+                result = q.executeQuery();
+
+                if (result.next()) {
+                    id = result.getInt("count(*)");
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+
+    public int getRating3(String isbn) {
+        int id = 0;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement q = null;
+                q = connection.prepareStatement("Select COUNT(*) from user_book where isbn = ? AND user_rating = 3");
+                q.setString(1, isbn);
+
+                ResultSet result = null;
+                result = q.executeQuery();
+
+                if (result.next()) {
+                    id = result.getInt("count(*)");
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+    
+    public int getRating4(String isbn) {
+        int id = 0;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement q = null;
+                q = connection.prepareStatement("Select COUNT(*) from user_book where isbn = ? AND user_rating = 4");
+                q.setString(1, isbn);
+
+                ResultSet result = null;
+                result = q.executeQuery();
+
+                if (result.next()) {
+                    id = result.getInt("count(*)");
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+    
+    public int getRating5(String isbn) {
+        int id = 0;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement q = null;
+                q = connection.prepareStatement("Select COUNT(*) from user_book where isbn = ? AND user_rating = 5");
+                q.setString(1, isbn);
+
+                ResultSet result = null;
+                result = q.executeQuery();
+
+                if (result.next()) {
+                    id = result.getInt("count(*)");
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
+    
+    
 }
