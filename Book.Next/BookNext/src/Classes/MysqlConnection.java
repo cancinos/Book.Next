@@ -657,5 +657,49 @@ public class MysqlConnection {
         return id;
     }
     
+        double id = 0;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement query_0 = null;
+                PreparedStatement query_1 = null;
+                PreparedStatement query_2 = null;
+                
+                //Return how many book the user has viwed
+                query_0 = connection.prepareStatement("SELECT COUNT(*) FROM user_book WHERE id  = ?");
+                query_0.setInt(1, uid);
+                
+                //Return how many book the user has liked
+                query_1 = connection.prepareStatement("SELECT COUNT(*) FROM user_book JOIN book ON user_book.isbn = book.isbn" +
+"			 WHERE user_book.id = ? AND user_book.user_liked = 1 AND book.genre LIKE ('%'+'?'+'%')");
+                query_1.setInt(1, uid);
+                query_1.setString(2, genre);
+                
+                //Return how many book the user has saved
+                query_2 = connection.prepareStatement("SELECT COUNT(*) FROM user_book JOIN book ON user_book.isbn = book.isbn" +
+"			 WHERE user_book.id = ? AND user_book.user_saved = 1 AND book.genre LIKE ('%'+?+'%') ");
+                query_2.setInt(1, uid);
+                query_2.setString(2, genre);
+                
+                                
+                ResultSet result_0 = null;                
+                ResultSet result_1 = null;
+                ResultSet result_2 = null;
+                result_0 = query_0.executeQuery();
+                result_1 = query_0.executeQuery();
+                result_2 = query_0.executeQuery();
+
+                if (result_0.next() & result_1.next() & result_2.next()) {
+                    id = result_1.getInt("count(*)") + result_2.getInt("count(*)");
+                    id = id /result_0.getInt("count(*)");
+                     
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return id;
+    }
     
 }
