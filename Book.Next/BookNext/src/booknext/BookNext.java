@@ -102,6 +102,7 @@ public class BookNext extends Application {
     boolean shouldTrainBayes = false;
     boolean shouldTestBayes = false;
     boolean shouldDownload = false;
+    boolean shouldLoadBooks = true;
 
     /**
      * This Function reads isbn.txt file and creates every single isbn to a
@@ -134,6 +135,33 @@ public class BookNext extends Application {
         }
 
         return everything;
+
+    }
+    
+    public List<String> readFileLines(Stage parent) throws FileNotFoundException, IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File selectedFile = fileChooser.showOpenDialog(parent);
+        String everything = "";
+        List<String> allLines = new ArrayList();
+        if (selectedFile != null) {
+            BufferedReader br = new BufferedReader(new FileReader(selectedFile.getAbsoluteFile()));
+            try {
+                StringBuilder sb = new StringBuilder();
+                String line = br.readLine();
+                while (line != null) {
+                    sb.append(line);
+                    sb.append(",");
+                    allLines.add(line);
+                    line = br.readLine();
+                }
+                everything = sb.toString();
+            } finally {
+                br.close();
+            }
+        }
+
+        return allLines;
 
     }
 
@@ -376,14 +404,23 @@ public class BookNext extends Application {
         naive.classifyBook(trainingBook, connection);
     }
     
-    public void validateLogin(Stage theStage) {
-        if (shouldTrainBayes) {
-            trainBayes();
+    public void loadBooks(Stage primaryStage){
+        try {
+            List<String> lines = readFileLines(primaryStage);
+            lines.remove(0);
+            new DatabaseSetup().linesToBooks(lines, connection);
+        } catch (IOException ex) {
+            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+    }
+    
+    public void validateLogin(Stage theStage) {
         if (shouldTestBayes)
             trainBayes();
-
+        
+        if (shouldLoadBooks)
+            loadBooks(theStage);
+            
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
 

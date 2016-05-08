@@ -182,7 +182,7 @@ public class ISBNConverter {
                 contIncorrectos++;
             }
             cont++;
-            if (cont > 1000)
+            if (cont > 10000)
                     i = isbns.size();
         }
         //De aquí para abajo imprime los ISBN (sólo eso imprime)
