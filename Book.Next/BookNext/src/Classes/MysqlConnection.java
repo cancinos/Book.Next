@@ -657,6 +657,7 @@ public class MysqlConnection {
         return id;
     }
     
+    public double getCategoryPorcent(int uid, String genre) {
         double id = 0;
         try {
             if (makeStatement() != null) {
