@@ -51,12 +51,17 @@ public class EditProfile extends Stage {
     private final CUser actUser;
     Boolean editDisabled = true;
     private final List<CBook> allBooks;
+    private String accentColor = CStaticInfo.accentColor;
     
     public EditProfile()
     {
-        this.actUser = CStaticInfo.loggedUser;
+        actUser = CStaticInfo.loggedUser;
+        int id = CStaticInfo.connection.getUserId(CStaticInfo.loggedUser.gerUsername());
+        CStaticInfo.usersBooks = CStaticInfo.connection.getUserBooks(id);
         allBooks = CStaticInfo.usersBooks;
     }
+    
+    
     
     /**
      * This method creates stage's navigation Drawer & toolbar
@@ -125,17 +130,17 @@ public class EditProfile extends Stage {
         JFXTextField txtUsername;
         txtUsername = new textField().validateTextField("Username", "User name can't be empty", "18");
         txtUsername.setText("@" + actUser.gerUsername());
-        txtUsername.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
+        txtUsername.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: " + accentColor + "; -fx-font-size: 18;");
         
         JFXTextField txtFullname;
         txtFullname = new textField().validateTextField("Full name", "Full name can't be empty", "18");
         txtFullname.setText(actUser.getUser_fullName());
-        txtFullname.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
+        txtFullname.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: " + accentColor + ";-fx-font-size: 18;");
         
         JFXTextField txtCountry;
         txtCountry = new textField().validateTextField("Country", "Country can't be empty", "18");
         txtCountry.setText(actUser.getUser_country());
-        txtCountry.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
+        txtCountry.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: " + accentColor + ";-fx-font-size: 18;");
         
         JFXDatePicker DatePicker = new JFXDatePicker();
         DatePicker.setPromptText("pick a date");
@@ -147,7 +152,7 @@ public class EditProfile extends Stage {
         JFXPasswordField txtPassword;
         txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
         txtPassword.setText(actUser.getUser_password());
-        txtPassword.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: #FFC107; -fx-font-size: 18;");
+        txtPassword.setStyle("-fx-background-color:TRANSPARENT; -fx-focus-color: " + accentColor + ";-fx-font-size: 18;");
         
         // </editor-fold>
         
@@ -176,15 +181,15 @@ public class EditProfile extends Stage {
                 }
         };
         btnEdit.setOnAction(editHandler);
-        JFXButton btnLogOut = new JFXButton("Log Out");
-        btnLogOut.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #F44336;");
+        JFXButton btnLogOut = new JFXButton("LOG OUT");
+        btnLogOut.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: " + accentColor + ";");
         btnLogOut.relocate(180, 570);
         
         Icon editIcon = new Icon("PENCIL", "1em");
         editIcon.setTextFill(Color.WHITE);
         editIcon.setPadding(new Insets(0,10,0,0));
         
-        btnEdit.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: #F44336;");
+        btnEdit.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: "  + accentColor + ";");
         btnEdit.setMinWidth(75);
         btnEdit.setMaxWidth(75);
         btnEdit.relocate(100, 570);
@@ -212,11 +217,24 @@ public class EditProfile extends Stage {
     
     private void showUserLibrary()
     {
-        ListCards list = new ListCards();
-        list.createMatrixList(allBooks, false);
-        list.relocate(320, 70);
-        addComponent(list);
+        if (allBooks != null && allBooks.size() > 0 )
+        {  
+            ListCards list = new ListCards();
+            list.createMatrixList(allBooks, false);
+            list.relocate(320, 70);
+            addComponent(list);
         //infoCard.getChildren().add(list.getList());
+        } else
+        {
+            ImageView noLibrary = new ImageView(new Image("/Icons/noSaved.png"));
+            noLibrary.relocate(320, 80);
+            addComponent(noLibrary);
+            
+            JFXButton btnAdd = new JFXButton("EXPLORE");
+            btnAdd.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: " + accentColor + ";");
+            btnAdd.relocate(620, 480);
+            addComponent(btnAdd);
+        }
     }
     
     /**

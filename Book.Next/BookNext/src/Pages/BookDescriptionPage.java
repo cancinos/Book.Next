@@ -237,11 +237,11 @@ public class BookDescriptionPage extends Stage{
         infoBox.relocate(180, 30);
         infoCard.getChildren().addAll(iv1, infoBox, btnSave, favHeart, separator, infoPane, separator2, stars, btnEdit);
         addComponent(infoCard);
-        addSimilarRecomendation();
+        addSimilarRecomendation(book);
 
     }
     
-    private void addSimilarRecomendation()
+    private void addSimilarRecomendation(CBook actBook)
     {
         Label moreLabel = new Label("Similar");
         moreLabel.setStyle("-fx-font-size:22px;");
@@ -257,6 +257,7 @@ public class BookDescriptionPage extends Stage{
         btnMore.relocate(990, 55);
         //addComponent(btnMore); --> -OJO- por el momento, no es necesario
         
+        //similarBooks = getSimilarBooks(actBook); 
         ListCards list = new ListCards();
         list.createVerticalList();
         //list.createVerticalList(similarBooks); -OJO- tomar los libros similares

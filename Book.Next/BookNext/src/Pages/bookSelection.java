@@ -65,7 +65,7 @@ public class bookSelection extends Stage {
     public bookSelection()
     {
         loggedUser = CStaticInfo.loggedUser;
-        allBooks = CStaticInfo.allBooks;
+        allBooks = CStaticInfo.connection.getBooks();
         page.setPrefSize(1000, 720);
     }
     
@@ -98,8 +98,6 @@ public class bookSelection extends Stage {
         });
         
         navDrawer.getContent().getChildren().addAll(cards, lblSelect, save_icon);
-        //navDrawer.getContent().setStyle("-fx-background-color");
-        //infoCard.getChildren().add(list.getList());
     }
     
     

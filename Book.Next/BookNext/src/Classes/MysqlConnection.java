@@ -274,6 +274,7 @@ public class MysqlConnection {
     }
 
     // </editor-fold>
+    
     //<editor-fold desc="Books Querys">
     public List<CBook> getBooks() {
 

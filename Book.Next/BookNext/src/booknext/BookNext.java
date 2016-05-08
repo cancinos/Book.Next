@@ -190,15 +190,6 @@ public class BookNext extends Application {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Data base methods">
-    private void getUserBooks()
-    {
-        try {
-            convertAllBooks(readFile(thisStage));
-        } catch (IOException ex) {
-            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        CStaticInfo.usersBooks = allBooks; // -OJO- debe tomar los libros del usuario...
-    }
     
     // </editor-fold>
     
@@ -374,12 +365,8 @@ public class BookNext extends Application {
         icon.setPrefSize(60, 60);
         icon.relocate(375, 415);
 
-        icon.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                validateLogin(theStage);
-            }
+        icon.setOnAction((ActionEvent actionEvent) -> {
+            validateLogin(theStage);
         });
 
         // </editor-fold>
@@ -394,12 +381,11 @@ public class BookNext extends Application {
         save_icon.relocate(375, 450);
         save_icon.setVisible(false);
 
-        save_icon.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
+        save_icon.setOnAction((ActionEvent actionEvent) -> {
+            try {
                 validateNewUser(theStage);
+            } catch (SQLException ex) {
+                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         // </editor-fold>
@@ -459,23 +445,17 @@ public class BookNext extends Application {
     
     // <editor-fold defaultstate="collapsed" desc="Log In, Sign Up">
     public void validateLogin(Stage theStage) {
-        if (shouldTestBayes)
-            trainBayes();
+//        if (shouldTestBayes)
+//            trainBayes();
         
-        if (shouldLoadBooks)
-            loadBooks(theStage);
+//        if (shouldLoadBooks) //-OJO- ya no será necesario al tener bdd
+//            loadBooks(theStage);
             
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
 
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss; //sets loggedUser -OJO-
-
-//                HomePage home = new HomePage();
-//                Stage homeStage = home.getStage(allBooks, allBooks);
-//                homeStage.show();
-//                theStage.getScene().getWindow().hide();
-                
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering here means that the user was succesfully logged
+                CStaticInfo.loggedUser = uss; 
                 EditProfile mainPage = new EditProfile();
                 Stage loginStage = mainPage.getStage();
                 loginStage.show();
@@ -507,9 +487,8 @@ public class BookNext extends Application {
         }
     }
 
-    public void validateNewUser(Stage theStage) {
+    public void validateNewUser(Stage theStage) throws SQLException {
 
-        System.out.println("You are connected");
         if (new_user.getText().length() > 3 & new_pass.getText().length() > 5 & new_name.getText().length() > 4 & country.getLength() > 4) {
             CUser uss = connection.consultUser(new_user.getText());
 
@@ -523,14 +502,13 @@ public class BookNext extends Application {
 
             } else {
                 uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-', '/'), imageURL, country.getText());
-                boolean validate = true; 
-                //= conection.addNewUser(uss.gerUsername(),uss.getUser_fullName(), uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());-OJO-
+                boolean validate = connection.addNewUser(uss.gerUsername(),uss.getUser_fullName(), uss.getUser_birthday(),uss.getUser_password(),
+                                                         uss.getUser_image(),uss.getUser_country());
                 validate = true;
-                if (validate = true) 
-                { //if this is true, means that all the fields are correct.
-                    CStaticInfo.loggedUser = uss; //sets loggedUser -OJO-
-                    //CStaticInfo.usersBooks = new ArrayList(); //New user, empty book list -OJO-
-                    
+                if (validate = true) //if this is true, means that all the fields are correct.
+                { 
+                    CStaticInfo.loggedUser = uss; 
+                    CStaticInfo.usersBooks = new ArrayList(); //New user, empty book list 
                     bookSelection book = new bookSelection();
                     Stage loginStage = book.getStage();
                     loginStage.show();
@@ -565,6 +543,7 @@ public class BookNext extends Application {
 
             connection = new MysqlConnection();
             connection.connect();
+            CStaticInfo.connection = connection;
 
             primaryStage.initStyle(StageStyle.UNDECORATED);
             page.setStyle("-fx-background-color:#455A64");
@@ -582,7 +561,6 @@ public class BookNext extends Application {
 //            } catch (IOException ex) {
 //                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
 //            }
-            getUserBooks(); //por el momento lee los libros de un archivo
             loginPic();
             createToggle(primaryStage);
             createTabs(primaryStage);
