@@ -676,11 +676,11 @@ public class MysqlConnection {
                 query_1.setInt(1, uid);
                 query_1.setString(2, genre);
                 
+                String ugenre = "%"+genre+"%";
                 //Return how many book the user has saved
                 query_2 = connection.prepareStatement("SELECT COUNT(*) FROM user_book JOIN book ON user_book.isbn = book.isbn" +
-"			 WHERE user_book.id = ? AND user_book.user_saved = 1 AND book.genre LIKE ('%'+?+'%') ");
+"			 WHERE user_book.id = ? AND user_book.user_saved = 1 AND book.genre LIKE "+ ugenre);
                 query_2.setInt(1, uid);
-                query_2.setString(2, genre);
                 
                                 
                 ResultSet result_0 = null;                

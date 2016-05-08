@@ -43,7 +43,7 @@ country varchar(20)
 
 CREATE TABLE book (
 
-isbn varchar(20) primary key,
+isbn varchar(100) primary key,
 book_name varchar(100),
 author varchar (80),
 imagen varchar (200),
