@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -63,6 +63,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import NaiveBayes.*;
 import Pages.HomePage;
+import java.util.Random;
 import org.json.JSONException;
 
 /**
@@ -97,6 +98,11 @@ public class BookNext extends Application {
     private List<CBook> allBooks = new ArrayList();
     private String imageURL = "/Icons/user.PNG";
     MysqlConnection connection;
+    NaiveBayes naive = new NaiveBayes();
+
+    boolean shouldTrainBayes = false;
+    boolean shouldTestBayes = false;
+    boolean shouldDownload = false;
 
     /**
      * This Function reads isbn.txt file and creates every single isbn to a
@@ -130,8 +136,8 @@ public class BookNext extends Application {
 
         return everything;
 
-    }        
-		        
+    }
+
     public void convertAllBooks(String allIsbn) {
         allIsbn = allIsbn.substring(0, allIsbn.length() - 1); 
         String[] separated = allIsbn.split(",");
@@ -151,7 +157,7 @@ public class BookNext extends Application {
                 System.out.print(" not finished\n");
             }
         }
-        }
+    }
 
     //Create Card with Components   
     public void createView() {
@@ -357,12 +363,31 @@ public class BookNext extends Application {
 
     }
 
+    public void trainBayes() {
+        List<CBook> books = connection.getBooks();
+        for (CBook book : books) {
+            naive.train(book, connection);
+        }
+    }
 
+    public void testBayes(){
+        List<CBook> books = connection.getBooks();
+        int randIndex = new Random().nextInt(books.size());
+        CBook trainingBook = books.get(randIndex);
+        naive.classifyBook(trainingBook, connection);
+    }
+    
     public void validateLogin(Stage theStage) {
-        allBooks.add(null);
+        if (shouldTrainBayes) {
+            trainBayes();
+        }
+        
+        if (shouldTestBayes)
+            trainBayes();
+
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
-            
+
             if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
                 
                 //Aquí habría que agarrar los favoritos y los recomendados
@@ -383,7 +408,7 @@ public class BookNext extends Application {
                 Stage loginStage = mainPage.getStage();
                 loginStage.show();
                 theStage.getScene().getWindow().hide();
-                
+
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
@@ -398,9 +423,9 @@ public class BookNext extends Application {
                 if (pass.getText().length() < 4) {
                     pass.validate();
                 } else {
-                    
+
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    
+
                     alert.setTitle("Error");
                     alert.setHeaderText("User form not complete");
                     alert.setContentText("Please complete user form");
@@ -413,17 +438,17 @@ public class BookNext extends Application {
     public void validateNewUser(Stage theStage) {
 
         System.out.println("You are connected");
-        if(new_user.getText().length()>3 & new_pass.getText().length()>5 & new_name.getText().length()>4 & country.getLength()>4){
+        if (new_user.getText().length() > 3 & new_pass.getText().length() > 5 & new_name.getText().length() > 4 & country.getLength() > 4) {
             CUser uss = connection.consultUser(new_user.getText());
-            
-            if(uss !=null){ //If uss !=null means that the username is already registered
-                
+
+            if (uss != null) { //If uss !=null means that the username is already registered
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
                 alert.setHeaderText("User Already Exist");
                 alert.setContentText("Please select another user");
                 alert.showAndWait();
-                
+
             } else {
                 //public CUser(String usrname,  String full, String pass, String birth, String img,String country)
                 uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-', '/'), imageURL, country.getText());
@@ -431,7 +456,7 @@ public class BookNext extends Application {
                 //uss.getUser_birthday(),uss.getUser_password(),uss.getUser_image(),uss.getUser_country());
                 validate = true;
                 if (validate = true) { //if this is true, means that all the fields are correct.
-                    
+
                     bookSelection book = new bookSelection(uss);
                     book.setBookList(allBooks);
                     Stage loginStage = book.getStage();
@@ -455,7 +480,6 @@ public class BookNext extends Application {
             }
         }
     }
-    
 
     private static void configureFileChooser(final FileChooser fileChooser) {
         fileChooser.setTitle("View Pictures");
@@ -486,7 +510,7 @@ public class BookNext extends Application {
 
             connection = new MysqlConnection();
             connection.connect();
-            
+
             primaryStage.initStyle(StageStyle.UNDECORATED);
             page.setStyle("-fx-background-color:#455A64");
             Scene scene = new Scene(page, 700, 700);
@@ -494,9 +518,11 @@ public class BookNext extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
             try {
-                if(connection.countBooks()<100){  
+                if (connection.countBooks() < 100) {
                     System.out.print(connection.countBooks());
-                convertAllBooks(readFile(primaryStage));         
+                    if (shouldDownload) {
+                        convertAllBooks(readFile(primaryStage));
+                    }
                 }
             } catch (IOException ex) {
                 Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);

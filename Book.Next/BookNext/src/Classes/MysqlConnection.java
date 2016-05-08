@@ -90,9 +90,10 @@ public class MysqlConnection {
         boolean add = false;
         try {
             if (makeStatement() != null) {
-                PreparedStatement selectQuery = null;
-                ResultSet result = selectQuery.executeQuery("SELECT * FROM " + table + " WHERE word = '" + word + "'");
-                if (result.isBeforeFirst()) //The word is new
+                String squery = "SELECT * FROM " + table + " WHERE word = '" + word + "'";
+                PreparedStatement q = connection.prepareStatement(squery);
+                ResultSet result = q.executeQuery(squery);
+                if (!result.next()) //The word is new
                 {
                     PreparedStatement query = null;
                     query = connection.prepareStatement("INSERT INTO " + table + " VALUES (?,?,?,?,?,?)");
@@ -107,13 +108,12 @@ public class MysqlConnection {
                     if (query.executeUpdate()> 0) {
                         add = true;
                     }
-                    close();
                 }
                 else
                 {
                     PreparedStatement query = null;
                     query = connection.prepareStatement("UPDATE " + table + " SET genre1 = genre1 + ?,"
-                            + "genre2 = genre2 + ?, genre3 = genre3 + ?, genre4 = genre4 + ?, genre5 = genre5 + ?");
+                            + "genre2 = genre2 + ?, genre3 = genre3 + ?, genre4 = genre4 + ?, genre5 = genre5 + ? WHERE word = '" + word + "'");
                     int[] gs = {0, 0, 0, 0, 0};
                     gs[genre] = 1;
                     for (int i = 0; i < gs.length; i++)
@@ -121,7 +121,6 @@ public class MysqlConnection {
                     if (query.executeUpdate()> 0) {
                         add = true;
                     }
-                    close();
                 }
             }
         } catch (SQLException sqlException) {
@@ -130,6 +129,43 @@ public class MysqlConnection {
         return add;
     }
 
+    public int[] getGenresForWord(String word, String table){
+        String squery = "SELECT * FROM " + table + " WHERE word = '" + word + "'";
+        PreparedStatement q;
+        int[] genres = {0, 0, 0, 0, 0};
+        try {
+            q = connection.prepareStatement(squery);
+            ResultSet result = q.executeQuery(squery);
+            if (!result.next()){
+                result.previous();
+                for (int i = 0; i < genres.length; i++)
+                    genres[i] = result.getInt(i + 1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return genres;
+    }
+    
+    public int[] getTotalsForGenre(String table)
+    {
+        String squery = "SELECT SUM(genre1) as g1, SUM(genre2) as g2, SUM(genre3) as g3, SUM(genre4) as g4, SUM(genre5) as g5 FROM " + table;
+        PreparedStatement q;
+        int[] genres = {0, 0, 0, 0, 0};
+        try {
+            q = connection.prepareStatement(squery);
+            ResultSet result = q.executeQuery(squery);
+            if (!result.next()){
+                result.previous();
+                for (int i = 0; i < genres.length; i++)
+                    genres[i] = result.getInt(i);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return genres;
+    }
+    
     private CUser getUser(String user) {
         CUser cuser = null;
         try {

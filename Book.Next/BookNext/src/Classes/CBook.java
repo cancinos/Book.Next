@@ -83,11 +83,14 @@ public class CBook {
     
     public String getBook_authorsStr()
     {
-        String finalString = "";
-        for (int i = 0; i < book_authors.size(); i++) {
-            finalString += book_authors.get(i)+ ", ";
+        if (book_authors != null){
+            String finalString = "";
+            for (int i = 0; i < book_authors.size(); i++) {
+                finalString += book_authors.get(i)+ ", ";
+            }
+            return finalString.substring(0, finalString.length() - 1);
         }
-        return finalString.substring(0, finalString.length() - 1);
+        return "";
     }
     
         public List<String> setBook_authorList(String authors)
