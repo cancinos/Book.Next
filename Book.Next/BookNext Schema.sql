@@ -43,7 +43,7 @@ country varchar(20)
 
 CREATE TABLE book (
 
-isbn varchar(20) primary key,
+isbn varchar(1000) primary key,
 book_name varchar(100),
 author varchar (80),
 imagen varchar (200),
@@ -57,11 +57,11 @@ genre varchar(100)
 CREATE TABLE user_book (
 
    
-isbn varchar(20),
+isbn varchar(1000),
 id int,	
 user_rating int(1),
 user_liked int(1),
-user_view int(1),
+user_view int(5),
 user_saved int(1),
 
 FOREIGN KEY (isbn)

@@ -3,16 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/booknext/BookNext.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/NavigationDrawer.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Pages/HomePage.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Classes/CStaticInfo.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Classes/ISBNConverter.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Pages/BookDescriptionPage.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/VCard.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/UI/ListCards.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Pages/bookSelection.java</file>
-            <file>file:/C:/Users/jcdur/Desktop/IA/Book.Next/Book.Next/Book.Next/BookNext/src/Pages/EditProfile.java</file>
+            <file>file:/C:/Users/Pablo/Desktop/Book.Next/Book.Next/BookNext/src/Classes/MysqlConnection.java</file>
+            <file>file:/C:/Users/Pablo/Desktop/Book.Next/Book.Next/BookNext/src/booknext/BookNext.java</file>
+            <file>file:/C:/Users/Pablo/Desktop/Book.Next/Book.Next/BookNext/src/booknext/DatabaseSetup.java</file>
         </group>
     </open-files>
 </project-private>
