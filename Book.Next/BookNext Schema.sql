@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS  users;
 
 DROP TABLE IF EXISTS description_bayes;
 
+DROP TABLE IF EXISTS ann;
 
 CREATE TABLE description_bayes (
 word varchar(20) primary key,
