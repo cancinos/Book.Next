@@ -553,11 +553,10 @@ public class MysqlConnection {
 
                 PreparedStatement query = null;
 
-                query = connection.prepareStatement("UPDATE user_book SET user_view = ? Where id = ? AND isbn = ?");
-
-                query.setInt(1, view);
-                query.setInt(2, id);
-                query.setString(3, ISBN);
+                query=connection.prepareStatement("UPDATE user_book SET user_view = user_view+1 Where id = ? AND isbn = ?");
+                
+                query.setInt(1, id);
+                query.setString(2, ISBN);
                 if (query.executeUpdate() > 0) {
                     add = true;
 
