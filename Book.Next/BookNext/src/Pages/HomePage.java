@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -143,8 +144,16 @@ public class HomePage extends Stage{
         Scene scene = new Scene(this.page, 1100, 700);
         scene.getStylesheets().add("/style/jfoenix-components.css");
         this.setScene(scene);
-        this.setScene(scene);
         return this;
+    }
+    
+    public Pane getContent(List<CBook> fav, List<CBook> suggested)
+    {
+        favBooks = fav;
+        suggestedBooks = suggested;
+        createView();
+        addComponents();
+        return navDrawer.getContent();
     }
     
 }

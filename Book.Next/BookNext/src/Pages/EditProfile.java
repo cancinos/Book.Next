@@ -6,6 +6,7 @@
 package Pages;
 
 import Classes.CBook;
+import Classes.CStaticInfo;
 import Classes.CUser;
 import UI.ListCards;
 import UI.NavigationDrawer;
@@ -35,6 +36,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -50,10 +52,10 @@ public class EditProfile extends Stage {
     Boolean editDisabled = true;
     private final List<CBook> allBooks;
     
-    public EditProfile(CUser actUser, List<CBook> myBooks)
+    public EditProfile()
     {
-        this.actUser = actUser;
-        allBooks = myBooks;
+        this.actUser = CStaticInfo.loggedUser;
+        allBooks = CStaticInfo.usersBooks;
     }
     
     /**
@@ -67,7 +69,7 @@ public class EditProfile extends Stage {
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Toolbar Creation">
-            toolBar = new mainToolbar(1100, 60, "-fx-background-color: #F44336; -fx-padding: 0 0 0 0;", "Book.Next");
+            toolBar = new mainToolbar(1100, 60, "-fx-background-color: #F44336; -fx-padding: 0 0 0 0;", "My Profile");
             toolBar.createToolbar();
             //Setting onHamburgerClick
             toolBar.getHamburger().addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
@@ -233,6 +235,7 @@ public class EditProfile extends Stage {
      */
     public Stage getStage()
     {
+        this.initStyle(StageStyle.UNDECORATED); 
         this.setSize(1110, 700);
         createView();
         addComponents();

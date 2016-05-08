@@ -6,6 +6,7 @@
 package Pages;
 
 import Classes.CBook;
+import Classes.CStaticInfo;
 import Classes.CUser;
 import UI.ListCards;
 import UI.NavigationDrawer;
@@ -61,15 +62,11 @@ public class bookSelection extends Stage {
     }
     
     
-    public bookSelection(CUser actUser)
+    public bookSelection()
     {
-        loggedUser = actUser;
+        loggedUser = CStaticInfo.loggedUser;
+        allBooks = CStaticInfo.allBooks;
         page.setPrefSize(1000, 720);
-    }
-    
-    public void setBookList(List<CBook> books)
-    {
-        allBooks = books;
     }
     
     private void showUserLibrary()
@@ -92,7 +89,7 @@ public class bookSelection extends Stage {
         save_icon.relocate(1000,550);
         save_icon.setVisible(false);
         save_icon.setOnAction((ActionEvent actionEvent) -> {
-            EditProfile mainPage = new EditProfile(loggedUser, allBooks); //Verificar que sea la lista de sus libros
+            EditProfile mainPage = new EditProfile(); //Verificar que sea la lista de sus libros
             mainPage.setSize(1100, 700);
             Stage profileStage = mainPage.getStage();
             profileStage.show();
