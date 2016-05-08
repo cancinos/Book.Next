@@ -12,7 +12,9 @@ import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -49,9 +51,25 @@ public class HomePage extends Stage{
         // </editor-fold>
     }
     
-    private void addComponents()
+    private void addFavoriteBooks()
+    {
+        favScroll = new ScrollPane();
+        favScroll.setPrefSize(800,275);
+        favScroll.setStyle("-fx-padding: 0 0 0 20; -fx-background-color:TRANSPARENT;");
+        favScroll.setBorder(Border.EMPTY);
+        
+        HBox hbox = new HBox(30);
+    }
+    
+    private void addSuggestedBooks()
     {
         
+    }
+    
+    private void addComponents()
+    {
+        addFavoriteBooks();
+        addSuggestedBooks();
     }
     
     public Stage getStage()
