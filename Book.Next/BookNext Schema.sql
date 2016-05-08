@@ -1,11 +1,6 @@
 DROP SCHEMA IF EXISTS BookNext;
 
 create schema BookNext;
-create user 'booknext' identified by 'book';
-
-Grant all privileges on booknext.* to 'booknext';
-
-
 
 use BookNext;
 
@@ -43,7 +38,7 @@ country varchar(20)
 
 CREATE TABLE book (
 
-isbn varchar(1000) primary key,
+isbn varchar(200) primary key,
 book_name varchar(100),
 author varchar (80),
 imagen varchar (200),
@@ -57,7 +52,7 @@ genre varchar(100)
 CREATE TABLE user_book (
 
    
-isbn varchar(1000),
+isbn varchar(200),
 id int,	
 user_rating int(1),
 user_liked int(1),
@@ -81,6 +76,12 @@ insert into users(username,fullname,birthday,passwoord,imagen,country) values ('
 insert into users(username,fullname,birthday,passwoord,imagen,country) values ('Queme','Pablo Queme','1994/23/08','123pass','https://scontent-atl3-1.xx.fbcdn.net/v/t1.0-9/12512703_10153892622892726_5037909035613453449_n.jpg?oh=d0ddcdaa27ee81b3b908478feaa689bd&oe=57A6B22C','Guatemala');
 
 insert into users(username,fullname,birthday,passwoord,imagen,country) values ('Ludwing','Ludwing Cano','1994/23/08','123pass','https://scontent-atl3-1.xx.fbcdn.net/t31.0-8/s960x960/12068740_10153524436238100_3708907581614942786_o.jpg','Guatemala');
+
+
+
+create user 'booknext' identified by 'book';
+
+Grant all privileges on booknext.* to 'booknext';
 
 CREATE TABLE `booknext`.`ann` (
   `idANN` INT NOT NULL AUTO_INCREMENT,
