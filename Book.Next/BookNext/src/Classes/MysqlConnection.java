@@ -327,10 +327,11 @@ public class MysqlConnection {
 
                 PreparedStatement query = null;
 
-                query =connection.prepareStatement("Select * from book where genre = ?");
+                String ugenre = "%"+genre+"%";
+                query =connection.prepareStatement("Select * from book where genre LIKE ?");
                                 
                 
-                query.setString(1, genre);
+                query.setString(1, ugenre);
                 ResultSet result =null;
                 result = query.executeQuery();
                 books = new ArrayList<CBook>();
@@ -748,17 +749,18 @@ public class MysqlConnection {
                 query_0 = connection.prepareStatement("SELECT COUNT(*) FROM user_book WHERE id  = ?");
                 query_0.setInt(1, uid);
 
+                String ugenre = "%"+genre+"%";
                 //Return how many book the user has liked
                 query_1 = connection.prepareStatement("SELECT COUNT(*) FROM user_book JOIN book ON user_book.isbn = book.isbn"
-                        + "			 WHERE user_book.id = ? AND user_book.user_liked = 1 AND book.genre LIKE ('%'+'?'+'%')");
+                        + "			 WHERE user_book.id = ? AND user_book.user_liked = 1 AND book.genre LIKE ?");
                 query_1.setInt(1, uid);
-                query_1.setString(2, genre);
+                query_1.setString(2, ugenre);
 
-                String ugenre = "%"+genre+"%";
                 //Return how many book the user has saved
                 query_2 = connection.prepareStatement("SELECT COUNT(*) FROM user_book JOIN book ON user_book.isbn = book.isbn" +
-"			 WHERE user_book.id = ? AND user_book.user_saved = 1 AND book.genre LIKE "+ ugenre);
+"			 WHERE user_book.id = ? AND user_book.user_saved = 1 AND book.genre LIKE ?");
                 query_2.setInt(1, uid);
+                query_2.setString(2, ugenre);
 
                 ResultSet result_0 = null;
                 ResultSet result_1 = null;
