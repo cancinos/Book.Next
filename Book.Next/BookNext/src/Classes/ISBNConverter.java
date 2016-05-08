@@ -63,7 +63,7 @@ public class ISBNConverter {
        JSONObject volumeInfo = items.getJSONObject("volumeInfo");
        JSONArray authors;
        
-       newBook.setBookId(id); //Set isbn as ID
+       //newBook.setBookId(id); //Set isbn as ID
        if (!volumeInfo.isNull("title"))
            newBook.setBook_name(volumeInfo.getString("title"));
        if (!volumeInfo.isNull("publishedDate"))

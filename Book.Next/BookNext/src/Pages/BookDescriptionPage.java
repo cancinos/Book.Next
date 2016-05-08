@@ -6,6 +6,8 @@
 package Pages;
 
 import Classes.CBook;
+import Classes.CStaticInfo;
+import Classes.CUser;
 import UI.HCard;
 import UI.ListCards;
 import UI.NavigationDrawer;
@@ -59,7 +61,16 @@ public class BookDescriptionPage extends Stage{
     private NavigationDrawer navDrawer;
     private mainToolbar toolBar;
     private List<CBook> similarBooks;
+    private CUser actUser;
+    private int numUser;
+    private giantCard infoCard;
+    boolean saved = false, favorite = false;
     
+    public BookDescriptionPage()
+    {
+        actUser = CStaticInfo.loggedUser;
+        numUser = CStaticInfo.connection.getUserId(actUser.gerUsername());
+    }
     /**
      * This method creates stage's navigation Drawer & toolbar
      */
@@ -90,12 +101,14 @@ public class BookDescriptionPage extends Stage{
         this.width = width;
         this.height = height;
     }
-    boolean saved = false, favorite = false;
+    
  
     
     public void addComponents(CBook book)
     {
-        giantCard infoCard = new giantCard(700,550);
+        //saved = CStaticInfo.connection.isThisBookSaved(numUser, book.getBookId()); -OJO-
+        //favorite = CStaticInfo.connection.isThisBookFavorite(numUser, book.getBookId()); -OJO-
+        infoCard = new giantCard(700,550);
         infoCard.createCard();
         infoCard.relocate(50, 50);
         
@@ -152,25 +165,20 @@ public class BookDescriptionPage extends Stage{
         btnSave.getStyleClass().add("button-raised");
         btnSave.setMaxWidth(100);
         btnSave.relocate(565, 140);
-        btnSave.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    saved = !saved;
-                    if (!saved) //Until the user exit this page, we'll refresh all the data within the DB
-                    {
-                        // -OJO- update en bdd que ya no tiene guardado el libro
-                        btnSave.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color:#FF5252");
-                        btnSave.setText("SAVE BOOK");
-                    } else
-                    {
-                        // -OJO- update en bdd que ya tiene guardado el libro
-                        btnSave.setText("SAVED"); 
-                        btnSave.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color:#4CAF50");
-                    }
-                    
-                }
-            });
+        btnSave.setOnAction((ActionEvent actionEvent) -> {
+            saved = !saved;
+            if (!saved) //Until the user exit this page, we'll refresh all the data within the DB
+            {
+                CStaticInfo.connection.updateSaved(numUser, book.getBookId(), 0);
+                btnSave.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color:#FF5252");
+                btnSave.setText("SAVE BOOK");
+            } else
+            {
+                CStaticInfo.connection.updateSaved(numUser, book.getBookId(), 1);
+                btnSave.setText("SAVED");
+                btnSave.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color:#4CAF50");
+            }
+        });
         
         Rectangle separator = new Rectangle(500,1);
         separator.relocate(165, 213);
@@ -197,11 +205,12 @@ public class BookDescriptionPage extends Stage{
         separator2.setFill(Color.web("#B6B6B6"));
         // </editor-fold>
         
-        showRating(infoCard); //Shows total users rating
+        showRating(book); //Shows total users rating
         
         // <editor-fold defaultstate="collapsed" desc="Actuser's rating">
+        int rating = CStaticInfo.connection.getUserRating(book.getBookId(), numUser);
         RatingStars rateStars = new RatingStars("4em");
-        HBox stars = rateStars.showEmptyStars(3);//we need to Get actual user rating... if haven't rating, shows 0 stars
+        HBox stars = rateStars.showRatingStars(rating);//we need to Get actual user rating... if haven't rating, shows 0 stars
         stars.relocate(400, 290);
         stars.setDisable(true);
         
@@ -225,12 +234,13 @@ public class BookDescriptionPage extends Stage{
                 Icon editIcon2 = new Icon("PENCIL", "1.5em");
                 btnEdit.setGraphic(editIcon2);
                 btnEdit.setText("Edit rating");
-                // -OJO- guardar rating en base de datos
+                CStaticInfo.connection.updateRating(numUser, book.getBookId(), rateStars.getRating());
+                editRating(book);
             }
            });  
         // </editor-fold>
         
-        HBox keyWords = addKeyWords();
+        HBox keyWords = addKeyWords(book);
         
         infoBox.getChildren().addAll(lblName, moreInfo, keyWords);
         infoBox.setSpacing(10);
@@ -264,7 +274,7 @@ public class BookDescriptionPage extends Stage{
         addComponent(list.getList());
     }
     
-    private HBox addKeyWords()
+    private HBox addKeyWords(CBook book)
     {
         HBox hbox = new HBox(10);
         List<String> keyWords = new ArrayList();
@@ -282,42 +292,47 @@ public class BookDescriptionPage extends Stage{
         return hbox;
     }
     
-    private void showRating(giantCard infoCard)
+    Label lblAv, lbl1, lbl2, lbl3, lbl4, lbl5;
+    
+    /**
+     * This method is used for showing for the first time user's rating
+     * @param book 
+     */
+    private void showRating(CBook book)
     {
-        // -OJO- tomar cuántos votos tiene de cada estrella el libro...
-        int num5 = 3;
-        int num4 = 8;
-        int num3 = 3;
-        int num2 = 0;
-        int num1 = 1;
+        int num5 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "5");
+        int num4 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "4");
+        int num3 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "3");
+        int num2 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "2");
+        int num1 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "1");
         int numRating = num5+num4+num3+num2+num1;
         double avg = getAverage(num5, num4, num3, num2, num1, numRating);
         
-        Label lblAv = new Label(String.valueOf(avg));
+        lblAv = new Label(String.valueOf(avg));
         lblAv.setStyle("-fx-font-size:55px;");
         lblAv.relocate(170, 250);
         
-        Label lbl1 = new Label();
+        lbl1 = new Label();
         lbl1.setText(String.valueOf(num1));
         lbl1.setStyle("-fx-font-size:11px;");
         lbl1.relocate(330, 322);
        
-        Label lbl2 = new Label();
+        lbl2 = new Label();
         lbl2.setText(String.valueOf(num2));
         lbl2.setStyle("-fx-font-size:11px;");
         lbl2.relocate(330, 302);
         
-        Label lbl3 = new Label();
+        lbl3 = new Label();
         lbl3.setText(String.valueOf(num3));
         lbl3.setStyle("-fx-font-size:11px;");
         lbl3.relocate(330, 283);
         
-        Label lbl4 = new Label();
+        lbl4 = new Label();
         lbl4.setText(String.valueOf(num4));
         lbl4.setStyle("-fx-font-size:11px;");
         lbl4.relocate(330, 264);
         
-        Label lbl5 = new Label();
+        lbl5 = new Label();
         lbl5.setText(String.valueOf(num5));
         lbl5.setStyle("-fx-font-size:11px;");
         lbl5.relocate(330, 245);
@@ -329,8 +344,33 @@ public class BookDescriptionPage extends Stage{
         stars.getChildren().add(new ImageView(new Image("/Icons/2stars.png")));
         stars.getChildren().add(new ImageView(new Image("/Icons/1stars.png")));
         stars.relocate(250, 245);
-        infoCard.getChildren().addAll(lblAv,stars, lbl1, lbl2, lbl3, lbl4, lbl5);
+        
+        infoCard.getChildren().addAll(lblAv, stars, lbl1, lbl2, lbl3, lbl4, lbl5);
     }
+    
+    /**
+     * This method is used after clicking on the "Save rating" button.
+     * It upgrades all the rating labels.
+     * @param book 
+     */
+    private void editRating(CBook book)
+    {
+        int num5 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "5");
+        int num4 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "4");
+        int num3 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "3");
+        int num2 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "2");
+        int num1 = CStaticInfo.connection.getGlobalRating(book.getBookId(), "1");
+        int numRating = num5+num4+num3+num2+num1;
+        double avg = getAverage(num5, num4, num3, num2, num1, numRating);
+        
+        lblAv.setText(String.valueOf(avg));
+        lbl1.setText(String.valueOf(num1));
+        lbl2.setText(String.valueOf(num2));
+        lbl3.setText(String.valueOf(num3));
+        lbl4.setText(String.valueOf(num4));
+        lbl5.setText(String.valueOf(num5));
+    }
+    
         
     private double getAverage(double s5, double s4, double s3, double s2, double s1, double cont)
     {

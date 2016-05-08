@@ -96,12 +96,26 @@ public class ListCards extends ScrollPane{
                 
         VCard newCard;
         
+        if (bookList.size() >= 50)
+        {
+            CBook book;
+            for (int i = 0; i < 50; i++) {
+                book = bookList.get(i);
+                newCard = new VCard(128,250);
+                if (willBeSelected)
+                    newCard.createCardsToSelect(book); else
+                    newCard.createSimpleCard(book);
+                cardsMatrix.getChildren().add(newCard);
+            }
+        } else
+        {
             for (CBook book : bookList) {
             newCard = new VCard(128,250);
             if (willBeSelected)
                 newCard.createCardsToSelect(book); else
                 newCard.createSimpleCard(book);
             cardsMatrix.getChildren().add(newCard);
+            }
         }
         
         

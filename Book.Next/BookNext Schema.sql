@@ -36,19 +36,19 @@ country varchar(20)
 );
 
 
-
 CREATE TABLE book (
+  isbn varchar(20) NOT NULL,
+  book_name varchar(100) DEFAULT NULL,
+  author varchar(80) DEFAULT NULL,
+  imagen varchar(200) DEFAULT NULL,
+  publish_date varchar(20) DEFAULT NULL,
+  publisher varchar(40) DEFAULT NULL,
+  rating_average varchar(3) DEFAULT NULL,
+  description varchar(3000) DEFAULT NULL,
+  genre varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (isbn)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-isbn varchar(200) primary key,
-book_name varchar(100),
-author varchar (80),
-imagen varchar (200),
-publish_date varchar(20),
-publisher varchar(40),
-rating_average varchar(3),
-description varchar (500),
-genre varchar(100)
-);
 
 CREATE TABLE user_book (
 
