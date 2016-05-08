@@ -232,7 +232,7 @@ public class EditProfile extends Stage {
             
             JFXButton btnAdd = new JFXButton("EXPLORE");
             btnAdd.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: " + accentColor + ";");
-            btnAdd.relocate(620, 480);
+            btnAdd.relocate(623, 480);
             addComponent(btnAdd);
         }
     }

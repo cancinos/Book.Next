@@ -290,10 +290,10 @@ public class MysqlConnection {
 
                 ResultSet result = null;
                 result = query.executeQuery();
-
                 books = new ArrayList<CBook>();
                 while (result.next()) {
                     cbook = new CBook();
+                    
                     cbook.fillCBook(
                             result.getString("isbn"),
                             result.getString("book_name"),
@@ -357,9 +357,7 @@ public class MysqlConnection {
         }
         
         return books;
-    } 
-    
-    
+    }    
 
     public List<CBook> getUserBooks(int id) {
 
@@ -596,7 +594,7 @@ public class MysqlConnection {
     }
     //</editor-fold> 
 
-      public int getRating(String isbn, String range) {
+    public int getGlobalRating(String isbn, String range) {
         int id = 0;
         try {
             if (makeStatement() != null) {
@@ -617,6 +615,30 @@ public class MysqlConnection {
             Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return id;
+    }
+    
+    public int getUserRating(String isbn, int id) {
+        int rating = 0;
+        String sId = String.valueOf(id);
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement q = null;
+                q = connection.prepareStatement("Select user_rating from user_book where isbn = ? AND id = ?");
+                q.setString(1, isbn);
+                q.setString(2, sId);
+                ResultSet result = null;
+                result = q.executeQuery();
+
+                if (result.next()) {
+                    rating = result.getInt("user_rating");
+                } else {
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rating;
     }
 
       //<editor-fold desc="ratings">

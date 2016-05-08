@@ -1,5 +1,5 @@
-﻿
-package booknext;
+package booknext; 
+
 
 import ANN.ANN;
 import Classes.CBook;
@@ -60,6 +60,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import NaiveBayes.*;
 import Pages.HomePage;
+import booknext.DatabaseSetup;
 import java.util.Random;
 import org.json.JSONException;
 

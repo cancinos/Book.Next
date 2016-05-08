@@ -26,13 +26,13 @@ public class CBook {
     private List<String> key_words;
     private ImageView book_img;
     private int num_ratings = 0;
-    private long bookId; //ISBN
+    private String bookId; //ISBN
     private int autoIncId = 0;
     private float book_rating;
     
     
     public void fillCBook(String isbn,String book_name, String authors, String imagen, String publishDate, String publisher,String ratingAverage,String description,String genre){
-        this.bookId = Long.parseLong(isbn);
+        this.bookId = isbn;
         this.book_name = book_name;
         this.book_authors = setBook_authorList(authors);
         this.book_image = imagen;
@@ -44,8 +44,9 @@ public class CBook {
     }
     public int getAutoInc() { return autoIncId; }
     
-    public long getBookId() { return bookId; }
-    public void setBookId(long id) { bookId = id; autoIncId++; }
+    
+    public String getBookId() { return bookId; }
+    public void setBookId(String id) { bookId = id; autoIncId++; }
     
     public String getBook_name() { return book_name; }
     public void setBook_name(String book_name) { this.book_name = book_name; } 
@@ -71,7 +72,22 @@ public class CBook {
     
     public float getBook_rating() { return book_rating; }
     
-    public void setBook_genre(String allGenre) {  book_genres = allGenre; }
+    public void setBook_genre(String allGenre) {  
+        if (allGenre.contains(","))
+        {            
+            String aux = "";
+            String[] separated = allGenre.split(",");
+            for (String separated1 : separated) {
+                separated1 = separated1.toLowerCase();
+                if (separated1.compareTo("fiction") == 0 || separated1.compareTo("history") == 0 ||
+                    separated1.compareTo("biography") == 0 || separated1.compareTo("juvenile fiction") == 0 ||
+                    separated1.compareTo("social life and customs") == 0)
+                        aux += separated1 + ",";
+            }
+            book_genres  = aux.substring(0, aux.length() - 1); 
+        }
+        book_genres = allGenre; 
+    }
     public String getBook_genre() { return book_genres; }
     
     private void newRating(double rating)
@@ -107,7 +123,7 @@ public class CBook {
             return books;
         }
         
-        public String getId_String(){ return Long.toString(bookId);}
+        public String getId_String(){ return bookId;}
         
         public String getRating_String(){ return Float.toString(book_rating);}
 }
