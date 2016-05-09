@@ -31,7 +31,7 @@ CREATE TABLE `book` (
   `publisher` varchar(40) DEFAULT NULL,
   `rating_average` varchar(3) DEFAULT NULL,
   `description` varchar(3000) DEFAULT NULL,
-  `genre` varchar(100) DEFAULT NULL,
+  `genre` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,6 +39,25 @@ CREATE TABLE `book` (
 --
 -- Dumping data for table `book`
 --
+-- if you want 4 game of thrones books...
+INSERT INTO book 
+	(isbn,book_name,author,imagen, publish_date,publisher, rating_average,description,genre) 
+VALUES
+	('0553593714','Game of Thrones','R.R.Martin',
+     'http://books.google.com.gt/books/content?id=CgvUQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+     '2012', 'Santillana', 0.0, 'Este es el libro de la serie juego de tronos', 'juvenile fiction'),
+    
+    ('9780007447831','A clash of kings','R.R.Martin',
+     'http://books.google.com.gt/books/content?id=zlwlTfBeiSoC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+     '2013', 'Santillana', 0.0, 'Este es el libro de la serie juego de tronos', 'juvenile fiction'),
+	
+    ('0002245868','A storm of swords','R.R.Martin',
+     'http://books.google.com.gt/books/content?id=wAAlrgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+     '2014', 'Santillana', 0.0, 'Este es el libro de la serie juego de tronos', 'fiction'),
+     
+	('0553801503','A Feast of crowns','R.R.Martin',
+     'http://books.google.com.gt/books/content?id=BdDs4m0Jo1YC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+     '2015', 'Santillana', 0.0, 'Este es el libro de la serie juego de tronos', 'fiction');
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
