@@ -101,6 +101,8 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblHome.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblHome);
         lblHome.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to book description (later will be modified
+                        mainToolbar.title = "Home";
+                        mainToolbar.lblTitle.setText("Home");
 			List<CBook> favBooks = new ArrayList(); //mandar a traer favoritos
                         List<CBook> recBooks = new ArrayList(); //mandar a traer favoritos
                         HomePage home = new HomePage();
@@ -116,7 +118,8 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblProfile.setTextAlignment(TextAlignment.CENTER);
         menuList.getItems().add(lblProfile);
         lblProfile.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to actUser profile
-            
+            mainToolbar.title = "My profile";
+            mainToolbar.lblTitle.setText("My profile");
             EditProfile profile = new EditProfile();
             profile.setSize(1100, 700); //Resizing
             content = profile.getContent();

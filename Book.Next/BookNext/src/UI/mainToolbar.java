@@ -20,8 +20,9 @@ import javafx.scene.paint.Color;
 public class mainToolbar extends HBox{
     
     double width, height;
-    String style, title;
+    public static String style, title;
     private JFXToggleNode hamburger;
+    public static Label lblTitle;
     
     public mainToolbar(double width, double height, String style, String title){
         this.width = width;
@@ -58,7 +59,7 @@ public class mainToolbar extends HBox{
     
     public void setTitle()
     {
-        Label lblTitle = new Label(title);
+        lblTitle = new Label(title);
         lblTitle.setMinHeight(50);
         lblTitle.setAlignment(Pos.TOP_CENTER);
         lblTitle.setTextFill(Color.web("#FFFFFF"));

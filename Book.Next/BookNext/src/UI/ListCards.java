@@ -79,6 +79,37 @@ public class ListCards extends ScrollPane{
     }
     
     
+    public void createHorizontalList(List<CBook> books)
+    {
+        this.setPrefSize(935,275);
+        this.setStyle("-fx-padding: 5 0 0 5; -fx-background-color:TRANSPARENT;");
+        this.setBorder(Border.EMPTY);
+        
+        HBox hbox = new HBox(30);
+        if (books.size() >= 15)
+        {
+            VCard newCard;
+            CBook book;
+            for (int i = 0; i < 15; i++) {
+                book = books.get(i);
+                newCard = new VCard(128,250);
+                newCard.createSimpleCard(book);
+                hbox.getChildren().add(newCard);
+            }
+        } else
+        {
+            VCard newCard;
+            for (CBook book : books) {
+                newCard = new VCard(128,250);
+                newCard.createSimpleCard(book);
+                hbox.getChildren().add(newCard);
+            }
+        }
+        
+        this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        this.setContent(hbox);
+    }
+    
     /**
      * This method shows rows and columns of books
      * @param bookList user's book list

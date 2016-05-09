@@ -328,7 +328,7 @@ public class MysqlConnection {
                 PreparedStatement query = null;
 
                 String ugenre = "%"+genre+"%";
-                query =connection.prepareStatement("Select * from book where genre LIKE ?");
+                query =connection.prepareStatement("Select * from book where LOWER(genre) LIKE ?");
                                 
                 
                 query.setString(1, ugenre);

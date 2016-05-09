@@ -114,6 +114,8 @@ public class BookDescriptionPage extends Stage{
         
         // <editor-fold defaultstate="collapsed" desc="Book basic info">
         ImageView iv1 = new ImageView(new Image(book.getBook_image()));
+        iv1.setFitHeight(198);
+        iv1.setFitWidth(128);
         iv1.relocate(20, 20);
         
         Icon favHeart;
@@ -144,8 +146,10 @@ public class BookDescriptionPage extends Stage{
         lblName.setWrapText(true);
         lblName.setMaxWidth(450);
         lblName.setMaxHeight(200);
-        
-        String info = book.getBook_authorsStr() + "\n" + book.getBook_publisher() + "\n" + book.getBook_publishYear();
+        String authors = book.getBook_authorsStr();
+        if (authors.endsWith(","))
+            authors = authors.substring(0, authors.length() - 1);
+        String info = authors + "\n" + book.getBook_publisher() + "\n" + book.getBook_publishYear();
         Label moreInfo = new Label("by " + info);
         moreInfo.setStyle("-fx-font-size:15px;");
         moreInfo.setWrapText(true);
@@ -186,7 +190,11 @@ public class BookDescriptionPage extends Stage{
         // </editor-fold>
         
         // <editor-fold defaultstate="collapsed" desc="Book description">
-        Label description = new Label(book.getBook_description());
+        String emptyStr = "                                ";
+        String strDesc = book.getBook_description();
+        if (strDesc.isEmpty())
+                strDesc = "\n\n\n" + emptyStr + emptyStr + "Description not available";
+        Label description = new Label(strDesc);
         description.setTextAlignment(TextAlignment.JUSTIFY);
         description.setStyle("-fx-font-size:15px;");
         description.setWrapText(true);
