@@ -573,20 +573,6 @@ public class BookNext extends Application {
         } catch (SQLException ex) {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
-<<<<<<< HEAD
-=======
-//        getUserBooks();
-//
-//        HomePage home = new HomePage();
-//        primaryStage = home.getStage(allBooks, allBooks);
-//        primaryStage.show();
-
-//        getUserBooks();
-//
-//        HomePage home = new HomePage();
-//        primaryStage = home.getStage(allBooks, allBooks); 
-//        primaryStage.show();
->>>>>>> origin/master
     }
 
     /**
