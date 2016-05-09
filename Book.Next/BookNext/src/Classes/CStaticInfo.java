@@ -6,6 +6,7 @@
 package Classes;
 
 import java.util.List;
+import javafx.stage.Stage;
 
 /**
  *
