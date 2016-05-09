@@ -11,7 +11,7 @@ import Classes.ISBNConverter;
 import Pages.BookDescriptionPage;
 import Pages.EditProfile;
 import Pages.HomePage;
-import booknext.BookNext;
+import booknext.*;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXListView;
