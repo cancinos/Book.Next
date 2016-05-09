@@ -63,35 +63,50 @@ public class ANN {
      * @return 
      */
     public LinkedList<String> getRecommendations(int id){
-        
-        
-        LinkedList<String> recommendedIds = new LinkedList<>();
+       
+        LinkedList<String> recommendedIds = new LinkedList<>(); LinkedList<Double> categoryPercentage = new LinkedList<Double>();
         //get user favorite categories
         
-        inputs = new double[1][10];
+        NeuralNetwork(10, 8, 1);
+        inputs = new double[1][10]; double total = 0;
         for (String category : cats) {
-            setInputsUserByCat(category, connection.getCategoryPorcent(id, category));
+            double threshold = connection.getCategoryPorcent(id, category);
+            categoryPercentage.add(threshold);
+            total += threshold;
         }
-        //inputs[0][5] = 1; inputs[0][6] = 0; inputs[0][7] = 1; inputs[0][8] = 0; inputs[0][9] = 0;
+
+        int iter = 0;
+        for (Double threshold : categoryPercentage) {
+            setInputsUserByCat(cats[iter], threshold / total);
+            iter++;
+        }
         
         //get all the books on the database and iterate over it
         for (CBook book : connection.getBooks()) {
+            clearBookInputs();
             String[] categories = book.getBook_genre().split(",");
             for (String category : categories) {
                 setInputsBookByCat(category);
             }
-            NeuralNetwork(10, 8, 1);
             run(1, 0.001);
             if (getOutput()[0] > 0.9) {
-                //recommendedIds.add(book.getBookId());
+                recommendedIds.add(book.getBookId());
             }
         }
         return recommendedIds;
     }
     
+    public void clearBookInputs(){
+                inputs[0][0] = 0;
+                inputs[0][1] = 0;
+                inputs[0][2] = 0;
+                inputs[0][3] = 0;
+                inputs[0][4] = 0;
+    }
+    
     public void setInputsUserByCat(String category, double threshold){
         double value = 0;
-        if (threshold > 0.6) {
+        if (threshold > 0.25) {
             value = 1;
         }
         switch(category){
