@@ -172,10 +172,8 @@ Popular categorie: Social life and customs
         addComponent(parentScroll);
     }
     
-    public Stage getStage(List<CBook> fav, List<CBook> suggested)
+    public Stage getStage()
     {
-        favBooks = fav;
-        suggestedBooks = suggested;
         createView();
         addComponents();
         this.initStyle(StageStyle.UNDECORATED); 
@@ -187,10 +185,8 @@ Popular categorie: Social life and customs
         return this;
     }
     
-    public Pane getContent(List<CBook> fav, List<CBook> suggested)
+    public Pane getContent()
     {
-        favBooks = fav;
-        suggestedBooks = suggested;
         createView();
         addComponents();
         return navDrawer.getContent();

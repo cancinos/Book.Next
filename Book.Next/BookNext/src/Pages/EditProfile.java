@@ -57,7 +57,7 @@ public class EditProfile extends Stage {
     {
         actUser = CStaticInfo.loggedUser;
         int id = CStaticInfo.connection.getUserId(CStaticInfo.loggedUser.gerUsername());
-        CStaticInfo.usersBooks = CStaticInfo.connection.getUserBooks(id);
+        CStaticInfo.usersBooks = CStaticInfo.connection.getUserSavedBooks(id);
         allBooks = CStaticInfo.usersBooks;
     }
     
@@ -147,7 +147,7 @@ public class EditProfile extends Stage {
         DatePicker.setStyle("-fx-font-size: 18;");
         DatePicker.setDefaultColor(Color.web("#F44336"));
         DatePicker.setEditable(false);
-        //DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
+        DatePicker.setValue(stringToDate(actUser.getUser_birthday()));
         
         JFXPasswordField txtPassword;
         txtPassword = new textField().PasswordField("Password","Password can't be empty","18");
@@ -158,27 +158,24 @@ public class EditProfile extends Stage {
         
         // <editor-fold defaultstate="collapsed" desc="Buttons">
         JFXButton btnEdit = new JFXButton("EDIT");
-        EventHandler<ActionEvent> editHandler = new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    editDisabled = !editDisabled;
-                    vbox.setDisable(editDisabled);
-                    if (editDisabled == true) //Update user's info
-                    {
-                        Icon editIcon = new Icon("PENCIL", "1em");
-                        editIcon.setTextFill(Color.WHITE);
-                        editIcon.setPadding(new Insets(0,10,0,0));
-                        btnEdit.setGraphic(editIcon);
-                        btnEdit.setText("Edit");
-                    } else
-                    {
-                        Icon saveIcon = new Icon("SAVE", "1em");
-                        saveIcon.setTextFill(Color.WHITE);
-                        saveIcon.setPadding(new Insets(0,10,0,0));
-                        btnEdit.setGraphic(saveIcon);
-                        btnEdit.setText("Save");
-                    }
-                }
+        EventHandler<ActionEvent> editHandler = (ActionEvent actionEvent) -> {
+            editDisabled = !editDisabled;
+            vbox.setDisable(editDisabled);
+            if (editDisabled == true) //Update user's info
+            {
+                Icon editIcon = new Icon("PENCIL", "1em");
+                editIcon.setTextFill(Color.WHITE);
+                editIcon.setPadding(new Insets(0,10,0,0));
+                btnEdit.setGraphic(editIcon);
+                btnEdit.setText("Edit");
+            } else
+            {
+                Icon saveIcon = new Icon("SAVE", "1em");
+                saveIcon.setTextFill(Color.WHITE);
+                saveIcon.setPadding(new Insets(0,10,0,0));
+                btnEdit.setGraphic(saveIcon);
+                btnEdit.setText("Save");
+            }
         };
         btnEdit.setOnAction(editHandler);
         JFXButton btnLogOut = new JFXButton("LOG OUT");
@@ -210,8 +207,8 @@ public class EditProfile extends Stage {
         String[] nums = strDate.split("/");
         int year, month, day;
         year = Integer.parseInt(nums[0]);
-        month = Integer.parseInt(nums[1]);
-        day = Integer.parseInt(nums[2]);
+        day = Integer.parseInt(nums[1]);
+        month = Integer.parseInt(nums[2]);
         return LocalDate.of(year, month, day);
     }
     
@@ -233,6 +230,14 @@ public class EditProfile extends Stage {
             JFXButton btnAdd = new JFXButton("EXPLORE");
             btnAdd.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: " + accentColor + ";");
             btnAdd.relocate(623, 480);
+            EventHandler<ActionEvent> editHandler = (ActionEvent actionEvent) -> {
+                HomePage home = new HomePage();
+                Stage homeStage = home.getStage();
+                homeStage.show();
+                this.getScene().getWindow().hide();
+            };
+            btnAdd.setOnAction(editHandler);
+            
             addComponent(btnAdd);
         }
     }

@@ -6,17 +6,11 @@
 package UI;
 
 import Classes.CBook;
-import Classes.CStaticInfo;
-import Classes.ISBNConverter;
-import Pages.BookDescriptionPage;
 import Pages.EditProfile;
 import Pages.HomePage;
-import booknext.*;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXToggleNode;
-import de.jensd.fx.fontawesome.Icon;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,20 +18,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.json.JSONException;
 
 /**
  *
@@ -103,10 +92,8 @@ public class NavigationDrawer extends JFXDrawersStack{
         lblHome.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ //Goes to book description (later will be modified
                         mainToolbar.title = "Home";
                         mainToolbar.lblTitle.setText("Home");
-			List<CBook> favBooks = new ArrayList(); //mandar a traer favoritos
-                        List<CBook> recBooks = new ArrayList(); //mandar a traer favoritos
                         HomePage home = new HomePage();
-                        content = home.getContent(favBooks, recBooks);
+                        content = home.getContent();
                         this.setContent(content);
 		});
         //lblHome.setOnMouseClicked(goToHome);

@@ -8,6 +8,7 @@ package Pages;
 import Classes.CBook;
 import Classes.CStaticInfo;
 import Classes.CUser;
+import NaiveBayes.NaiveBayes;
 import UI.HCard;
 import UI.ListCards;
 import UI.NavigationDrawer;
@@ -49,6 +50,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import static jdk.nashorn.internal.objects.NativeMath.round;
 
 /**
  *  Stage used for see an specific book info.
@@ -288,11 +290,11 @@ public class BookDescriptionPage extends Stage{
         btnMore.setMinSize(20, 38);
         btnMore.relocate(990, 55);
         //addComponent(btnMore); --> -OJO- por el momento, no es necesario
-        
-        //similarBooks = getSimilarBooks(actBook); 
+        NaiveBayes naive = new NaiveBayes();
+        similarBooks = naive.recommend(actBook, CStaticInfo.connection, 4);
         ListCards list = new ListCards();
-        list.createVerticalList();
-        //list.createVerticalList(similarBooks); -OJO- tomar los libros similares
+        //list.createVerticalList();
+        list.createVerticalList(similarBooks);
         addComponent(list.getList());
     }
     
@@ -391,6 +393,8 @@ public class BookDescriptionPage extends Stage{
         lbl3.setText(String.valueOf(num3));
         lbl4.setText(String.valueOf(num4));
         lbl5.setText(String.valueOf(num5));
+        
+        CStaticInfo.connection.setBookRating(book.isbn, Double.toString(avg));
     }
     
         

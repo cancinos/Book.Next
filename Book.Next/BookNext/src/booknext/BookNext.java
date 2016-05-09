@@ -200,6 +200,7 @@ public class BookNext extends Application {
     }
 
     // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="View methods">
     //Create Card with Components   
     public void createView() {
@@ -422,6 +423,7 @@ public class BookNext extends Application {
     }
 
     // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Bayes methods">
     public void trainBayes() {
 
@@ -449,6 +451,7 @@ public class BookNext extends Application {
     }
 
     // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Log In, Sign Up">
     public void validateLogin(Stage theStage) {
         if (shouldTrainBayes) {
@@ -473,7 +476,7 @@ public class BookNext extends Application {
                     EditProfile mainPage = new EditProfile();
                     Stage loginStage = mainPage.getStage();
                     loginStage.show();
-                    theStage.getScene().getWindow().hide();
+                    thisStage.getScene().getWindow().hide();
                 //} catch (SQLException ex) {
                   //  Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
                 //}
@@ -550,6 +553,7 @@ public class BookNext extends Application {
     }
 
     // </editor-fold>
+    
     @Override
     public void start(Stage primaryStage) {
         thisStage = primaryStage;
@@ -582,6 +586,15 @@ public class BookNext extends Application {
         launch(args);
     }
 
+    private String dateToString(LocalDate date)
+    {
+        String fixedDate;
+        fixedDate = String.valueOf(date.getDayOfMonth());
+        fixedDate += "/" + String.valueOf(date.getMonthValue());
+        fixedDate += "/" + String.valueOf(date.getYear());
+        return fixedDate;
+    }
+    
     private LocalDate stringToDate(String strDate) {
         String[] nums = strDate.split("/");
         return LocalDate.of(Integer.parseInt(nums[2]), Integer.parseInt(nums[1]), Integer.parseInt(nums[0]));

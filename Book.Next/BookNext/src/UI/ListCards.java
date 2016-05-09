@@ -28,33 +28,6 @@ public class ListCards extends ScrollPane{
     
     }
     
-    public void createVerticalList()
-    {
-        this.setPrefSize(260,550);
-        this.setStyle("-fx-padding: 5 0 0 5; -fx-background-color:TRANSPARENT;");
-        this.setBorder(Border.EMPTY);
-        CBook newBook = new CBook();
-        
-        List<CBook> bookList;
-        bookList = new ArrayList<>();
-        bookList.add(newBook);
-        bookList.add(newBook);
-        bookList.add(newBook);
-        bookList.add(newBook);
-        
-        VBox vbox = new VBox(10);
-        HCard newCard;
-        for (CBook bookList1 : bookList) {
-            newCard = new HCard(240,115);
-            newCard.createCard();
-            vbox.getChildren().add(newCard);
-        }
-        
-        this.setVbarPolicy(ScrollBarPolicy.NEVER);
-        this.setContent(vbox);
-        this.relocate(800, 105);
-    }
-    
     /**
      * This method is used to show a vertical list of books (4 books) -OJO- every book needs to have a handler
      * @param books list of books
@@ -69,7 +42,7 @@ public class ListCards extends ScrollPane{
         HCard newCard;
         for (CBook bookList1 : books) {
             newCard = new HCard(240,115);
-            newCard.createCard();
+            newCard.createCard(bookList1);
             vbox.getChildren().add(newCard);
         }
         
