@@ -1,3 +1,4 @@
+package booknext;
 
 import ANN.ANN;
 import Classes.CBook;
@@ -465,25 +466,18 @@ public class BookNext extends Application {
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
 
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { try {
-                //Entering here means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss;
-                ANN a = new ANN();
-                a.getRecommendations(2);
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss; //sets loggedUser -OJO-
-
-//                HomePage home = new HomePage();
-//                Stage homeStage = home.getStage(allBooks, allBooks);
-//                homeStage.show();
-//                theStage.getScene().getWindow().hide();
-                EditProfile mainPage = new EditProfile();
-                Stage loginStage = mainPage.getStage();
-                loginStage.show();
-                theStage.getScene().getWindow().hide();
-                } catch (SQLException ex) {
-                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering here means that the user was succesfully logged
+               // try {
+                    CStaticInfo.loggedUser = uss;
+                    //ANN a = new ANN();
+                    //a.getRecommendations(2);
+                    EditProfile mainPage = new EditProfile();
+                    Stage loginStage = mainPage.getStage();
+                    loginStage.show();
+                    theStage.getScene().getWindow().hide();
+                //} catch (SQLException ex) {
+                  //  Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                //}
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -573,29 +567,14 @@ public class BookNext extends Application {
             scene.getStylesheets().add("/style/jfoenix-components.css");
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
-            if (shouldDownload) {
-                convertAllBooks(readFile(primaryStage));
-            }
-            //getUserBooks(); //por el momento lee los libros de un archivo
             loginPic();
             createToggle(primaryStage);
             createTabs(primaryStage);
             createView(); //Contains all the components
             primaryStage.show();
-        } catch (SQLException | IOException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        getUserBooks();
-//
-//        HomePage home = new HomePage();
-//        primaryStage = home.getStage(allBooks, allBooks);
-//        primaryStage.show();
-        
-//        getUserBooks();
-//
-//        HomePage home = new HomePage();
-//        primaryStage = home.getStage(allBooks, allBooks); 
-//        primaryStage.show();
     }
 
     /**
