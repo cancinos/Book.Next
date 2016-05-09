@@ -455,12 +455,18 @@ public class BookNext extends Application {
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
 
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering here means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss; 
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { try {
+                //Entering here means that the user was succesfully logged
+                CStaticInfo.loggedUser = uss;
+                ANN a = new ANN();
+                a.getRecommendations(2);
                 EditProfile mainPage = new EditProfile();
                 Stage loginStage = mainPage.getStage();
                 loginStage.show();
                 theStage.getScene().getWindow().hide();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
