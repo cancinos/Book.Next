@@ -9,6 +9,7 @@ import Classes.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,7 +86,7 @@ public class NaiveBayes {
         }
     }
 
-    public void classifyBook(CBook book, MysqlConnection connection) {
+    public List<CBook> recommend(CBook book, MysqlConnection connection, int howMany) {
         TextManagement tm = new TextManagement();
         List<double[]> allLikelihoods = new ArrayList();
 
@@ -127,9 +128,60 @@ public class NaiveBayes {
         }
         for (int i = 0; i < finalProbabilities.length; i++) {
             finalProbabilities[i] = globalLikelihood[i] / totalLikelihood;
-            
         }
-        int bla = 0;
+        
+        List<String> topGenres = BubbleSort(finalProbabilities);
+        List<CBook> recommended = new ArrayList();
+        //Sends 75% of the same genre and 25% of the next most probable genre
+        int numSameGenre = howMany * 3 / 4;
+        if (numSameGenre == howMany)
+            numSameGenre--;
+        int nextGenre = howMany - numSameGenre;
+        
+        List<CBook> sameGenres = connection.getBooksByGenre(topGenres.get(0));
+        List<CBook> differentGenres = connection.getBooksByGenre(topGenres.get(1));
+        for (int i = 0; i < numSameGenre; i++) {
+            int randIndex = new Random().nextInt(sameGenres.size());
+            recommended.add(sameGenres.get(randIndex));
+        }
+        for (int i = 0; i < nextGenre; i++) {
+            int randIndex = new Random().nextInt(differentGenres.size());
+            recommended.add(differentGenres.get(randIndex));
+        }
+        return recommended;
+    }
+    
+    private List<String> BubbleSort(double[] num) {
+        List<String> words = new ArrayList();
+        words.add("History");
+        words.add("Biography");
+        words.add("Juvenile fiction");
+        words.add("Social life and customs");
+        words.add("Women");
+        int j;
+        boolean flag = true;   // set flag to true to begin first pass
+        double temp;   //holding variable
+        String temps;
+
+        while (flag) {
+            flag = false;    //set flag to false awaiting a possible swap
+            for (j = 0; j < num.length - 1; j++) {
+                if (num[j] < num[j + 1]) // change to > for ascending sort
+                {
+                    temp = num[j];
+                    temps = words.get(j); //swap elements
+
+                    num[j] = num[j + 1];
+                    words.set(j, words.get(j + 1));
+
+                    num[j + 1] = temp;
+                    words.set(j + 1, temps);
+
+                    flag = true;              //shows a swap occurred  
+                }
+            }
+        }
+        return words;
     }
 
     private double[] genresLikelihoodForWords(List<String> words, MysqlConnection connection, String table) {

@@ -434,7 +434,7 @@ public class BookNext extends Application {
         List<CBook> books = connection.getBooks();
         int randIndex = new Random().nextInt(books.size());
         CBook trainingBook = books.get(randIndex);
-        naive.classifyBook(trainingBook, connection);
+        naive.recommend(trainingBook, connection, 4);
     }
 
     public void loadBooks(Stage primaryStage) {
@@ -465,22 +465,24 @@ public class BookNext extends Application {
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
 
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { try {
-                //Entering here means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss;
-                ANN a = new ANN();
-                a.getRecommendations(2);
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss; //sets loggedUser -OJO-
+            if (uss != null && pass.getText().equals(uss.getUser_password())) {
+                try {
+                    //Entering here means that the user was succesfully logged
+                    CStaticInfo.loggedUser = uss;
+                    ANN a = new ANN();
+                    a.getRecommendations(2);
+                    if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
+                        CStaticInfo.loggedUser = uss; //sets loggedUser -OJO-
 
 //                HomePage home = new HomePage();
 //                Stage homeStage = home.getStage(allBooks, allBooks);
 //                homeStage.show();
 //                theStage.getScene().getWindow().hide();
-                EditProfile mainPage = new EditProfile();
-                Stage loginStage = mainPage.getStage();
-                loginStage.show();
-                theStage.getScene().getWindow().hide();
+                        EditProfile mainPage = new EditProfile();
+                        Stage loginStage = mainPage.getStage();
+                        loginStage.show();
+                        theStage.getScene().getWindow().hide();
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -526,12 +528,12 @@ public class BookNext extends Application {
 
             } else {
                 uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-', '/'), imageURL, country.getText());
-                boolean validate = connection.addNewUser(uss.gerUsername(),uss.getUser_fullName(), uss.getUser_birthday(),uss.getUser_password(),
-                                                         uss.getUser_image(),uss.getUser_country());
+                boolean validate = connection.addNewUser(uss.gerUsername(), uss.getUser_fullName(), uss.getUser_birthday(), uss.getUser_password(),
+                        uss.getUser_image(), uss.getUser_country());
                 validate = true;
                 if (validate = true) //if this is true, means that all the fields are correct.
-                { 
-                    CStaticInfo.loggedUser = uss; 
+                {
+                    CStaticInfo.loggedUser = uss;
                     CStaticInfo.usersBooks = new ArrayList(); //New user, empty book list 
                     bookSelection book = new bookSelection();
                     Stage loginStage = book.getStage();
@@ -590,7 +592,7 @@ public class BookNext extends Application {
 //        HomePage home = new HomePage();
 //        primaryStage = home.getStage(allBooks, allBooks);
 //        primaryStage.show();
-        
+
 //        getUserBooks();
 //
 //        HomePage home = new HomePage();
