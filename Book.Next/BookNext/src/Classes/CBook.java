@@ -33,6 +33,7 @@ public class CBook {
     
     public void fillCBook(String isbn,String book_name, String authors, String imagen, String publishDate, String publisher,String ratingAverage,String description,String genre){
         this.bookId = isbn;
+        this.isbn = isbn;
         this.book_name = book_name;
         this.book_authors = setBook_authorList(authors);
         this.book_image = imagen;

@@ -1,5 +1,3 @@
-package booknext; 
-
 
 import ANN.ANN;
 import Classes.CBook;
@@ -98,7 +96,7 @@ public class BookNext extends Application {
     private String imageURL = "/Icons/user.PNG";
     MysqlConnection connection;
     NaiveBayes naive = new NaiveBayes();
-    private Stage thisStage ;
+    private Stage thisStage;
     boolean shouldTrainBayes = false;
     boolean shouldTestBayes = false;
     boolean shouldDownload = false;
@@ -139,7 +137,7 @@ public class BookNext extends Application {
         return everything;
 
     }
-    
+
     public List<String> readFileLines(Stage parent) throws FileNotFoundException, IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -168,7 +166,7 @@ public class BookNext extends Application {
     }
 
     public void convertAllBooks(String allIsbn) {
-        allIsbn = allIsbn.substring(0, allIsbn.length() - 1); 
+        allIsbn = allIsbn.substring(0, allIsbn.length() - 1);
         String[] separated = allIsbn.split(",");
         CBook actBook;
         int cont = 0;
@@ -189,11 +187,18 @@ public class BookNext extends Application {
         CStaticInfo.allBooks = allBooks;
     }
     // </editor-fold>
-    
+
     // <editor-fold defaultstate="collapsed" desc="Data base methods">
-    
+    private void getUserBooks() {
+        try {
+            convertAllBooks(readFile(thisStage));
+        } catch (IOException ex) {
+            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        CStaticInfo.usersBooks = allBooks; // -OJO- debe tomar los libros del usuario...
+    }
+
     // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="View methods">
     //Create Card with Components   
     public void createView() {
@@ -392,7 +397,7 @@ public class BookNext extends Application {
         // </editor-fold>
 
     }
-    
+
     private static void configureFileChooser(final FileChooser fileChooser) {
         fileChooser.setTitle("View Pictures");
         fileChooser.setInitialDirectory(
@@ -414,25 +419,25 @@ public class BookNext extends Application {
             );
         }
     }
-    
+
     // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Bayes methods">
     public void trainBayes() {
+
         List<CBook> books = connection.getBooks();
         for (CBook book : books) {
             naive.train(book, connection);
         }
     }
 
-    public void testBayes(){
+    public void testBayes() {
         List<CBook> books = connection.getBooks();
         int randIndex = new Random().nextInt(books.size());
         CBook trainingBook = books.get(randIndex);
         naive.classifyBook(trainingBook, connection);
     }
-    
-    public void loadBooks(Stage primaryStage){
+
+    public void loadBooks(Stage primaryStage) {
         try {
             List<String> lines = readFileLines(primaryStage);
             lines.remove(0);
@@ -441,26 +446,44 @@ public class BookNext extends Application {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     // </editor-fold>
-    
     // <editor-fold defaultstate="collapsed" desc="Log In, Sign Up">
     public void validateLogin(Stage theStage) {
-//        if (shouldTestBayes)
-//            trainBayes();
-        
-//        if (shouldLoadBooks) //-OJO- ya no será necesario al tener bdd
-//            loadBooks(theStage);
-            
+        if (shouldTrainBayes) {
+            trainBayes();
+        }
+
+        if (shouldTestBayes) {
+            testBayes();
+        }
+
+        if (shouldLoadBooks) {
+            loadBooks(theStage);
+        }
+
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
 
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering here means that the user was succesfully logged
-                CStaticInfo.loggedUser = uss; 
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { try {
+                //Entering here means that the user was succesfully logged
+                CStaticInfo.loggedUser = uss;
+                ANN a = new ANN();
+                a.getRecommendations(2);
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering this means that the user was succesfully logged
+                CStaticInfo.loggedUser = uss; //sets loggedUser -OJO-
+
+//                HomePage home = new HomePage();
+//                Stage homeStage = home.getStage(allBooks, allBooks);
+//                homeStage.show();
+//                theStage.getScene().getWindow().hide();
                 EditProfile mainPage = new EditProfile();
                 Stage loginStage = mainPage.getStage();
                 loginStage.show();
                 theStage.getScene().getWindow().hide();
+                } catch (SQLException ex) {
+                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -514,7 +537,7 @@ public class BookNext extends Application {
                     Stage loginStage = book.getStage();
                     loginStage.show();
                     theStage.getScene().getWindow().hide();
-                    
+
                 } else {
                     if (new_user.getText().length() < 4) {
                         new_user.validate();
@@ -535,8 +558,6 @@ public class BookNext extends Application {
     }
 
     // </editor-fold>
-    
-    
     @Override
     public void start(Stage primaryStage) {
         thisStage = primaryStage;
@@ -552,25 +573,24 @@ public class BookNext extends Application {
             scene.getStylesheets().add("/style/jfoenix-components.css");
             primaryStage.setScene(scene);
             primaryStage.setTitle("FXML is Simple");
-//            try {
-//                if (connection.countBooks() < 100) {
-//                    System.out.print(connection.countBooks());
-//                    if (shouldDownload) {
-//                        convertAllBooks(readFile(primaryStage));
-//                    }
-//                }
-//            } catch (IOException ex) {
-//                Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+            if (shouldDownload) {
+                convertAllBooks(readFile(primaryStage));
+            }
             //getUserBooks(); //por el momento lee los libros de un archivo
             loginPic();
             createToggle(primaryStage);
             createTabs(primaryStage);
             createView(); //Contains all the components
             primaryStage.show();
-        } catch (SQLException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        getUserBooks();
+//
+//        HomePage home = new HomePage();
+//        primaryStage = home.getStage(allBooks, allBooks);
+//        primaryStage.show();
+        
 //        getUserBooks();
 //
 //        HomePage home = new HomePage();
