@@ -6,6 +6,7 @@
 package UI;
 
 import Classes.CBook;
+import Pages.DiscoverPage;
 import Pages.EditProfile;
 import Pages.HomePage;
 import com.jfoenix.controls.JFXDrawer;
@@ -113,6 +114,20 @@ public class NavigationDrawer extends JFXDrawersStack{
             this.setContent(content);
         });
         
+        Label lblDiscover = new Label("    Discover");
+        lblDiscover.setStyle("-fx-font-size: 14; -fx-font-weight: LIGHT;");
+        Image imgBook = new Image("/Icons/book.png");
+        lblDiscover.setGraphic(new ImageView(imgBook));
+        lblDiscover.setTextAlignment(TextAlignment.CENTER);
+        menuList.getItems().add(lblDiscover);
+        lblDiscover.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{ 
+                        mainToolbar.title = "Discover";
+                        mainToolbar.lblTitle.setText("Discover");
+                        DiscoverPage discover = new DiscoverPage();
+                        content = discover.getContent();
+                        this.setContent(content);
+		});
+        
         this.leftDrawerPane.getChildren().add(menuList);
     }
     
@@ -120,6 +135,8 @@ public class NavigationDrawer extends JFXDrawersStack{
     {
         return leftDrawer;
     }
+    
+    
     
     public String readFile(Stage parent) throws FileNotFoundException, IOException
     {

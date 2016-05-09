@@ -290,6 +290,47 @@ public class MysqlConnection {
     // </editor-fold>
     
     //<editor-fold desc="Books Querys">
+    public CBook getBookFromISBN(String isbn)
+    {;
+
+        CBook cbook = null;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement query = null;
+
+                query = connection.prepareStatement("Select * from book WHERE isbn = ?");
+                query.setString(1, isbn);
+                ResultSet result = null;
+                result = query.executeQuery();
+                if (result.next())
+                {
+                    cbook = new CBook();
+
+                    cbook.fillCBook(
+                            result.getString("isbn"),
+                            result.getString("book_name"),
+                            result.getString("author"),
+                            result.getString("imagen"),
+                            result.getString("publish_date"),
+                            result.getString("publisher"),
+                            result.getString("rating_average"),
+                            result.getString("description"),
+                            result.getString("genre")
+                    );
+                }
+                    
+
+                
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return cbook;
+    }
+    
     public List<CBook> getBooks() {
 
         List<CBook> books = null;

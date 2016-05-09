@@ -72,6 +72,7 @@ public class CBook {
     public void setBook_publisher(String publisher) { this.book_publisher = publisher; }
     
     public float getBook_rating() { return book_rating; }
+    public String getBook_StrRating() { return Float.toString(book_rating); }
     
     public void setBook_genre(String allGenre) {  
         /*if (allGenre.contains(","))

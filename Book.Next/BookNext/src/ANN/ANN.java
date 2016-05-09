@@ -42,7 +42,7 @@ public class ANN {
  
     // for weight update all
     final HashMap<String, Double> weightUpdate = new HashMap<>();
-    String cats[] = {"Fiction", "History", "Biography", "Juvenile fiction", "Social life and customs"};
+    String cats[] = {"women", "history", "biography", "juvenile fiction", "social life and customs"};
     MysqlConnection connection;
     
     public ANN() throws SQLException{
@@ -52,7 +52,7 @@ public class ANN {
  
     
     /**
-     * Popular category: Fiction (1)
+     * Popular category: Women (1)
      * Popular category: History (2)
      * Popular category: Biography (3)
      * Popular category: Juvenile fiction (4)
@@ -109,20 +109,21 @@ public class ANN {
         if (threshold > 0.25) {
             value = 1;
         }
+        category = category.toLowerCase();
         switch(category){
-            case("Fiction"):
+            case("women"):
                 inputs[0][5] = value;
                 break;
-            case("History"):
+            case("history"):
                 inputs[0][6] = value;
                 break;
-            case("Biography"):
+            case("biography"):
                 inputs[0][7] = value;
                 break;
-            case("Juvenile fiction"):
+            case("juvenile fiction"):
                 inputs[0][8] = value;
                 break;
-            case("Social life and customs"):
+            case("social life and customs"):
                 inputs[0][9] = value;
                 break;
                
@@ -131,20 +132,21 @@ public class ANN {
     
     public void setInputsBookByCat(String category)
     {
+        category = category.toLowerCase();
         switch(category){
-            case("Fiction"):
+            case("women"):
                 inputs[0][0] = 1;
                 break;
-            case("History"):
+            case("history"):
                 inputs[0][1] = 1;
                 break;
-            case("Biography"):
+            case("biography"):
                 inputs[0][2] = 1;
                 break;
-            case("Juvenile fiction"):
+            case("juvenile fiction"):
                 inputs[0][3] = 1;
                 break;
-            case("Social life and customs"):
+            case("social life and customs"):
                 inputs[0][4] = 1;
                 break;
                

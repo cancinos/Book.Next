@@ -5,13 +5,18 @@
  */
 package Pages;
 
+import ANN.ANN;
 import Classes.CBook;
 import Classes.CStaticInfo;
 import UI.ListCards;
 import UI.NavigationDrawer;
 import UI.VCard;
 import UI.mainToolbar;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -129,6 +134,13 @@ public class HomePage extends Stage{
         return actScroll;
     }
     
+    private ScrollPane addRecommended(List<CBook> books)
+    {
+        ListCards actScroll = new ListCards();
+        actScroll.createHorizontalList(books);
+        return actScroll;
+    }
+    
     /**
      * This method is used for adding an specific element to page content
      * @param element added element
@@ -146,11 +158,37 @@ Popular categorie: Juvenile fiction
 Popular categorie: Social life and customs
 
     */
-    private void addComponents()
+    private void addComponents() throws SQLException
     {
-        parentScroll.setPrefSize(980, 650);
-        String[] allGenres = {"History", "Biography", "Juvenile fiction", "Social life and customs", "Women"};
+        /**
+         * Recommended for you
+         */
+        
+        ANN recommended = new ANN();
+        int userId = CStaticInfo.connection.getUserId(CStaticInfo.loggedUser.gerUsername());
+        List<String> recommendedISBN = recommended.getRecommendations(userId); //Returns recommeded books (just isbn)
+        List<CBook> recommendedBooks = new ArrayList();
+        for (String recommendedBook : recommendedISBN) { //Converts isbn to books
+            CBook act = CStaticInfo.connection.getBookFromISBN(recommendedBook);
+            recommendedBooks.add(act); 
+        }
         VBox allScrolls = new VBox(1);
+        parentScroll.setPrefSize(980, 650);
+        
+        // Adds recommended books--------------------------------
+        Pane recPane = new Pane();
+        recPane.setPrefSize(980,310);
+        recPane.setStyle("-fx-background-color: TRANSPARENT;");
+        Label lblRec = new Label("Recommended for you") ;
+        lblRec.setStyle("-fx-font-size:20px");
+        lblRec.relocate(5, 5);
+        ScrollPane recScroll = addRecommended(recommendedBooks);
+        recScroll.relocate(5, 35);
+        recPane.getChildren().addAll(lblRec, recScroll);
+        allScrolls.getChildren().add(recPane);
+        //-------------------------------------------------------
+        
+        String[] allGenres = {"History", "Biography", "Juvenile fiction", "Social life and customs", "Women"};
         for (int i = 0; i < 5; i++) {
             Pane actPane = new Pane();
             actPane.setPrefSize(980,310);
@@ -175,7 +213,11 @@ Popular categorie: Social life and customs
     public Stage getStage()
     {
         createView();
-        addComponents();
+        try {
+            addComponents();
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.initStyle(StageStyle.UNDECORATED); 
         this.page.setCenter(this.navDrawer);
         this.page.setTop(this.toolBar);
@@ -188,7 +230,11 @@ Popular categorie: Social life and customs
     public Pane getContent()
     {
         createView();
-        addComponents();
+        try {
+            addComponents();
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return navDrawer.getContent();
     }
     

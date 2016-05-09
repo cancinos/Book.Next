@@ -6,6 +6,7 @@
 package UI;
 
 import Classes.CBook;
+import Classes.CStaticInfo;
 import Pages.BookDescriptionPage;
 import Pages.bookSelection;
 import javafx.geometry.Insets;
@@ -98,6 +99,7 @@ public class VCard extends Pane{
         background.setFitHeight(198);
         background.setFitWidth(128);
         background.relocate(0, 0);
+        String prueba = background.toString();
         
         Label title = new Label(strName);
         Label author = new Label(strAuthor);
@@ -123,6 +125,7 @@ public class VCard extends Pane{
             bookSelection.save_icon.setVisible(false);
             this.getChildren().remove(selectedIcon);
             this.setEffect(new DropShadow(8d, 0d, 0d, Color.web("#727272")));
+            CStaticInfo.top3Books.remove(book);
         }else
         {            
             if(bookSelection.selected < 3 ) //2 cards are already selected, and now, its the 3rd one
@@ -133,6 +136,7 @@ public class VCard extends Pane{
                 selectedIcon = new ImageView(new Image("/Icons/choosen.png"));
                 selectedIcon.relocate(10, 10);
                 this.getChildren().add(selectedIcon);   
+                CStaticInfo.top3Books.add(book);
                 if (bookSelection.selected == 3)
                     bookSelection.save_icon.setVisible(true);                      
                

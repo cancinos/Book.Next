@@ -20,4 +20,5 @@ public class CStaticInfo {
     public static String mainColor = "#F44336";
     public static String darkColor = "#D32F2F";
     public static String accentColor = "#536DFE";
+    public static List<CBook> top3Books;
 }

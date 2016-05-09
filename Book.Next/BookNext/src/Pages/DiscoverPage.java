@@ -1,8 +1,17 @@
-package booknext;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Pages;
 
+import ANN.ANN;
+import Classes.Book;
 import Classes.CBook;
-import Pages.DiscoverPage;
+import Classes.CStaticInfo;
 import Pages.LandingPage;
+import UI.NavigationDrawer;
+import UI.mainToolbar;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,17 +37,49 @@ import com.jfoenix.controls.cells.editors.TextFieldEditorBuilder;
 import com.jfoenix.controls.cells.editors.base.GenericEditableTreeTableCell;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import de.jensd.fx.fontawesome.Icon;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
+
 /**
  *
  * @author jcdur
  */
-public class BookNext extends Application {
+public class DiscoverPage extends Stage {
+    
+    private NavigationDrawer navDrawer;
+    private mainToolbar toolBar;
+    private final BorderPane page = new BorderPane();
+    
+     /**
+     * This method creates stage's navigation Drawer & toolbar
+     */
+    private void createView()
+    {
+        // <editor-fold defaultstate="collapsed" desc="Navigation Drawer Creation">
+            navDrawer = new NavigationDrawer(300);
+            navDrawer.createNavDrawer();
+        // </editor-fold>
+        
+        // <editor-fold defaultstate="collapsed" desc="Toolbar Creation">
+            toolBar = new mainToolbar(1100, 60, "-fx-background-color: #F44336; -fx-padding: 0 0 0 0;", "Discover");
+            toolBar.createToolbar();
+            //Setting onHamburgerClick
+            toolBar.getHamburger().addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+                            navDrawer.toggle(navDrawer.getSideMenu());
+                    });
+        // </editor-fold>
+    }
+    
     
     private Pane showBooksMatrix(List<CBook> booksToShow)
     {        
@@ -80,27 +121,27 @@ public class BookNext extends Application {
                 });       
 
                 isbnColumn.setCellFactory((TreeTableColumn<Book, String> param) -> new GenericEditableTreeTableCell<Book, String>(new TextFieldEditorBuilder()));
-                isbnColumn.setOnEditCommit((CellEditEvent<Book, String> t)->{
+                isbnColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Book, String> t)->{
                         ((Book) t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue()).isbn.set(t.getNewValue());
                 });
 
                 nameColumn.setCellFactory((TreeTableColumn<Book, String> param) -> new GenericEditableTreeTableCell<Book, String>(new TextFieldEditorBuilder()));
-                nameColumn.setOnEditCommit((CellEditEvent<Book, String> t)->{
+                nameColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Book, String> t)->{
                         ((Book) t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue()).book_name.set(t.getNewValue());
                 });
 
                 authorsColumn.setCellFactory((TreeTableColumn<Book, String> param) -> new GenericEditableTreeTableCell<Book, String>(new TextFieldEditorBuilder()));
-                authorsColumn.setOnEditCommit((CellEditEvent<Book, String> t)->{
+                authorsColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Book, String> t)->{
                         ((Book) t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue()).authors.set(t.getNewValue());
                 });
 
                 genreColumn.setCellFactory((TreeTableColumn<Book, String> param) -> new GenericEditableTreeTableCell<Book, String>(new TextFieldEditorBuilder()));
-                genreColumn.setOnEditCommit((CellEditEvent<Book, String> t)->{
+                genreColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Book, String> t)->{
                         ((Book) t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue()).genres.set(t.getNewValue());
                 });
 
                 avgColumn.setCellFactory((TreeTableColumn<Book, String> param) -> new GenericEditableTreeTableCell<Book, String>(new TextFieldEditorBuilder()));
-                avgColumn.setOnEditCommit((CellEditEvent<Book, String> t)->{
+                avgColumn.setOnEditCommit((TreeTableColumn.CellEditEvent<Book, String> t)->{
                         ((Book) t.getTreeTableView().getTreeItem(t.getTreeTablePosition().getRow()).getValue()).average.set(t.getNewValue());
                 });
 
@@ -140,7 +181,7 @@ public class BookNext extends Application {
                 size.setStyle("-fx-font-size: 20px;");
                 size.relocate(0, 420);
                 filterField.textProperty().addListener((o,oldVal,newVal)->{
-                        treeView.setPredicate(book -> book.getValue().genres.get().contains(newVal));
+                        treeView.setPredicate(book -> book.getValue().book_name.get().contains(newVal));
                 });
 
                 size.textProperty().bind(Bindings.createStringBinding(()->"Book count: " + treeView.getCurrentItemsCount()+"", treeView.currentItemsCountProperty()));
@@ -155,35 +196,129 @@ public class BookNext extends Application {
         return new Pane();
     }
     
-    @Override
-    public void start(Stage primaryStage) {
+    private void addComponents()
+    {
         
-        LandingPage logPage = new LandingPage();
-        Stage newStage = logPage.getStage();
-        newStage.show();
-        primaryStage.close();
+        
+        Pane contenido = new Pane();
+        contenido.setPrefSize(1100, 640);
+
+        JFXComboBox<Label> cboxTypes = new JFXComboBox<>();
+        cboxTypes.getItems().add(new Label("All books"));
+        cboxTypes.getItems().add(new Label("Recommended for you"));
+        cboxTypes.getItems().add(new Label("Favorites"));
+        cboxTypes.getItems().add(new Label("Women"));
+        cboxTypes.getItems().add(new Label("Juvenile fiction"));
+        cboxTypes.getItems().add(new Label("History"));
+        cboxTypes.getItems().add(new Label("Biography"));
+        cboxTypes.getItems().add(new Label("Social life and customs"));
+        cboxTypes.setEditable(false);
+        cboxTypes.setPromptText("Choose one...");
+        EventHandler<ActionEvent> editHandler2 = (ActionEvent actionEvent) -> {
+            int prueba = contenido.getChildren().size();
+            contenido.getChildren().remove(1); //Removes table
+            List<CBook> books = new ArrayList();
+            int idUser = CStaticInfo.connection.getUserId(CStaticInfo.loggedUser.gerUsername());
+            switch (cboxTypes.getValue().getText())
+            {
+                case "All books":
+                    books = CStaticInfo.connection.getBooks();
+                    break;
+                case "Recommended for you":
+                    ANN recommended;
+                    try {
+                        recommended = new ANN();
+                        int userId = CStaticInfo.connection.getUserId(CStaticInfo.loggedUser.gerUsername());
+                        List<String> recommendedISBN = recommended.getRecommendations(userId); //Returns recommeded books (just isbn)
+                        books.clear();
+                        for (String recommendedBook : recommendedISBN) { //Converts isbn to books
+                        CBook act = CStaticInfo.connection.getBookFromISBN(recommendedBook);
+                        books.add(act); 
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(DiscoverPage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+                    
+                case "Favorites":
+                    books = CStaticInfo.connection.getUserFavBooks(idUser);
+                    break;
+                    
+                case "Women":
+                    books = CStaticInfo.connection.getBooksByGenre("Women");
+                    break;
+                    
+                case "Juvenile fiction":
+                    books = CStaticInfo.connection.getBooksByGenre("Juvenile fiction");
+                    break;
+                    
+                case "History":
+                    books = CStaticInfo.connection.getBooksByGenre("History");
+                    break;
+                    
+                case "Biography":
+                    books = CStaticInfo.connection.getBooksByGenre("Biography");
+                    break;
+                        
+                case "Social life and customs":
+                    books = CStaticInfo.connection.getBooksByGenre("Social life and customs");
+                    break;
+            }
+            Pane main = showBooksMatrix(books);
+            main.relocate(180, 110);
+            contenido.getChildren().add(main);
+        };
+        
+        cboxTypes.relocate(450, 15);
+        cboxTypes.setStyle("-fx-font-size:15px;");
+        cboxTypes.setOnAction(editHandler2);
+        contenido.getChildren().add(cboxTypes);
+        addComponent(contenido);
+        
+        Pane main = showBooksMatrix(new ArrayList());
+        main.relocate(180, 110);
+        contenido.getChildren().add(main);
+        
+        
         
     }
-
+    
+    
     /**
-     * @param args the command line arguments
+     * This method is used for adding an specific element to page content
+     * @param element added element
      */
-    public static void main(String[] args) {
-        launch(args);
+    private void addComponent(Node element)
+    {
+        navDrawer.getContent().getChildren().add(element);
     }
-
-   class Book extends RecursiveTreeObject<Book>{
-		
-                SimpleStringProperty isbn, book_name, authors, genres, average;
-
-		public Book(CBook newBook) {
-			this.isbn = new SimpleStringProperty(newBook.isbn) ;
-			this.book_name = new SimpleStringProperty(newBook.getBook_name());
-			this.authors = new SimpleStringProperty(newBook.getBook_authorsStr());
-                        this.genres = new SimpleStringProperty(newBook.getBook_genre());
-                        this.average = new SimpleStringProperty(newBook.getBook_StrRating());
-		}
-
-	}
-
+    
+    public Stage getStage()
+    {
+        this.initStyle(StageStyle.UNDECORATED);        
+        createView();
+        addComponents();
+        this.page.setCenter(this.navDrawer);
+        this.page.setTop(this.toolBar);
+        Scene scene = new Scene(this.page, 1100, 700);
+        scene.getStylesheets().add("/style/jfoenix-components.css");
+        this.setScene(scene);
+        return this;
+    }
+    
+    public Pane getContent()
+    {
+        createView();
+        addComponents();
+        return navDrawer.getContent();
+    }
+    
+    
+    
+    
+    
+    
+    
 }
+
+

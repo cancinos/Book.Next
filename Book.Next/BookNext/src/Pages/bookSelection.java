@@ -64,6 +64,7 @@ public class bookSelection extends Stage {
     
     public bookSelection()
     {
+        CStaticInfo.top3Books = new ArrayList();
         loggedUser = CStaticInfo.loggedUser;
         allBooks = CStaticInfo.connection.getBooks();
         page.setPrefSize(1000, 720);
@@ -89,6 +90,11 @@ public class bookSelection extends Stage {
         save_icon.relocate(1000,550);
         save_icon.setVisible(false);
         save_icon.setOnAction((ActionEvent actionEvent) -> {
+            List<CBook> top3 = CStaticInfo.top3Books;
+            top3.stream().forEach((book) -> {
+                int id = CStaticInfo.connection.getUserId(loggedUser.gerUsername());
+                CStaticInfo.connection.setUserBook(id, book.isbn);
+            });
             EditProfile mainPage = new EditProfile(); //Verificar que sea la lista de sus libros
             mainPage.setSize(1100, 700);
             Stage profileStage = mainPage.getStage();
