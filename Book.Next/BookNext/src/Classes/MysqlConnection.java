@@ -488,13 +488,37 @@ public class MysqlConnection {
 
     //</editor-fold>
     //<editor-fold desc="User_Books Querys">
+    public boolean doesThisRelationExists(int id, String ISBN)
+    {
+        boolean exists = false;
+        try {
+            if (makeStatement() != null) {
+
+                PreparedStatement query = null;
+                query = connection.prepareStatement("SELECT * FROM user_book WHERE id = ? AND isbn = ?");
+
+                query.setInt(1, id);
+                query.setString(2, ISBN);
+                ResultSet result = null;
+                result = query.executeQuery();
+                if (result.next()) {
+                     exists = true;
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return exists;
+    }
+    
     public boolean setUserBook(int id, String ISBN) {
         boolean add = false;
         try {
             if (makeStatement() != null) {
 
                 PreparedStatement query = null;
-                query = connection.prepareStatement("Insert into user_book(isbn,id,user_rating,user_liked,user_view,user_saved) values (?,?,0,0,0,0)");
+                query = connection.prepareStatement("Insert into user_book(isbn,id,user_rating,user_liked,user_view,user_saved) values (?,?,0,0,1,0)");
 
                 query.setString(1, ISBN);
                 query.setInt(2, id);;
@@ -559,14 +583,13 @@ public class MysqlConnection {
         return add;
     }
 
-    public boolean updateView(int id, String ISBN, int view) {
+    public boolean updateView(int id, String ISBN) {
         boolean add = false;
 
         try {
             if (makeStatement() != null) {
 
-                PreparedStatement query = null;
-
+                PreparedStatement query;
                 query=connection.prepareStatement("UPDATE user_book SET user_view = user_view+1 Where id = ? AND isbn = ?");
                 
                 query.setInt(1, id);
@@ -624,9 +647,9 @@ public class MysqlConnection {
                 
                 ResultSet result = null;
                 result = query.executeQuery();
-                if (result.getInt("user_saved") > 0) {
+                result.next();
+                if (result.getInt("user_saved") == 1)
                     add = true;
-                }
             }
 
         } catch (SQLException ex) {
@@ -635,32 +658,32 @@ public class MysqlConnection {
         return add;
     }
     
-      public boolean isThisBookFavorite(int id, String ISBN) {
-        boolean add = false;
+    public boolean isThisBookFavorite(int id, String ISBN) {
+      boolean add = false;
 
-        try {
-            if (makeStatement() != null) {
+      try {
+          if (makeStatement() != null) {
 
-                PreparedStatement query = null;
+              PreparedStatement query = null;
 
-                query = connection.prepareStatement("Select user_liked from user_book where id = ? AND isbn = ?");
+              query = connection.prepareStatement("Select user_liked from user_book where id = ? AND isbn = ?");
 
-                
-                query.setInt(1, id);
-                query.setString(2, ISBN);
-                
-                ResultSet result = null;
-                result = query.executeQuery();
-                if (result.getInt("user_liked") > 0) {
+
+              query.setInt(1, id);
+              query.setString(2, ISBN);
+
+              ResultSet result = null;
+              result = query.executeQuery();
+              result.next();
+                if (result.getInt("user_liked") == 1)
                     add = true;
-                }
-            }
+          }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return add;
-    }
+      } catch (SQLException ex) {
+          Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return add;
+  }
     
     //</editor-fold> 
 

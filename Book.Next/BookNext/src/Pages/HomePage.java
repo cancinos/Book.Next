@@ -151,7 +151,7 @@ Popular categorie: Social life and customs
         parentScroll.setPrefSize(980, 650);
         String[] allGenres = {"History", "Biography", "Juvenile fiction", "Social life and customs", "Women"};
         VBox allScrolls = new VBox(1);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             Pane actPane = new Pane();
             actPane.setPrefSize(980,310);
             actPane.setStyle("-fx-background-color: TRANSPARENT;");

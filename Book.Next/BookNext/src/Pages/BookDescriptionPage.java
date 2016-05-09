@@ -70,6 +70,8 @@ public class BookDescriptionPage extends Stage{
     {
         actUser = CStaticInfo.loggedUser;
         numUser = CStaticInfo.connection.getUserId(actUser.gerUsername());
+        
+        //doesThisRelationExists(int id, String ISBN)
     }
     /**
      * This method creates stage's navigation Drawer & toolbar
@@ -106,8 +108,15 @@ public class BookDescriptionPage extends Stage{
     
     public void addComponents(CBook book)
     {
-        //saved = CStaticInfo.connection.isThisBookSaved(numUser, book.getBookId()); -OJO-
-        //favorite = CStaticInfo.connection.isThisBookFavorite(numUser, book.getBookId()); -OJO-
+        boolean exists = CStaticInfo.connection.doesThisRelationExists(numUser, book.isbn);
+        if (!exists) //means that this book-user relation is new
+        {
+            CStaticInfo.connection.setUserBook(numUser, book.isbn);
+        } else
+            CStaticInfo.connection.updateView(numUser, book.isbn); //view++
+        
+        saved = CStaticInfo.connection.isThisBookSaved(numUser, book.getBookId()); 
+        favorite = CStaticInfo.connection.isThisBookFavorite(numUser, book.getBookId()); 
         infoCard = new giantCard(700,550);
         infoCard.createCard();
         infoCard.relocate(50, 50);
@@ -119,7 +128,7 @@ public class BookDescriptionPage extends Stage{
         iv1.relocate(20, 20);
         
         Icon favHeart;
-        if (favorite == false) // -OJO- tomar de bdd este dato
+        if (favorite == false)
             favHeart = new Icon("HEART_ALT", "3em"); else
             favHeart = new Icon("HEART", "3em");
         
@@ -127,12 +136,17 @@ public class BookDescriptionPage extends Stage{
         favHeart.setTextFill(Color.web("#FF5252"));
         favHeart.relocate(610, 30);
         favHeart.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{    
-            // -OJO- cambiar a bdd este dato
             favorite = !favorite;
             if (favorite)
-                favHeart.icon(AwesomeIcon.HEART); else
+            {
+                favHeart.icon(AwesomeIcon.HEART);
+                CStaticInfo.connection.updateLiked(numUser, book.isbn, 1);
+            } else
+            {
                 favHeart.icon(AwesomeIcon.HEART_ALT);
-
+                CStaticInfo.connection.updateLiked(numUser, book.isbn, 0);
+            }
+            
         }); 
         
         
