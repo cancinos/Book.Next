@@ -46,7 +46,7 @@ public class DatabaseSetup {
                 contents[i] = tokens.get(i);
             }
             //String[] contents = line.split("\\|-|");
-            book.setBookId(cont);
+            book.setBookId(Integer.toString(cont));
             book.isbn = contents[0];
             book.setBook_name(contents[1]);
 

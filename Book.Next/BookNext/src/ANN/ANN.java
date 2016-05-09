@@ -64,15 +64,16 @@ public class ANN {
      */
     public LinkedList<String> getRecommendations(int id){
         
+        
         LinkedList<String> recommendedIds = new LinkedList<>();
         //get user favorite categories
         
+        inputs = new double[1][10];
         for (String category : cats) {
             setInputsUserByCat(category, connection.getCategoryPorcent(id, category));
         }
         //inputs[0][5] = 1; inputs[0][6] = 0; inputs[0][7] = 1; inputs[0][8] = 0; inputs[0][9] = 0;
         
-        inputs = new double[1][10];
         //get all the books on the database and iterate over it
         for (CBook book : connection.getBooks()) {
             String[] categories = book.getBook_genre().split(",");
@@ -89,25 +90,25 @@ public class ANN {
     }
     
     public void setInputsUserByCat(String category, double threshold){
-        int value = 0;
+        double value = 0;
         if (threshold > 0.6) {
             value = 1;
         }
         switch(category){
             case("Fiction"):
-                inputs[0][0] = value;
+                inputs[0][5] = value;
                 break;
             case("History"):
-                inputs[0][1] = value;
+                inputs[0][6] = value;
                 break;
             case("Biography"):
-                inputs[0][2] = value;
+                inputs[0][7] = value;
                 break;
             case("Juvenile fiction"):
-                inputs[0][3] = value;
+                inputs[0][8] = value;
                 break;
             case("Social life and customs"):
-                inputs[0][4] = value;
+                inputs[0][9] = value;
                 break;
                
         }
