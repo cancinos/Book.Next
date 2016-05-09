@@ -12,6 +12,7 @@ import UI.ListCards;
 import UI.NavigationDrawer;
 import UI.mainToolbar;
 import UI.textField;
+import booknext.BookNext;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
@@ -181,6 +182,13 @@ public class EditProfile extends Stage {
         JFXButton btnLogOut = new JFXButton("LOG OUT");
         btnLogOut.setStyle("-fx-font-size: 14; -fx-text-fill:WHITE; -fx-background-color: " + accentColor + ";");
         btnLogOut.relocate(180, 570);
+        EventHandler<ActionEvent> logOutHandler = (ActionEvent actionEvent) -> {
+            LandingPage logPage = new LandingPage();
+            Stage logStage = logPage.getStage();
+            logStage.show();
+            this.getScene().getWindow().hide();
+        };
+        btnLogOut.setOnAction(logOutHandler);
         
         Icon editIcon = new Icon("PENCIL", "1em");
         editIcon.setTextFill(Color.WHITE);

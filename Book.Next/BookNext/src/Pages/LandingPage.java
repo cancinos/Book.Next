@@ -1,16 +1,68 @@
-package booknext;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Pages;
 
-import javafx.application.Application;
+import Classes.CBook;
+import Classes.CStaticInfo;
+import Classes.CUser;
+import Classes.ISBNConverter;
+import Classes.MysqlConnection;
+import NaiveBayes.NaiveBayes;
+import UI.giantCard;
+import UI.textField;
+import booknext.BookNext;
+import booknext.DatabaseSetup;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleNode;
+import de.jensd.fx.fontawesome.Icon;
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import Pages.LandingPage;
+import javafx.stage.StageStyle;
+import org.json.JSONException;
 
 /**
  *
  * @author jcdur
  */
-public class BookNext extends Application {
-<<<<<<< HEAD
-
+public class LandingPage extends Stage{
+ 
     // <editor-fold defaultstate="collapsed" desc="Global variables">
     private Desktop desktop = Desktop.getDesktop();
     private Pane page = new Pane();
@@ -410,22 +462,18 @@ public class BookNext extends Application {
 
         if (user.getText().length() > 3 & pass.getText().length() > 4) {
             CUser uss = connection.consultUser(user.getText());
-            if (uss != null && pass.getText().equals(uss.getUser_password())) { try {
-                //Entering here means that the user was succesfully logged
-                // try {
-                CStaticInfo.loggedUser = uss;
-                ANN a = new ANN();
-                a.getRecommendations(2);
-                EditProfile mainPage = new EditProfile();
-                Stage loginStage = mainPage.getStage();
-                loginStage.show();
-                thisStage.getScene().getWindow().hide();
+            if (uss != null && pass.getText().equals(uss.getUser_password())) { //Entering here means that the user was succesfully logged
+               // try {
+                    CStaticInfo.loggedUser = uss;
+                    //ANN a = new ANN();
+                    //a.getRecommendations(2);
+                    EditProfile mainPage = new EditProfile();
+                    Stage loginStage = mainPage.getStage();
+                    loginStage.show();
+                    thisStage.close();
                 //} catch (SQLException ex) {
-                //  Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+                  //  Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
                 //}
-                } catch (SQLException ex) {
-                    Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
-                }
             } else {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Error");
@@ -500,25 +548,42 @@ public class BookNext extends Application {
 
     // </editor-fold>
     
-=======
-        
->>>>>>> f61b21c3e1a40807fecd8cb6743eec7996389f53
-    @Override
-    public void start(Stage primaryStage) {
-        
-        LandingPage logPage = new LandingPage();
-        Stage newStage = logPage.getStage();
-        newStage.show();
-        primaryStage.close();
+    private String dateToString(LocalDate date)
+    {
+        String fixedDate;
+        fixedDate = String.valueOf(date.getDayOfMonth());
+        fixedDate += "/" + String.valueOf(date.getMonthValue());
+        fixedDate += "/" + String.valueOf(date.getYear());
+        return fixedDate;
     }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     
+    private LocalDate stringToDate(String strDate) {
+        String[] nums = strDate.split("/");
+        return LocalDate.of(Integer.parseInt(nums[2]), Integer.parseInt(nums[1]), Integer.parseInt(nums[0]));
+    }
+    
+    public Stage getStage()
+    {
+        thisStage = this;
+        try {
 
+            connection = new MysqlConnection();
+            connection.connect();
+            CStaticInfo.connection = connection;
+
+            this.initStyle(StageStyle.UNDECORATED);
+            page.setStyle("-fx-background-color:#455A64");
+            Scene scene = new Scene(page, 700, 700);
+            scene.getStylesheets().add("/style/jfoenix-components.css");
+            this.setScene(scene);
+            this.setTitle("FXML is Simple");
+            loginPic();
+            createToggle(this);
+            createTabs(this);
+            createView(); //Contains all the components
+        } catch (SQLException ex) {
+            Logger.getLogger(BookNext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return this;
+    }
 }
