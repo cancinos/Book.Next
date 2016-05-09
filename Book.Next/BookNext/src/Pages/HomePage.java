@@ -14,7 +14,9 @@ import UI.VCard;
 import UI.mainToolbar;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
@@ -129,7 +131,7 @@ public class HomePage extends Stage{
     private ScrollPane addGenreBooks(String genre)
     {
         ListCards actScroll = new ListCards();
-        List<CBook> actBooks = CStaticInfo.connection.getBooksByGenre(genre);
+        List<CBook> actBooks = randomList(CStaticInfo.connection.getBooksByGenre(genre));
         actScroll.createHorizontalList(actBooks);
         return actScroll;
     }
@@ -158,6 +160,15 @@ Popular categorie: Juvenile fiction
 Popular categorie: Social life and customs
 
     */
+    
+    private List<CBook> randomList(List<CBook> list)
+    {
+        long seed = System.nanoTime();
+        Collections.shuffle(list, new Random(seed));
+        Collections.shuffle(list, new Random(seed));
+        return list;
+    }
+    
     private void addComponents() throws SQLException
     {
         /**
@@ -182,7 +193,7 @@ Popular categorie: Social life and customs
         Label lblRec = new Label("Recommended for you") ;
         lblRec.setStyle("-fx-font-size:20px");
         lblRec.relocate(5, 5);
-        ScrollPane recScroll = addRecommended(recommendedBooks);
+        ScrollPane recScroll = addRecommended(randomList(recommendedBooks));
         recScroll.relocate(5, 35);
         recPane.getChildren().addAll(lblRec, recScroll);
         allScrolls.getChildren().add(recPane);

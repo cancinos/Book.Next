@@ -47,11 +47,15 @@ public class VCard extends Pane{
         this.setPrefSize(width, height);
         this.setStyle("-fx-background-color:WHITE;");
         this.setEffect(new DropShadow(10d, 0d, 0d, Color.web("#607D8B")));
+        
         strImage = book.getBook_image();
         strName = book.getBook_name();
         strAuthor = book.getBook_authorsStr();
         strAuthor = strAuthor.substring(0, strAuthor.length() - 1);
-        ImageView background = new ImageView(new Image(strImage));
+        ImageView background;
+        if (strImage.compareTo("/Icons/No_Cover.jpg") == 0)
+            background = new ImageView(new Image(strImage)); else
+            background = new ImageView(new Image("/BookCovers/" + book.isbn + ".jpg"));
         background.setFitHeight(198);
         background.setFitWidth(128);
         background.relocate(0, 0);
@@ -95,7 +99,10 @@ public class VCard extends Pane{
         strName = book.getBook_name();
         strAuthor = book.getBook_authorsStr();
         strAuthor = strAuthor.substring(0, strAuthor.length() - 1);
-        ImageView background = new ImageView(new Image(strImage));
+        ImageView background;
+        if (strImage.compareTo("/Icons/No_Cover.jpg") == 0)
+            background = new ImageView(new Image(strImage)); else
+            background = new ImageView(new Image("/BookCovers/" + book.isbn + ".jpg"));
         background.setFitHeight(198);
         background.setFitWidth(128);
         background.relocate(0, 0);

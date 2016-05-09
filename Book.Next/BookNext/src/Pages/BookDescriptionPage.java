@@ -41,6 +41,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -124,7 +125,11 @@ public class BookDescriptionPage extends Stage{
         infoCard.relocate(50, 50);
         
         // <editor-fold defaultstate="collapsed" desc="Book basic info">
-        ImageView iv1 = new ImageView(new Image(book.getBook_image()));
+        String strImage = book.getBook_image();
+        ImageView iv1;
+        if (strImage.compareTo("/Icons/No_Cover.jpg") == 0)
+            iv1 = new ImageView(new Image(strImage)); else
+            iv1 = new ImageView(new Image("/BookCovers/" + book.isbn + ".jpg"));
         iv1.setFitHeight(198);
         iv1.setFitWidth(128);
         iv1.relocate(20, 20);
@@ -264,7 +269,7 @@ public class BookDescriptionPage extends Stage{
            });  
         // </editor-fold>
         
-        HBox keyWords = addKeyWords(book);
+        FlowPane keyWords = addKeyWords(book);
         
         infoBox.getChildren().addAll(lblName, moreInfo, keyWords);
         infoBox.setSpacing(10);
@@ -298,14 +303,39 @@ public class BookDescriptionPage extends Stage{
         addComponent(list.getList());
     }
     
-    private HBox addKeyWords(CBook book)
+    private String deleteWirdGenres(String genres)
     {
-        HBox hbox = new HBox(10);
-        List<String> keyWords = new ArrayList();
-        keyWords.add("gunter");
-        keyWords.add("glieben");
-        keyWords.add("glauchen");
-        keyWords.add("globen");
+        while (genres.endsWith(","))
+        {
+            genres = genres.substring(0, genres.length() - 1);
+        }
+        
+        String[] separated = genres.split(", ");
+        String allGenres = "";
+        for (String oneBook : separated)
+        {
+            switch (oneBook.toLowerCase())
+            {
+                case "women": 
+                case "history":
+                case "biography":
+                case "juvenile fiction":
+                case "social life and customs":
+                    allGenres += oneBook + ",";
+            }
+                    
+        }
+        return allGenres.substring(0, allGenres.length() - 1);
+    }
+    
+    private FlowPane addKeyWords(CBook book)
+    {
+        FlowPane hbox = new FlowPane();
+        hbox.setMaxSize(400, 150);
+        hbox.setVgap(10);
+        hbox.setHgap(5);
+        String categories = deleteWirdGenres(book.getBook_genre()); 
+        String[] keyWords = categories.split(",");
         
         Label newHashtag;
         for (String keyWord : keyWords) {
@@ -313,6 +343,7 @@ public class BookDescriptionPage extends Stage{
             newHashtag.setStyle("-fx-background-color: #C4DCFF; -fx-text-fill: #5E69FF; -fx-font-size:16px;");
             hbox.getChildren().add(newHashtag);
         }
+        
         return hbox;
     }
     

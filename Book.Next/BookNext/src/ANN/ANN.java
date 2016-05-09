@@ -184,7 +184,7 @@ public class ANN {
                     outputLayer.add(neuron);
                 }
             } else {
-                System.out.println("!Error NeuralNetwork init");
+
             }
         }
  
@@ -336,15 +336,15 @@ public class ANN {
                 applyBackpropagation(expectedOutputs[p]);
             }
         }
-             printResult();
+             //printResult();
          
-        System.out.println("Sum of squared errors = " + error);
-        System.out.println("##### EPOCH " + i+"\n");
+//        System.out.println("Sum of squared errors = " + error);
+//        System.out.println("##### EPOCH " + i+"\n");
         if (i == maxSteps) {
-            System.out.println("!Error training try again");
+//            System.out.println("!Error training try again");
         } else {
-            printAllWeights();
-            printWeightUpdate();
+           // printAllWeights();
+           // printWeightUpdate();
         }
     }
  

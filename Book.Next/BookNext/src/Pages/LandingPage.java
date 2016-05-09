@@ -22,11 +22,17 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
 import java.awt.Desktop;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -548,6 +554,10 @@ public class LandingPage extends Stage{
 
     // </editor-fold>
     
+    public LandingPage()
+    {
+    }
+    
     private String dateToString(LocalDate date)
     {
         String fixedDate;
@@ -562,6 +572,35 @@ public class LandingPage extends Stage{
         return LocalDate.of(Integer.parseInt(nums[2]), Integer.parseInt(nums[1]), Integer.parseInt(nums[0]));
     }
     
+    private void deployAlgorithm() throws MalformedURLException, IOException
+    {
+        List<CBook> allBooks = CStaticInfo.connection.getBooks();
+        URL url;
+        int cont = 1;
+        for (CBook book : allBooks) {
+            if (book.getBook_image().compareTo("/Icons/No_Cover.jpg") != 0 ) 
+            {
+                url = new URL(book.getBook_image());
+                InputStream in = new BufferedInputStream(url.openStream());
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
+                int n = 0;
+                while(-1 != (n = in.read(buf)))
+                {
+                    out.write(buf, 0, n);
+                }
+                out.close();
+                in.close();
+                byte[] response = out.toByteArray();
+                FileOutputStream fos = new FileOutputStream("C:\\Users\\jcdur\\Desktop\\BookCovers\\" + book.isbn + ".jpg");
+                fos.write(response);
+                fos.close();
+                System.out.println("descargando imagen #: " + cont);
+                cont++;
+            }
+        }
+    }
+    
     public Stage getStage()
     {
         thisStage = this;
@@ -570,7 +609,7 @@ public class LandingPage extends Stage{
             connection = new MysqlConnection();
             connection.connect();
             CStaticInfo.connection = connection;
-
+            
             this.initStyle(StageStyle.UNDECORATED);
             page.setStyle("-fx-background-color:#455A64");
             Scene scene = new Scene(page, 700, 700);
