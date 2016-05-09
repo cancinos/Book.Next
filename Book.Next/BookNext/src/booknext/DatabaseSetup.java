@@ -46,7 +46,7 @@ public class DatabaseSetup {
                 contents[i] = tokens.get(i);
             }
             //String[] contents = line.split("\\|-|");
-            book.setBookId(cont);
+            book.setBookId(contents[0]);
             book.isbn = contents[0];
             book.setBook_name(contents[1]);
 
@@ -89,6 +89,7 @@ public class DatabaseSetup {
             ignoredGenres.add("OverDrive");
             ignoredGenres.add("Large type books");
             ignoredGenres.add("Popular Print Disabled Books");
+            ignoredGenres.add("Fiction");
 
             if (shouldInsert) {
                 usedBooks.add(book);

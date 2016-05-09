@@ -55,9 +55,9 @@ public class ANN {
      * @param id
      * @return 
      */
-    public LinkedList<Long> getRecommendations(int id){
+    public LinkedList<String> getRecommendations(int id){
         
-        LinkedList<Long> recommendedIds = new LinkedList<>();
+        LinkedList<String> recommendedIds = new LinkedList<>();
         //get user favorite categories
         
         //example user actions 

@@ -19,16 +19,23 @@ import java.util.logging.Logger;
 public class NaiveBayes {
 
     //Tables used for each content classification
-
     String tableDescriptions = "description_bayes";
     String tableNames = "names_bayes";
     String tableAuthors = "authors_bayes";
     String tablePublishers = "publishers_bayes";
+    List<String> usedGenres = new ArrayList();
+
+    public NaiveBayes() {
+        usedGenres.add("History");
+        usedGenres.add("Biography");
+        usedGenres.add("Juvenile fiction");
+        usedGenres.add("Social life and customs");
+        usedGenres.add("Women");
+    }
 
     private int genreToInt(String genre) {
-        ISBNConverter ic = new ISBNConverter();
-        for (int i = 0; i < ic.genres.length; i++) {
-            if (genre.equals(ic.genres[i])) {
+        for (int i = 0; i < usedGenres.size(); i++) {
+            if (genre.equals(usedGenres.get(i))) {
                 return i;
             }
         }
@@ -42,37 +49,108 @@ public class NaiveBayes {
         String publisher = book.getBook_publisher();
 
         TextManagement tm = new TextManagement();
-        if(description == null)
+        if (description == null) {
             description = "";
+        }
         List<String> descriptionWords = tm.tokenize(description);
-        /*List<String> nameWords = tm.tokenize(name);
+        List<String> nameWords = tm.tokenize(name);
         List<String> authorsWords = tm.tokenize(authors);
-        List<String> publisherWords = tm.tokenize(publisher);*/
+        List<String> publisherWords = tm.tokenize(publisher);
 
         String[] genres = book.getBook_genre().split(",");
-        
-        for (String descriptionWord : descriptionWords) {
+        List<String> usefulGenres = new ArrayList();
+
+        for (String genre : genres) {
+            if (usedGenres.contains(genre)) {
+                usefulGenres.add(genre);
+            }
+        }
+
+        iterateTrain(descriptionWords, usefulGenres, tableDescriptions, connection);
+        System.out.println("Finished training descriptions");
+        iterateTrain(nameWords, usefulGenres, tableNames, connection);
+        System.out.println("Finished training names");
+        iterateTrain(authorsWords, usefulGenres, tableAuthors, connection);
+        System.out.println("Finished training authors");
+        iterateTrain(publisherWords, usefulGenres, tablePublishers, connection);
+        System.out.println("Finished training publishers");
+    }
+
+    private void iterateTrain(List<String> words, List<String> usefulGenres, String table, MysqlConnection connection) {
+        for (String descriptionWord : words) {
             descriptionWord = descriptionWord.toLowerCase();
-            for (String genre : genres) {
-                connection.addWordToBayes(genreToInt(genre), descriptionWord, tableDescriptions);
+            for (String genre : usefulGenres) {
+                connection.addWordToBayes(genreToInt(genre), descriptionWord, table);
             }
         }
     }
-    
-    public void classifyBook(CBook book, MysqlConnection connection){
+
+    public void classifyBook(CBook book, MysqlConnection connection) {
         TextManagement tm = new TextManagement();
-        int[] likelihood = genresLikelihoodForWords(tm.tokenize(book.getBook_description()), connection, tableDescriptions);
+        List<double[]> allLikelihoods = new ArrayList();
+
+        List<String> authorsWords = tm.tokenize(book.getBook_authorsStr());
+        if (authorsWords.size() > 0) {
+            double[] likelihoodAuthors = genresLikelihoodForWords(authorsWords, connection, tableAuthors);
+            allLikelihoods.add(likelihoodAuthors);
+        }
+
+        List<String> descriptionWords = tm.tokenize(book.getBook_description());
+        if (authorsWords.size() > 0) {
+            double[] likelihoodDescription = genresLikelihoodForWords(descriptionWords, connection, tableDescriptions);
+            allLikelihoods.add(likelihoodDescription);
+        }
+
+        List<String> publisherWords = tm.tokenize(book.getBook_publisher());
+        if (authorsWords.size() > 0) {
+            double[] likelihoodPublisher = genresLikelihoodForWords(publisherWords, connection, tablePublishers);
+            allLikelihoods.add(likelihoodPublisher);
+        }
+
+        List<String> nameWords = tm.tokenize(book.getBook_name());
+        {
+            double[] likelihoodNames = genresLikelihoodForWords(nameWords, connection, tableNames);
+            allLikelihoods.add(likelihoodNames);
+        }
+        
+        double[] globalLikelihood = allLikelihoods.get(0);
+        for (double[] allLikelihood : allLikelihoods) {
+            for (int i = 1; i < allLikelihood.length; i++) {
+                globalLikelihood[i] = (double)globalLikelihood[i] * (double)allLikelihood[i];
+            }
+        }
+        
+        double[] finalProbabilities = new double[5];
+        double totalLikelihood = (double)0;
+        for (int i = 0; i < globalLikelihood.length; i++) {
+            totalLikelihood += globalLikelihood[i];
+        }
+        for (int i = 0; i < finalProbabilities.length; i++) {
+            finalProbabilities[i] = globalLikelihood[i] / totalLikelihood;
+            
+        }
+        int bla = 0;
     }
-    
-    private int[] genresLikelihoodForWords(List<String> words, MysqlConnection connection, String table){
+
+    private double[] genresLikelihoodForWords(List<String> words, MysqlConnection connection, String table) {
         int[] genres = {0, 0, 0, 0, 0};
-        int[] totals = connection.getTotalsForGenre(tableDescriptions);
+        int[] totals = connection.getTotalsForGenre(table);
+        int vocabularyTotal = connection.getVocabularyTotal(table);
         for (String word : words) {
+            word = word.toLowerCase();
             int[] wordGenres = connection.getGenresForWord(word, table);
             for (int i = 0; i < genres.length; i++) {
                 genres[i] += wordGenres[i];
             }
         }
-        return genres;
+        double[] probabilities = new double[5];
+        for (int i = 0; i < probabilities.length; i++) {
+            if (genres[i] == 0) { //Laplace smoothing
+                probabilities[i] = (double)(genres[i] + 1) / (double)(totals[i] + vocabularyTotal);
+            } else {
+                probabilities[i] = (double)genres[i] / (double)totals[i];
+            }
+        }
+        return probabilities;
     }
 }

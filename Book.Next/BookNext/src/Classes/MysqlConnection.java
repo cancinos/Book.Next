@@ -135,16 +135,31 @@ public class MysqlConnection {
         try {
             q = connection.prepareStatement(squery);
             ResultSet result = q.executeQuery(squery);
-            if (!result.next()) {
-                result.previous();
+            if (result.next()) {
                 for (int i = 0; i < genres.length; i++) {
-                    genres[i] = result.getInt(i + 1);
+                    genres[i] = result.getInt(i + 2);
                 }
             }
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
         return genres;
+    }
+    
+    public int getVocabularyTotal(String table) {
+        int total = -1;
+        String squery = "SELECT COUNT(*) FROM " + table;
+        PreparedStatement q;
+        try {
+            q = connection.prepareStatement(squery);
+            ResultSet result = q.executeQuery(squery);
+            if (result.next()) {
+                total = result.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
     }
 
     public int[] getTotalsForGenre(String table) {
@@ -154,10 +169,9 @@ public class MysqlConnection {
         try {
             q = connection.prepareStatement(squery);
             ResultSet result = q.executeQuery(squery);
-            if (!result.next()) {
-                result.previous();
+            if (result.next()) {
                 for (int i = 0; i < genres.length; i++) {
-                    genres[i] = result.getInt(i);
+                    genres[i] = result.getInt(i + 1);
                 }
             }
         } catch (SQLException ex) {
