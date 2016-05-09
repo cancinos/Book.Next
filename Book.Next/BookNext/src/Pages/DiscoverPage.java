@@ -77,6 +77,9 @@ public class DiscoverPage extends Stage {
             toolBar.getHamburger().addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
                             navDrawer.toggle(navDrawer.getSideMenu());
                     });
+            toolBar.getClose().addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+                            this.getScene().getWindow().hide();
+                    });
         // </editor-fold>
     }
     

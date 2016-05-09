@@ -16,7 +16,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -66,8 +68,16 @@ public class bookSelection extends Stage {
     {
         CStaticInfo.top3Books = new ArrayList();
         loggedUser = CStaticInfo.loggedUser;
-        allBooks = CStaticInfo.connection.getBooks();
+        allBooks = randomList(CStaticInfo.connection.getBooks());
         page.setPrefSize(1000, 720);
+    }
+    
+    private List<CBook> randomList(List<CBook> list)
+    {
+        long seed = System.nanoTime();
+        Collections.shuffle(list, new Random(seed));
+        Collections.shuffle(list, new Random(seed));
+        return list;
     }
     
     private void showUserLibrary()

@@ -7,21 +7,24 @@ package UI;
 
 import com.jfoenix.controls.JFXToggleNode;
 import de.jensd.fx.fontawesome.Icon;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 /**
  *
  * @author jcdur
  */
-public class mainToolbar extends HBox{
+public class mainToolbar extends Pane{
     
     double width, height;
     public static String style, title;
-    private JFXToggleNode hamburger;
+    private JFXToggleNode hamburger, close;
     public static Label lblTitle;
     
     public mainToolbar(double width, double height, String style, String title){
@@ -30,7 +33,8 @@ public class mainToolbar extends HBox{
         this.style = style;
         this.title = title;
         this.hamburger = new JFXToggleNode();
-        //this.relocate(0,0);
+        this.close  = new JFXToggleNode();
+        
     }
     
     public void createToolbar()
@@ -40,9 +44,11 @@ public class mainToolbar extends HBox{
         this.setStyle(style);
         this.setMinHeight(height);
         this.setEffect(new DropShadow(5d, 0d, +2d, Color.GRAY));
-        this.setAlignment(Pos.CENTER_LEFT);
+        //this.setAlignment(Pos.CENTER_LEFT);
         setHamburger();
         setTitle();
+        setClose();
+
     }
     
     public void setHamburger()
@@ -54,7 +60,21 @@ public class mainToolbar extends HBox{
         hamburger.setGraphic(value);
         hamburger.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
         hamburger.setPrefSize(60, 60);
+        hamburger.relocate(0, 0);
         this.getChildren().add(hamburger);
+    }
+    
+    public void setClose()
+    {   
+        Icon value = new Icon("CLOSE", "2em");
+        value.setTextFill(Color.WHITE);
+        value.setPrefSize(30, 30);
+        value.setAlignment(Pos.CENTER);
+        close.setGraphic(value);
+        close.setStyle("-fx-background-radius: 4em; -fx-background-color:TRANSPARENT;");
+        close.setPrefSize(60, 60);
+        close.relocate(1050, 0);
+        this.getChildren().add(close);
     }
     
     public void setTitle()
@@ -64,6 +84,7 @@ public class mainToolbar extends HBox{
         lblTitle.setAlignment(Pos.TOP_CENTER);
         lblTitle.setTextFill(Color.web("#FFFFFF"));
         lblTitle.setStyle("-fx-font-size: 22; -fx-padding: 12 0 0 0;");
+        lblTitle.relocate(70, 5);
         this.getChildren().add(lblTitle);
     }
     
@@ -72,4 +93,8 @@ public class mainToolbar extends HBox{
         return this.hamburger;
     }
     
+    public JFXToggleNode getClose()
+    {
+        return this.close;
+    }
 }

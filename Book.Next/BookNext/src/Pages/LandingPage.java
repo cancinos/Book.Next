@@ -520,7 +520,8 @@ public class LandingPage extends Stage{
                 alert.showAndWait();
 
             } else {
-                uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), date.getValue().toString().replace('-', '/'), imageURL, country.getText());
+                String strDate = dateToString(date.getValue());
+                uss = new CUser(new_user.getText(), new_name.getText(), new_pass.getText(), strDate, imageURL, country.getText());
                 boolean validate = connection.addNewUser(uss.gerUsername(), uss.getUser_fullName(), uss.getUser_birthday(), uss.getUser_password(),
                         uss.getUser_image(), uss.getUser_country());
                 validate = true;
@@ -561,9 +562,9 @@ public class LandingPage extends Stage{
     private String dateToString(LocalDate date)
     {
         String fixedDate;
-        fixedDate = String.valueOf(date.getDayOfMonth());
+        fixedDate = String.valueOf(date.getYear());
+        fixedDate += "/" + String.valueOf(date.getDayOfMonth());
         fixedDate += "/" + String.valueOf(date.getMonthValue());
-        fixedDate += "/" + String.valueOf(date.getYear());
         return fixedDate;
     }
     
