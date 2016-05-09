@@ -35,13 +35,14 @@ public class ANN {
     final double learningRate = 0.1f;
     final double momentum = 0.07f;
     
-    double inputs[][] = new double[1][10];
+    double inputs[][]; 
     final double expectedOutputs[][] = new double[1][1];
     double resultOutputs[][] = new double[1][1];
     double output[];
  
     // for weight update all
     final HashMap<String, Double> weightUpdate = new HashMap<>();
+    String cats[] = {"Fiction", "History", "Biography", "Juvenile fiction", "Social life and customs"};
     MysqlConnection connection;
     
     public ANN() throws SQLException{
@@ -51,30 +52,88 @@ public class ANN {
  
     
     /**
+     * Popular category: Fiction (1)
+     * Popular category: History (2)
+     * Popular category: Biography (3)
+     * Popular category: Juvenile fiction (4)
+     * Popular category: Social life and customs (5)
+     * 
      * 
      * @param id
      * @return 
      */
     public LinkedList<String> getRecommendations(int id){
         
+        
         LinkedList<String> recommendedIds = new LinkedList<>();
         //get user favorite categories
         
-        //example user actions 
-        inputs[0][5] = 1; inputs[0][6] = 0; inputs[0][7] = 1; inputs[0][8] = 0; inputs[0][9] = 0;
-        
+        inputs = new double[1][10];
+        for (String category : cats) {
+            setInputsUserByCat(category, connection.getCategoryPorcent(id, category));
+        }
+        //inputs[0][5] = 1; inputs[0][6] = 0; inputs[0][7] = 1; inputs[0][8] = 0; inputs[0][9] = 0;
         
         //get all the books on the database and iterate over it
         for (CBook book : connection.getBooks()) {
-            //String[] categories = book.getBook_genre().split(",");
-            inputs[0][0] = 1; inputs[0][1] = 1; inputs[0][2] = 0; inputs[0][3] = 0; inputs[0][4] = 0;
+            String[] categories = book.getBook_genre().split(",");
+            for (String category : categories) {
+                setInputsBookByCat(category);
+            }
             NeuralNetwork(10, 8, 1);
             run(1, 0.001);
             if (getOutput()[0] > 0.9) {
-                recommendedIds.add(book.getBookId());
+                //recommendedIds.add(book.getBookId());
             }
         }
         return recommendedIds;
+    }
+    
+    public void setInputsUserByCat(String category, double threshold){
+        double value = 0;
+        if (threshold > 0.6) {
+            value = 1;
+        }
+        switch(category){
+            case("Fiction"):
+                inputs[0][5] = value;
+                break;
+            case("History"):
+                inputs[0][6] = value;
+                break;
+            case("Biography"):
+                inputs[0][7] = value;
+                break;
+            case("Juvenile fiction"):
+                inputs[0][8] = value;
+                break;
+            case("Social life and customs"):
+                inputs[0][9] = value;
+                break;
+               
+        }
+    }
+    
+    public void setInputsBookByCat(String category)
+    {
+        switch(category){
+            case("Fiction"):
+                inputs[0][0] = 1;
+                break;
+            case("History"):
+                inputs[0][1] = 1;
+                break;
+            case("Biography"):
+                inputs[0][2] = 1;
+                break;
+            case("Juvenile fiction"):
+                inputs[0][3] = 1;
+                break;
+            case("Social life and customs"):
+                inputs[0][4] = 1;
+                break;
+               
+        }
     }
    
     public void NeuralNetwork(int input, int hidden, int output){

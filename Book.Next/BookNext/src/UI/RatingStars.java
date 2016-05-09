@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 public class RatingStars extends HBox{
     
     private final String starSize;
+    private int rating;
     
     public RatingStars(String size)
     {
@@ -33,7 +34,7 @@ public class RatingStars extends HBox{
      * @param userRating 1,2,3,4 or 5 stars assigned to this book
      * @return HBox with rating view
      */
-    public HBox showEmptyStars(int userRating)
+    public HBox showRatingStars(int userRating)
     {
         
         HBox actBox = new HBox();
@@ -65,6 +66,7 @@ public class RatingStars extends HBox{
                 actBox.getChildren().add(2, myEmptyStar3);
                 actBox.getChildren().add(3, myEmptyStar4);
                 actBox.getChildren().add(4, myEmptyStar5);
+                rating = 1;
             }
         };
                 
@@ -76,6 +78,7 @@ public class RatingStars extends HBox{
                 actBox.getChildren().add(2, myEmptyStar3);
                 actBox.getChildren().add(3, myEmptyStar4);
                 actBox.getChildren().add(4, myEmptyStar5);
+                rating = 2;
             }
         };
  
@@ -87,6 +90,7 @@ public class RatingStars extends HBox{
                 actBox.getChildren().add(2, fullStar2);
                 actBox.getChildren().add(3, myEmptyStar4);
                 actBox.getChildren().add(4, myEmptyStar5);
+                rating = 3;
             }
         };       
         
@@ -98,6 +102,7 @@ public class RatingStars extends HBox{
                 actBox.getChildren().add(2, fullStar2);
                 actBox.getChildren().add(3, fullStar3);
                 actBox.getChildren().add(4, myEmptyStar5);
+                rating = 4;
             }
         };
         
@@ -109,6 +114,7 @@ public class RatingStars extends HBox{
                 actBox.getChildren().add(2, fullStar2);
                 actBox.getChildren().add(3, fullStar3);
                 actBox.getChildren().add(4, fullStar4);
+                rating = 5;
             }
         };
         // </editor-fold>
@@ -201,5 +207,10 @@ public class RatingStars extends HBox{
                 return intValue; else
                 return intValue + 0.5;
             
+    }
+    
+    public int getRating()
+    {
+        return rating;
     }
 }

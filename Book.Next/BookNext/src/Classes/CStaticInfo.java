@@ -15,4 +15,8 @@ public class CStaticInfo {
     public static CUser loggedUser;
     public static List<CBook> usersBooks;
     public static List<CBook> allBooks;
+    public static MysqlConnection connection;
+    public static String mainColor = "#F44336";
+    public static String darkColor = "#D32F2F";
+    public static String accentColor = "#536DFE";
 }
